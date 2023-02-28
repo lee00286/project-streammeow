@@ -4,6 +4,7 @@
   "description": "**Team Name**: Sleepless",
   "main": "index.js",
   "scripts": {
+    "format": "prettier --write .",
     "start": "node app.js",
     "backend": "nodemon app.js",
     "frontend": "npm run start --prefix ../frontend",
@@ -27,7 +28,8 @@
     "sqlite3": "^5.1.4"
   },
   "devDependencies": {
-    "nodemon": "^2.0.20"
+    "nodemon": "^2.0.20",
+    "prettier": "2.8.4"
   },
   "type": "module"
 }

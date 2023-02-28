@@ -17,8 +17,8 @@ try {
   console.error("Unable to connect to the database:", error);
 }
 
-app.get('/', (req, res) => {
-  res.send('Hello World!');
+app.get("/", (req, res) => {
+  res.send("Hello World!");
 });
 
 const PORT = process.env.PORT || 5001;
