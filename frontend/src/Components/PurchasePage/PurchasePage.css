@@ -1,0 +1,21 @@
+.purchase {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 100%;
+  height: 100%;
+}
+
+.purchase-left {
+  margin-right: 20px;
+  width: 100%;
+  height: 100%;
+  background-color: var(--yellow1);
+}
+
+.purchase-right {
+  width: 100%;
+  height: 100%;
+  background-color: var(--yellow1);
+}
