@@ -3,6 +3,7 @@ import { Route, Routes } from "react-router-dom";
 import HomePage from "./Components/HomePage/HomePage";
 // Style
 import "./App.css";
+import "./Components/cols.css";
 
 function App() {
   return (

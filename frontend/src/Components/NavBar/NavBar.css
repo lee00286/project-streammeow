@@ -1,0 +1,30 @@
+.navigation {
+  justify-content: space-between;
+  width: 100%;
+  padding: 10px 30px;
+  background-color: var(--yellow2);
+  user-select: none;
+}
+
+.navigation .logo-img {
+  cursor: pointer;
+}
+
+.navigation img {
+  height: 20px;
+}
+
+.nav-menu {
+  justify-content: flex-start;
+}
+
+.nav-buttons button {
+  margin-left: 10px;
+}
+
+/* for mobile */
+@media (max-width: 425px) {
+  .navigation {
+    height: 56px;
+  }
+}
