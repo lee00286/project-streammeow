@@ -1,0 +1,27 @@
+.rounded-1 {
+  border-radius: 50px;
+}
+
+.button {
+  font-size: 0.8em;
+  cursor: pointer;
+}
+
+.menu-button {
+  padding: 10px 15px;
+  border: none;
+  background-color: transparent;
+  font-size: 0.9em;
+  font-weight: bold;
+}
+
+.menu-button:not(:last-child) {
+  margin-right: 10px;
+}
+
+.color-button {
+  padding: 10px 15px;
+  border: none;
+}
+
+/* .color-button:hover {} */
