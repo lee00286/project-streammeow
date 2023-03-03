@@ -6,8 +6,10 @@ export const paymentsRouter = Router();
 dotenv.config();
 
 // Stripe API key
-const publicSampleTestAPIKey = "sk_test_Hrs6SAopgFPF0bZXSN3f6ELN";
-const stripe = Stripe(process.env.STRIPE_API_KEY || publicSampleTestAPIKey);
+const publicSampleTestKey = "sk_test_Hrs6SAopgFPF0bZXSN3f6ELN";
+const stripe = Stripe(process.env.STRIPE_API_KEY || publicSampleTestKey, {
+  stripeAccount: process.env.STRIPE_ACCOUNT_ID || null,
+});
 
 // Calculate the order total on the server
 // to prevent people from directly manipulating the amount on the client
@@ -27,19 +29,29 @@ paymentsRouter.post("/paymentintent", async (req, res) => {
     return res.status(422).json({ error: "Invalid arguments" });
   }
 
-  // Create a PaymentIntent with the order amount and currency
-  const paymentIntent = await stripe.paymentIntents.create({
-    amount: calculateOrderAmount(items),
-    currency: "cad", // "usd"
-    automatic_payment_methods: {
-      enabled: true, // Enable cards and other common payment methods
-    },
-  });
-
-  if (paymentIntent.status === "succeeded") {
+  try {
+    // Create a PaymentIntent with the order amount and currency
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount: calculateOrderAmount(items),
+      currency: "cad", // "usd"
+      payment_method_types: ["card"],
+      // automatic_payment_methods: {
+      //   enabled: true, // Enable cards and other common payment methods
+      // },
+    });
     // Finish the payment
     return res.status(200).json({ clientSecret: paymentIntent.client_secret });
+  } catch (e) {
+    switch (e.type) {
+      case "StripeCardError":
+        console.log(`A payment error occurred: ${e.message}`);
+        break;
+      case "StripeInvalidRequestError":
+        console.log("An invalid request occurred.");
+        break;
+      default:
+        console.log("Another problem occurred, maybe unrelated to Stripe.");
+        break;
+    }
   }
-
-  return res.status(400).json({ error: paymentIntent.status });
 });

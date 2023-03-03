@@ -21,19 +21,27 @@ function CheckOutForm() {
     );
     if (!clientSecret) return;
 
-    // Show a pyament status message
-    stripe.retrievePaymentIntent(clientSecret).then(({ paymentIntent }) => {
+    // Show a payment status message
+    stripe.retrievePaymentIntent(clientSecret).then((res) => {
+      // If error occurs
+      if (res.error) return console.log(res.error.message);
+      // paymentIntent is retrieved
+      const paymentIntent = res.paymentIntent;
       switch (paymentIntent.status) {
         case "succeeded":
+          console.log("Payment succeeded!");
           setMessage("Payment succeeded!");
           break;
         case "processing":
+          console.log("Your payment is processing.");
           setMessage("Your payment is processing.");
           break;
         case "requires_payment_method":
+          console.log("Your payment was not successful, please try again.");
           setMessage("Your payment was not successful, please try again.");
           break;
         default:
+          console.log("Something went wrong.");
           setMessage("Something went wrong.");
           break;
       }
@@ -52,16 +60,21 @@ function CheckOutForm() {
 
     // Process the payment
     setIsLoading(true);
+
     const { error } = await stripe.confirmPayment({
       elements,
-      confirmParams: { return_url: "/" }, // redirected after the payment
+      confirmParams: {
+        return_url: "http://localhost:3000/",
+      }, // redirected after the payment
     });
 
     // If there is an immediate error when confirming the payment
     if (error.type === "card_error" || error.type === "validation_error") {
       setMessage(error.message);
+      console.log(error.message);
     } else {
       setMessage("An unexpected error occurred.");
+      console.log("An unexpected error occurred.");
     }
 
     // Payment finished

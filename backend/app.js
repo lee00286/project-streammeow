@@ -12,7 +12,8 @@ dotenv.config();
 
 // CORS for a list of allowed origins (specify for safety)
 // const allowedOrigins = ["http://localhost:3000"];
-const allowedOrigins = ["*"];
+const allowedOrigins = ["http://localhost:3000", "https://checkout.stripe.com"];
+// const allowedOrigins = ["*"];
 const options = {
   origin: allowedOrigins,
 };

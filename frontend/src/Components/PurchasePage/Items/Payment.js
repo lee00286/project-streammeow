@@ -12,7 +12,7 @@ const stripePromise = loadStripe(
 );
 
 function Payment() {
-  const [ClientSecret, setClientSecret] = useState("");
+  const [ClientSecret, setClientSecret] = useState(null);
 
   useEffect(() => {
     const reqBody = { items: [{ id: "xl-tshirt" }] };
