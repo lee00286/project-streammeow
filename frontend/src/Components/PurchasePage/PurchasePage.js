@@ -1,5 +1,8 @@
 import React from "react";
+// Components
 import PageTitle from "../Texts/PageTitle";
+import Payment from "./Items/Payment";
+// Style
 import "./PurchasePage.css";
 
 /**
@@ -14,6 +17,7 @@ function PurchasePage() {
         <div className="purchase-left">
           {/* Membership Plan */}
           {/* Payment Details */}
+          <Payment />
         </div>
         <div className="purchase-right">{/* Order Summary */}</div>
       </div>
