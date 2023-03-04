@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 // Stripe
 import {
+  LinkAuthenticationElement,
   PaymentElement,
   useElements,
   useStripe,
@@ -10,6 +11,7 @@ function CheckOutForm() {
   const stripe = useStripe();
   const elements = useElements();
 
+  const [Email, setEmail] = useState("");
   const [Message, setMessage] = useState(null);
   const [IsLoading, setIsLoading] = useState(false);
 
@@ -64,8 +66,9 @@ function CheckOutForm() {
     const { error } = await stripe.confirmPayment({
       elements,
       confirmParams: {
-        return_url: "http://localhost:3000/",
-      }, // redirected after the payment
+        return_url: "http://localhost:3000/purchase/confirm", // redirected after the payment
+        receipt_email: Email, // stripe only sends in live mode
+      },
     });
 
     // If there is an immediate error when confirming the payment
@@ -83,6 +86,10 @@ function CheckOutForm() {
 
   return (
     <form onSubmit={handleSubmit}>
+      <LinkAuthenticationElement
+        id="link-authentication-element"
+        onChange={(e) => setEmail(e?.target?.value ?? "")}
+      />
       <PaymentElement id="payment-element" options={paymentElementOptions} />
       <button disabled={IsLoading || !stripe || !elements} id="submit">
         <span id="button-text">
