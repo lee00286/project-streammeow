@@ -28,12 +28,13 @@ function Subscription() {
     const variable = { lookupKey: e.target[0].value };
     axios.post("/api/payments/checkout-session", variable).then((res) => {
       console.log(res);
+      // Payment (replace with my own payment page)
+      window.open(res.data.url, "_self");
     });
   };
 
   const onManage = (e) => {
     e.preventDefault();
-    console.log(e.target);
     axios.post("/api/payments/create-portal-session", {}).then((res) => {
       console.log(res);
     });

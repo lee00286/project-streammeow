@@ -1,23 +1,61 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useLocation } from "react-router-dom";
+import axios from "axios";
 
-function useQuery() {
+const useQuery = () => {
   const { search } = useLocation();
   return useMemo(() => new URLSearchParams(search), [search]);
-}
+};
 
 function ConfirmPage() {
   let query = useQuery();
 
+  const [Invoice, setInvoice] = useState(null);
+
   useEffect(() => {
-    const variables = {
-      payment_intent: query.get("payment_intent"),
-      payment_intent_client_secret: query.get("payment_intent_client_secret"),
-      redirect_status: query.get("redirect_status"),
-    };
+    axios
+      .get(`/api/payments/session/${query.get("session_id")}`)
+      .then((res) => {
+        console.log(res.data);
+        if (res.data.error) console.log(res.data.error);
+        else return res.data;
+      })
+      .then((data) => {
+        console.log(data);
+        const variables = { invoiceId: data.invoice };
+        axios.post("/api/payments/summarize", variables).then((res) => {
+          console.log(res.data);
+          setInvoice(res.data);
+        });
+      });
   }, []);
 
-  return <div>ConfirmPage</div>;
+  const onDownload = () => {
+    window.open(Invoice.invoicePDF);
+  };
+
+  return (
+    <div className="invoice">
+      ConfirmPage
+      {Invoice && (
+        <div className="invoice-ticket">
+          <div>
+            <h3>
+              {Invoice.currency} {Invoice.payment.amountPaid}
+            </h3>
+          </div>
+          <p>Invoice Number: {Invoice.invoiceNum}</p>
+          <p>Payment Date: {Invoice.payment.datePaid}</p>
+          <a
+            href={Invoice.invoicePDF}
+            download={`Invoice-${Invoice.invoiceNum}`}
+          >
+            Download Invoice
+          </a>
+        </div>
+      )}
+    </div>
+  );
 }
 
 export default ConfirmPage;

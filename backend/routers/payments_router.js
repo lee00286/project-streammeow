@@ -23,6 +23,36 @@ const calculateOrderAmount = (items) => {
   return 1400;
 };
 
+const summarizeInvoice = (invoice) => {
+  if (invoice === undefined) return;
+  const newInvoice = {
+    invoiceNum: invoice.number,
+    receiptNum: invoice.receipt_number,
+    currency: invoice.currency,
+    customer: invoice.customer,
+    customerInfo: {
+      account: invoice.account_name,
+      name: invoice.customer_name,
+      address: invoice.customer_address,
+      email: invoice.customer_email,
+      phone: invoice.customer_phone,
+    },
+    payment: {
+      collectionMethod: invoice.collection_method,
+      amountDue: invoice.amount_due,
+      amountPaid: invoice.amount_paid,
+      amountRemaining: invoice.amount_remaining,
+      attemptCount: invoice.attempt_count,
+      billingReason: invoice.billing_reason,
+      dateFinalized: invoice.status_transitions.finalized_at,
+      datePaid: invoice.status_transitions.paid_at,
+    },
+    subscription: invoice.subscription,
+    invoicePDF: invoice.invoice_pdf,
+  };
+  return newInvoice;
+};
+
 /**
  * Create a PaymentIntent.
  * One PaymentIntent is created for each order or customer session.
@@ -86,11 +116,16 @@ paymentsRouter.post("/checkout-session", async (req, res) => {
       success_url: `http://localhost:3000/purchase/confirm?success=true&session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `http://localhost:3000/purchase/confirm?canceled=true`,
     });
-    // console.log(session);
-    return res.redirect(303, session.url);
-    // return res.status(200).json({ url: session.url });
+    return res.status(200).json({ url: session.url });
   }
   res.send();
+});
+
+paymentsRouter.get("/session/:sessionId", async (req, res) => {
+  const { sessionId } = req.params;
+  const session = await stripe.checkout.sessions.retrieve(sessionId);
+  if (!session) return res.status(404).send("Session not found");
+  return res.status(200).json(session);
 });
 
 /**
@@ -182,3 +217,19 @@ paymentsRouter.post(
     return response.status(200);
   }
 );
+
+/**
+ * Summarize the payment method details and get invoice.
+ */
+paymentsRouter.post("/summarize", async (req, res) => {
+  try {
+    const reqBody = req.body;
+    // Retrieve invoice
+    const invoice = await stripe.invoices.retrieve(reqBody.invoiceId);
+    // Send the response to the client
+    res.status(200).json(summarizeInvoice(invoice));
+  } catch (e) {
+    // Display error on client
+    return res.status(500).json({ error: e.message });
+  }
+});
