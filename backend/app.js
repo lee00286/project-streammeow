@@ -4,6 +4,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import { sequelize } from "./datasource.js";
 import { paymentsRouter } from "./routers/payments_router.js";
+import { membershipsRouter } from "./routers/memberships_router.js";
 
 export const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -36,6 +37,7 @@ app.get("/api/test", (req, res) => {
 
 // Routers
 app.use("/api/payments", paymentsRouter);
+app.use("/api/memberships", membershipsRouter);
 
 const PORT = process.env.PORT || 5001;
 
