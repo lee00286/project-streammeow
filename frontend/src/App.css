@@ -8,6 +8,12 @@
   text-align: center;
 }
 
+.navigation {
+  /* grid-area: header; */
+  grid-row-start: row1-start;
+  grid-row-end: row1-end;
+}
+
 .grid-body {
   grid-row-start: row1-end;
   grid-row-end: third-line;
