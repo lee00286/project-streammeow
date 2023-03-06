@@ -1,6 +1,10 @@
 import React, { useEffect } from "react";
 import axios from "axios";
 
+/**
+ * Home page component.
+ * @returns Home page component
+ */
 function HomePage() {
   useEffect(() => {
     // Example usage of axios
