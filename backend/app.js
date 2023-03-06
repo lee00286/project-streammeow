@@ -1,15 +1,20 @@
 import express from "express";
 import bodyParser from "body-parser";
-import { sequelize } from "./datasource.js";
 import cors from "cors";
+import dotenv from "dotenv";
+import { sequelize } from "./datasource.js";
+import { paymentsRouter } from "./routers/payments_router.js";
+import { membershipsRouter } from "./routers/memberships_router.js";
 
 export const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+dotenv.config();
 
 // CORS for a list of allowed origins (specify for safety)
 // const allowedOrigins = ["http://localhost:3000"];
-const allowedOrigins = ["*"];
+const allowedOrigins = ["http://localhost:3000", "https://checkout.stripe.com"];
+// const allowedOrigins = ["*"];
 const options = {
   origin: allowedOrigins,
 };
@@ -29,6 +34,10 @@ try {
 app.get("/api/test", (req, res) => {
   res.status(200).json({ message: "Hello World!" });
 });
+
+// Routers
+app.use("/api/payments", paymentsRouter);
+app.use("/api/memberships", membershipsRouter);
 
 const PORT = process.env.PORT || 5001;
 

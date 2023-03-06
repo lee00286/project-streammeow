@@ -18,3 +18,7 @@
   grid-row-start: row1-end;
   grid-row-end: third-line;
 }
+
+.page {
+  padding: 50px;
+}
