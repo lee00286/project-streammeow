@@ -31,7 +31,7 @@ function ColorButton(props) {
 
   return (
     <button
-      className="button rounded-1 color-button"
+      className="button rounded-1 color-button no-select"
       style={{ border: Border, backgroundColor: ButtonColor, color: TextColor }}
       onClick={onButton}
     >

@@ -22,3 +22,21 @@
 .page {
   padding: 50px;
 }
+
+.horizontal-line {
+  margin: 10px 0 20px;
+  border-bottom: 1px solid #fff;
+  width: 100%;
+  text-align: center;
+  line-height: 0.1em;
+  user-select: none;
+}
+
+.horizontal-line span {
+  padding: 0 10px;
+  background-color: #fff;
+}
+
+.no-select {
+  user-select: none;
+}

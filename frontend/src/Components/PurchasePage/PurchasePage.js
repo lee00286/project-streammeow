@@ -60,7 +60,6 @@ function PurchasePage({ plan }) {
   const memberships =
     Memberships && Memberships.length > 0
       ? Memberships.map((membership, index) => {
-          console.log(membership);
           const isSelected = SelectPlan && SelectPlan === membership.id;
           return (
             <div className="tier" key={`tier-${index}`}>
@@ -80,7 +79,9 @@ function PurchasePage({ plan }) {
       <div className="purchase">
         <div className="purchase-left col-7">
           <SubTitle text="Membership Plan" />
-          {Memberships && <div className="membership row">{memberships}</div>}
+          {Memberships && (
+            <div className="membership row no-select">{memberships}</div>
+          )}
           {/* {SelectPlan && <SubTitle text="Payment Details" />}
           {SelectPlan && <Payment totalCost={TotalCost} currency="cad" />} */}
         </div>

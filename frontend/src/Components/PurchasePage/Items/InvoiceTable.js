@@ -55,7 +55,7 @@ function InvoiceTable({ buyList, totalCost }) {
 
   return (
     <div>
-      <div className="table-header row">
+      <div className="table-header row no-select">
         <div className="col-auto text-l">Item</div>
         <div className="col-3 text-r">Quantity</div>
         <div className="col-2 text-r">Price</div>

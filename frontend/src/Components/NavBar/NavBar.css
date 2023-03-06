@@ -3,7 +3,6 @@
   width: 100%;
   padding: 10px 30px;
   background-color: var(--yellow2);
-  user-select: none;
 }
 
 .navigation .logo-img {

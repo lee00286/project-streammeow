@@ -30,9 +30,9 @@ function NavBar() {
   };
 
   return (
-    <div className="navigation row align-items-center">
+    <div className="navigation row align-items-center no-select">
       <div className="logo-img col-2">
-        <img src="logo2.png" onClick={onLogo} />
+        <img src="/logo2.png" onClick={onLogo} />
       </div>
       <div className="nav-menu row col-auto">
         <MenuButton text="About" textColor="var(--yellow4)" />

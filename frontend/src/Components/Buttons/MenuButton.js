@@ -27,7 +27,7 @@ function MenuButton(props) {
 
   return (
     <button
-      className="button menu-button"
+      className="button menu-button no-select"
       style={{ color: TextColor }}
       onClick={onButton}
     >

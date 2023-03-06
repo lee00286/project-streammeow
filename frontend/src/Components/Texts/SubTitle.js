@@ -6,7 +6,7 @@ import React from "react";
  * @returns Page subtitle component
  */
 function SubTitle({ text }) {
-  return <h3 className="sub-title">{text}</h3>;
+  return <h3 className="sub-title no-select">{text}</h3>;
 }
 
 export default SubTitle;

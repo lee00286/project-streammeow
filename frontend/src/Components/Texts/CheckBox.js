@@ -12,7 +12,7 @@ function CheckBox({ text, onCheck }) {
   };
 
   return (
-    <div className="checkbox row">
+    <div className="checkbox row no-select">
       <input type="checkbox" className="col-1" onClick={onClick} />
       <div className="col-auto">{text}</div>
     </div>

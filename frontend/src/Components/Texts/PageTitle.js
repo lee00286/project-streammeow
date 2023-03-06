@@ -7,7 +7,7 @@ import "./texts.css";
  * @returns Page title component
  */
 function PageTitle({ text }) {
-  return <h2 className="page-title">{text}</h2>;
+  return <h2 className="page-title no-select">{text}</h2>;
 }
 
 export default PageTitle;

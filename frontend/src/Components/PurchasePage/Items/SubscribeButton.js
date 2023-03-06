@@ -52,11 +52,13 @@ function SubscribeButton({ currency, membership, price }) {
     axios
       .post("/api/memberships/prices", variables)
       .then((res) => {
+        // Create a new price with total price
         if (res.error) return console.log(res.error);
         const priceId = res.data.price.id;
         return priceId;
       })
       .then((priceId) => {
+        // Update memberships to have new priceId
         const variable = { priceId: priceId };
         axios.patch(`/api/memberships/${membership}`, variable).then((res) => {
           if (res.error) return console.log(res.error);
@@ -64,6 +66,7 @@ function SubscribeButton({ currency, membership, price }) {
         return variable;
       })
       .then((variable) => {
+        // Create a checkout-session using priceId
         axios.post("/api/payments/checkout-session", variable).then((res) => {
           console.log(res);
           // Payment (replace with my own payment page)
