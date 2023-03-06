@@ -3,6 +3,7 @@
   flex-flow: row nowrap;
   justify-content: space-between;
   align-items: flex-start;
+  margin-top: 30px;
   width: 100%;
   height: 100%;
 }
@@ -11,11 +12,104 @@
   margin-right: 20px;
   width: 100%;
   height: 100%;
-  background-color: var(--yellow1);
 }
 
 .purchase-right {
+  padding: 30px 20px;
   width: 100%;
-  height: 100%;
   background-color: var(--yellow1);
+}
+
+/* Subscription */
+.purchase-left .sub-title {
+  margin-top: 0;
+}
+
+.membership {
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding-bottom: 20px;
+  width: 100%;
+  user-select: none;
+}
+
+.membership-box {
+  margin: 0 20px 20px 0;
+  padding: 15px;
+  border: 2px solid var(--gray1);
+  border-radius: 10px;
+  width: 160px;
+  background-color: #fff;
+}
+
+.membership-box .title {
+  margin: 0 0 20px 0;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.price {
+  justify-content: center;
+  align-items: flex-end;
+  height: 40px;
+}
+
+.price p {
+  margin: 0;
+  font-size: 12px;
+}
+
+.price .currency {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: flex-start;
+  height: 100%;
+}
+
+.price .price-num {
+  font-size: 30px;
+  font-weight: bold;
+}
+
+.membership-box button {
+  margin-top: 15px;
+  border: none;
+  background-color: #fff;
+  color: var(--yellow4);
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.membership-box button:hover {
+  color: var(--yellow4);
+  text-decoration: underline;
+}
+
+/* Invoice Table */
+.table-header {
+  padding: 0 20px 15px 20px;
+  border-bottom: 2px solid var(--yellow4);
+  color: var(--yellow4);
+  font-weight: bold;
+  user-select: none;
+}
+
+.table-section {
+  padding: 15px 20px;
+  border-bottom: 1px dotted var(--yellow4);
+  color: var(--yellow4);
+}
+
+.table-row {
+  width: 100%;
+}
+
+.table-row-space {
+  margin-bottom: 15px !important;
+}
+
+.purchase-right .checkbox {
+  margin-top: 20px;
+  margin-bottom: 20px;
 }

@@ -7,6 +7,10 @@ const useQuery = () => {
   return useMemo(() => new URLSearchParams(search), [search]);
 };
 
+/**
+ * Payment confirmation page.
+ * @returns ConfirmPage component
+ */
 function ConfirmPage() {
   let query = useQuery();
 
@@ -29,10 +33,6 @@ function ConfirmPage() {
         });
       });
   }, []);
-
-  const onDownload = () => {
-    window.open(Invoice.invoicePDF);
-  };
 
   return (
     <div className="invoice">

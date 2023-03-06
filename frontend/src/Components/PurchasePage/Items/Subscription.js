@@ -1,10 +1,32 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-function Subscription() {
+/**
+ * Subscription component that displays membership.
+ * @param {*} membership
+ * @returns Subscription component
+ */
+function Subscription({ membership }) {
   let [message, setMessage] = useState("");
   let [success, setSuccess] = useState(false);
   let [sessionId, setSessionId] = useState("");
+
+  const [MembershipPrice, setMembershipPrice] = useState(null);
+
+  useEffect(() => {
+    if (!membership) return;
+    // Get price of the membership
+    axios
+      .get(`/api/memberships/prices/${membership.default_price}`)
+      .then((res) => {
+        if (res.error) console.log(res.error);
+        const price = parseFloat(res.data.price.unit_amount_decimal);
+        setMembershipPrice(price);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [membership]);
 
   useEffect(() => {
     // Check to see if this is a redirect back from Checkout
@@ -23,6 +45,7 @@ function Subscription() {
     }
   }, [sessionId]);
 
+  /* Checkout membership subscription */
   const onCheckOut = (e) => {
     e.preventDefault();
     const variable = { lookupKey: e.target[0].value };
@@ -40,22 +63,22 @@ function Subscription() {
     });
   };
 
-  const productDisplay = () => {
+  const membershipDisplay = () => {
     return (
-      <div>
-        <div className="product">
-          <div className="description">
-            <h3>Standard</h3>
-            <h5>$2.99 / month</h5>
-          </div>
+      <div className="membership-box">
+        <p className="title">{membership.name}</p>
+        <div className="price row">
+          <div className="currency">$</div>
+          <p className="price-num">{MembershipPrice}</p>
+          <p>/ month</p>
         </div>
-        <form onSubmit={onCheckOut}>
-          {/* Add a hidden field with the lookup_key of your Price */}
+        <button>See Details</button>
+        {/* <form onSubmit={onCheckOut}>
           <input type="hidden" name="lookup_key" value="standard" />
           <button id="checkout-and-portal-button" type="submit">
             Checkout
           </button>
-        </form>
+        </form> */}
       </div>
     );
   };
@@ -90,7 +113,7 @@ function Subscription() {
   );
 
   if (!success && message === "") {
-    return productDisplay();
+    return membershipDisplay();
   } else if (success && sessionId !== "") {
     return successDisplay(sessionId);
   } else {

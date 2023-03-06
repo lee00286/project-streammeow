@@ -14,31 +14,60 @@ const stripe = Stripe(process.env.STRIPE_API_KEY || publicSampleTestKey, {
 /**
  * Create a membership.
  * */
-membershipsRouter.post("/", async (req, res, next) => {
+membershipsRouter.post("/", async (req, res) => {
   const reqBody = req.body;
-  if (!reqBody?.name || !reqBody.description || !reqBody.default_price_data)
+  if (
+    !reqBody?.name ||
+    !reqBody.description ||
+    !reqBody.default_price_data ||
+    !reqBody.creatorId
+  )
     return res.status(422).json({ error: "Invalid arguments" });
   const defaultPrice = reqBody.default_price_data;
   if (!defaultPrice.currency || !defaultPrice.unit_amount_decimal)
     return res.status(422).json({ error: "Invalid arguments" });
-  // Create a new product
-  const product = await stripe.products.create({
-    name: req.body.name,
-    description: req.body.description,
+  // Create a new membership
+  const membership = await stripe.products.create({
+    name: reqBody.name,
+    description: reqBody.description,
     default_price_data: {
       currency: defaultPrice.currency,
       unit_amount_decimal: defaultPrice.unit_amount_decimal,
     },
+    metadata: {
+      creatorId: reqBody.creatorId,
+      // TODO: Save tier level (i.e. reqBody.tierLevel)
+    },
   });
-  return res.status(200).json({ product });
+  return res.status(200).json({ membership });
 });
 
 /**
  * Retrieve all memberships.
  * */
 membershipsRouter.get("/", async (req, res) => {
-  const products = await stripe.products.list();
-  return res.status(200).json({ products });
+  const memberships = await stripe.products.list();
+  if (!memberships?.data)
+    return res.status(404).json({ error: "Failed to load memberships." });
+  // Get creator's memberships
+  const { creatorId } = req.query;
+  if (creatorId) {
+    // TODO: pass `ids` parameter after user model is constructed
+    //       (user can save ids of memberships)
+
+    // Get memberships with creatorId
+    let creatorMemberships = memberships.data.filter(
+      (membership) =>
+        membership?.metadata?.creatorId &&
+        membership.metadata.creatorId === creatorId
+    );
+
+    // TODO: Sort memberships by tier level
+
+    return res.status(200).json({ memberships: creatorMemberships });
+  }
+  // Get all existing memberships
+  return res.status(200).json({ memberships: memberships.data });
 });
 
 /**
@@ -49,9 +78,10 @@ membershipsRouter.get("/:membershipId", async (req, res, next) => {
   if (!membershipId)
     return res.status(422).json({ error: "Invalid membershipId" });
   else if (membershipId === "prices") return next();
-  const product = await stripe.products.retrieve(membershipId);
-  if (!product) return res.status(404).json({ error: "Membership not found" });
-  return res.status(200).json({ product });
+  const membership = await stripe.products.retrieve(membershipId);
+  if (!membership)
+    return res.status(404).json({ error: "Membership not found" });
+  return res.status(200).json({ membership });
 });
 
 /**

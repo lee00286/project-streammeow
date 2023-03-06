@@ -11,6 +11,10 @@ const stripePromise = loadStripe(
   process.env.STRIPE_API_KEY || publicSampleTestAPIKey
 );
 
+/**
+ * Payment component that allows paying for a membership.
+ * @returns Payment component
+ */
 function Payment() {
   const [ClientSecret, setClientSecret] = useState(null);
 

@@ -7,6 +7,10 @@ import {
   useStripe,
 } from "@stripe/react-stripe-js";
 
+/**
+ * CheckOutForm component.
+ * @returns CheckOutForm component
+ */
 function CheckOutForm() {
   const stripe = useStripe();
   const elements = useElements();
