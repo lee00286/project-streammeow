@@ -2,7 +2,7 @@ import React from "react";
 
 /**
  * CheckBox component.
- * @param {*} text, onCheck 
+ * @param {*} text, onCheck
  * @returns CheckBox component
  */
 function CheckBox({ text, onCheck }) {

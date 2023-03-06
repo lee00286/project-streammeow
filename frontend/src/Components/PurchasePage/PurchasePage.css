@@ -40,6 +40,11 @@
   border-radius: 10px;
   width: 160px;
   background-color: #fff;
+  cursor: pointer;
+}
+
+.membership-box.selected-plan {
+  border-color: var(--yellow4);
 }
 
 .membership-box .title {

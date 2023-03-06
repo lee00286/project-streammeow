@@ -4,14 +4,21 @@ import axios from "axios";
 /**
  * Subscription component that displays membership.
  * @param {*} membership
+ * @param {boolean} isSelected
+ * @param {*} onSelect
  * @returns Subscription component
  */
-function Subscription({ membership }) {
+function Subscription({ membership, isSelected, onSelect }) {
   let [message, setMessage] = useState("");
   let [success, setSuccess] = useState(false);
   let [sessionId, setSessionId] = useState("");
 
   const [MembershipPrice, setMembershipPrice] = useState(null);
+
+  useEffect(() => {
+    // If plan is selected, send information
+    if (isSelected) onSelectPlan();
+  }, [isSelected]);
 
   useEffect(() => {
     if (!membership) return;
@@ -45,6 +52,11 @@ function Subscription({ membership }) {
     }
   }, [sessionId]);
 
+  /* Select membership plan */
+  const onSelectPlan = () => {
+    if (onSelect) onSelect(membership.id, MembershipPrice);
+  };
+
   /* Checkout membership subscription */
   const onCheckOut = (e) => {
     e.preventDefault();
@@ -65,7 +77,10 @@ function Subscription({ membership }) {
 
   const membershipDisplay = () => {
     return (
-      <div className="membership-box">
+      <div
+        onClick={onSelectPlan}
+        className={`membership-box ${isSelected ? "selected-plan" : ""}`}
+      >
         <p className="title">{membership.name}</p>
         <div className="price row">
           <div className="currency">$</div>

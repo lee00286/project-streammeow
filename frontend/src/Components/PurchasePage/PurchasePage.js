@@ -11,29 +11,57 @@ import ColorButton from "../Buttons/ColorButton";
 // Style
 import "./PurchasePage.css";
 
+// TODO: Replace
 const creatorId = "1";
 
 /**
- * Purchase page.
- * @returns Purchase page
+ * Purchase page component.
+ * @param {string} plan
+ * @returns Purchase page component
  */
-function PurchasePage() {
+function PurchasePage({ plan }) {
   const [Memberships, setMemberships] = useState([]);
+  const [SelectPlan, setSelectPlan] = useState(null);
+  const [BuyList, setBuyList] = useState(null);
+
+  useEffect(() => {
+    if (Memberships && SelectPlan === null && plan) setSelectPlan(plan);
+  }, [Memberships, plan]);
 
   useEffect(() => {
     axios.get(`/api/memberships?creatorId=${creatorId}`).then((res) => {
       if (res.error) return console.log(res.error);
       setMemberships(res.data.memberships);
-      console.log(res.data.memberships);
     });
   }, []);
+
+  const onSelect = (membershipId, price) => {
+    setSelectPlan(membershipId);
+    for (let i = 0; i < Memberships.length; i++) {
+      if (Memberships[i].id === membershipId) {
+        const variable = {
+          membershipId: Memberships[i].id,
+          item: Memberships[i].name,
+          quantity: 1,
+          priceId: Memberships[i].default_price,
+          price: price,
+        };
+        setBuyList(variable);
+      }
+    }
+  };
 
   const memberships =
     Memberships && Memberships.length > 0
       ? Memberships.map((membership, index) => {
+          const isSelected = SelectPlan && SelectPlan === membership.id;
           return (
             <div className="tier" key={`tier-${index}`}>
-              <Subscription membership={membership} />
+              <Subscription
+                membership={membership}
+                isSelected={isSelected}
+                onSelect={onSelect}
+              />
             </div>
           );
         })
@@ -49,23 +77,27 @@ function PurchasePage() {
           <SubTitle text="Payment Details" />
           <Payment />
         </div>
-        <div className="purchase-right col-auto">
-          <InvoiceTable />
-          <CheckBox
-            text={
-              <p>
-                I agree to the <span>Terms & Conditions</span> and{" "}
-                <span>Privacy Policy</span>.
-              </p>
-            }
-          />
-          <ColorButton
-            buttonColor="var(--yellow4)"
-            textColor="#fff"
-            text="Subscribe"
-            // buttonFunction={onRegister}
-          />
-        </div>
+        {SelectPlan && BuyList ? (
+          <div className="purchase-right col-auto">
+            <InvoiceTable buyList={BuyList} />
+            <CheckBox
+              text={
+                <p>
+                  I agree to the <span>Terms & Conditions</span> and{" "}
+                  <span>Privacy Policy</span>.
+                </p>
+              }
+            />
+            <ColorButton
+              buttonColor="var(--yellow4)"
+              textColor="#fff"
+              text="Subscribe"
+              // buttonFunction={}
+            />
+          </div>
+        ) : (
+          <div className="purchase-right col-auto">No plan selected</div>
+        )}
       </div>
     </div>
   );
