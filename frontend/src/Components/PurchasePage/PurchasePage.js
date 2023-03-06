@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import module from "../../ApiService";
 // Components
 import PageTitle from "../Texts/PageTitle";
 import SubTitle from "../Texts/SubTitle";
@@ -26,7 +26,7 @@ function PurchasePage({ plan }) {
 
   /* Get membership of the creator */
   useEffect(() => {
-    axios.get(`/api/memberships?creatorId=${creatorId}`).then((res) => {
+    module.getAllMembership(creatorId).then((res) => {
       if (res.error) return console.log(res.error);
       setMemberships(res.data.memberships);
     });

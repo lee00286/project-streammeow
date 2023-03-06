@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import module from "../../../ApiService";
 
 /**
  * Subscription component that displays membership.
@@ -19,8 +19,8 @@ function Subscription({ membership, isSelected, onSelect }) {
   /* Get price of the membership */
   useEffect(() => {
     if (!membership) return;
-    axios
-      .get(`/api/memberships/prices/${membership.default_price}`)
+    module
+      .getPriceById(membership.default_price)
       .then((res) => {
         if (res.error) console.log(res.error);
         const price = parseFloat(res.data.price.unit_amount_decimal);

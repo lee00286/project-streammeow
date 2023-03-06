@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import module from "../../../ApiService";
 // Stripe
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
@@ -24,8 +24,8 @@ function Payment({ totalCost, currency }) {
     if (!totalCost || !currency) return;
     const reqBody = { totalCost: totalCost, currency: currency };
     // Create a new PaymentIntent
-    axios
-      .post("/api/payments/payment-intent", reqBody)
+    module
+      .addPaymentIntent(totalCost, currency)
       .then((res) => {
         setClientSecret(res.data.clientSecret);
       })

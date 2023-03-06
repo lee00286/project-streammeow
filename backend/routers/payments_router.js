@@ -16,13 +16,20 @@ const endpointSecret =
   process.env.STRIPE_ENDPOINT_SECRET_CLI ||
   null;
 
-// Calculate the order total on the server
-// to prevent people from directly manipulating the amount on the client
+/**
+ * Calculate the order total on the server
+ * to prevent people from directly manipulating the amount on the client
+ * @param {Number} totalCost
+ */
 const calculateOrderAmount = (totalCost) => {
-  // Replace this constant with a calculation of the order's amount
+  // TODO: Replace this constant with a calculation of the order's amount
   return 1400;
 };
 
+/**
+ * Summarize invoice data to send to the client.
+ * @param {*} invoice
+ */
 const summarizeInvoice = (invoice) => {
   if (invoice === undefined) return;
   const newInvoice = {
@@ -88,6 +95,9 @@ paymentsRouter.post("/payment-intent", async (req, res) => {
   }
 });
 
+/**
+ * Checkout current session.
+ */
 paymentsRouter.post("/checkout-session", async (req, res) => {
   const priceId = req.body.priceId;
   if (priceId) {
@@ -113,8 +123,12 @@ paymentsRouter.post("/checkout-session", async (req, res) => {
   res.send();
 });
 
+/**
+ * Get a session by sessionId.
+ */
 paymentsRouter.get("/session/:sessionId", async (req, res) => {
   const { sessionId } = req.params;
+  if (!sessionId) return res.status(422).json("Invalid sessionId.");
   const session = await stripe.checkout.sessions.retrieve(sessionId);
   if (!session) return res.status(404).send("Session not found");
   return res.status(200).json(session);
@@ -130,8 +144,7 @@ paymentsRouter.post("/create-portal-session", async (req, res) => {
   const { session_id } = req.body;
   const checkoutSession = await stripe.checkout.sessions.retrieve(session_id);
 
-  // This is the url to which the customer will be redirected when they are done
-  // managing their billing with the portal.
+  // URL where the customer will be redirected after the payment
   const returnUrl = "http://localhost:3000/purchase/confirm";
 
   const portalSession = await stripe.billingPortal.sessions.create({

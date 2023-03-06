@@ -85,7 +85,7 @@ membershipsRouter.get("/:membershipId", async (req, res, next) => {
 });
 
 /**
- * Modify elements of a membership.
+ * Update attributes of a membership.
  * */
 membershipsRouter.patch("/:membershipId", async (req, res) => {
   const membershipId = req.params.membershipId;

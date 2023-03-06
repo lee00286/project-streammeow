@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useLocation } from "react-router-dom";
-import axios from "axios";
+import module from "../../ApiService";
 import "../Buttons/Buttons.css";
 
 /* Get query */
@@ -35,17 +35,15 @@ function ConfirmPage() {
   const [Invoice, setInvoice] = useState(null);
 
   useEffect(() => {
-    axios
-      .get(`/api/payments/session/${query.get("session_id")}`)
+    module
+      .getSession(query.get("session_id"))
       .then((res) => {
         console.log(res.data);
         if (res.data.error) console.log(res.data.error);
         else return res.data;
       })
       .then((data) => {
-        console.log(data);
-        const variables = { invoiceId: data.invoice };
-        axios.post("/api/payments/summarize", variables).then((res) => {
+        module.summarizePayment(data.invoice).then((res) => {
           console.log(res.data);
           setInvoice(res.data);
         });

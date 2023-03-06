@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import module from "../../../ApiService";
 // Components
 import ColorButton from "../../Buttons/ColorButton";
 // Style
@@ -36,21 +36,14 @@ function SubscribeButton({ currency, membership, price }) {
   /* Create portal session */
   const onManage = (e) => {
     e.preventDefault();
-    axios.post("/api/payments/create-portal-session", {}).then((res) => {
-      console.log(res);
-    });
+    module.addPortalSession();
   };
 
   /* Checkout membership subscription */
   const onCheckOut = (e) => {
     e.preventDefault();
-    const variables = {
-      currency: currency,
-      product: membership,
-      unit_amount_decimal: price,
-    };
-    axios
-      .post("/api/memberships/prices", variables)
+    module
+      .addPrice(currency, membership, price)
       .then((res) => {
         // Create a new price with total price
         if (res.error) return console.log(res.error);
@@ -59,15 +52,16 @@ function SubscribeButton({ currency, membership, price }) {
       })
       .then((priceId) => {
         // Update memberships to have new priceId
-        const variable = { priceId: priceId };
-        axios.patch(`/api/memberships/${membership}`, variable).then((res) => {
-          if (res.error) return console.log(res.error);
-        });
-        return variable;
+        module
+          .updateMembership(membership, { priceId: priceId })
+          .then((res) => {
+            if (res.error) return console.log(res.error);
+          });
+        return priceId;
       })
-      .then((variable) => {
+      .then((priceId) => {
         // Create a checkout-session using priceId
-        axios.post("/api/payments/checkout-session", variable).then((res) => {
+        module.addCheckoutSession(priceId).then((res) => {
           console.log(res);
           // Payment (replace with my own payment page)
           window.open(res.data.url, "_self");
