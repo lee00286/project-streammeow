@@ -59,6 +59,7 @@ function CheckOutForm() {
     layout: "tabs",
   };
 
+  // Checkout payment
   const handleSubmit = async (e) => {
     e.preventDefault();
     // Stripe.js has not yet loaded

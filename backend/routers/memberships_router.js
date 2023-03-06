@@ -85,6 +85,19 @@ membershipsRouter.get("/:membershipId", async (req, res, next) => {
 });
 
 /**
+ * Modify elements of a membership.
+ * */
+membershipsRouter.patch("/:membershipId", async (req, res) => {
+  const membershipId = req.params.membershipId;
+  const update = {
+    default_price: req.params.defaultPrice,
+  };
+  const product = await stripe.products.update(membershipId, update);
+  if (!product) return res.status(404).json({ error: "Membership not found" });
+  return res.status(200).json({ product });
+});
+
+/**
  * Create a price for a membership.
  * */
 membershipsRouter.post("/prices", async (req, res) => {
@@ -95,7 +108,7 @@ membershipsRouter.post("/prices", async (req, res) => {
   const price = await stripe.prices.create({
     currency: reqBody.currency,
     product: reqBody.product,
-    unit_amount_decimal: reqBody.unit_amount_decimal,
+    unit_amount_decimal: reqBody.unit_amount_decimal.toFixed(2),
     recurring: { interval: "month" },
   });
   return res.status(200).json({ price });

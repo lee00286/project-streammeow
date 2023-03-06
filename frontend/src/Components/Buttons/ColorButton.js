@@ -26,7 +26,7 @@ function ColorButton(props) {
   const onButton = (e) => {
     e.preventDefault();
     // Use the function from parent(s), if exists
-    if (props.buttonFunction) props.buttonFunction();
+    if (props.buttonFunction) props.buttonFunction(e);
   };
 
   return (

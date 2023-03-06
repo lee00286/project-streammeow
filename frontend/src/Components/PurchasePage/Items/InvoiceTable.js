@@ -3,25 +3,29 @@ import "../PurchasePage.css";
 
 const taxCalculate = (price, taxRate) => {
   if (!price || !taxRate) return;
-  return ((price * taxRate) / 100).toFixed(2);
+  return (price * taxRate) / 100;
 };
 
 const addCalculate = (left, right) => {
   if (!left || !right) return;
-  return (parseFloat(left) + parseFloat(right)).toFixed(2);
+  if (typeof left === "string" || typeof right === "string")
+    return parseFloat(left) + parseFloat(right);
+  return left + right;
 };
 
 /**
  * Invoice table that shows invoice of purchase.
- * @param {*} items: List of selected item to purchase
+ * @param {*} buyList: A selected item to purchase
+ * @param {*} totalCost: Function for PurchasPage to get total cost
  * @returns Invoice table component
  */
-function InvoiceTable({ buyList }) {
+function InvoiceTable({ buyList, totalCost }) {
   const [BuyList, setBuyList] = useState(null);
   const [Price, setPrice] = useState(null);
 
   useEffect(() => {
     if (!buyList) return;
+    // Set prices of the selected buyList
     setBuyList(buyList);
     let priceObject = {
       price: buyList.price,
@@ -29,8 +33,11 @@ function InvoiceTable({ buyList }) {
     };
     priceObject.total = addCalculate(priceObject.price, priceObject.tax);
     setPrice(priceObject);
-  }, [buyList]);
+    // Send total cost to PurchasePage component
+    if (totalCost) totalCost(priceObject.total);
+  }, [buyList, totalCost]);
 
+  // Row of the table body
   const tableRow = (item, quantity, price, space) => {
     return (
       <div className={`table-row row ${space ? "table-row-space" : ""}`}>
@@ -41,7 +48,8 @@ function InvoiceTable({ buyList }) {
     );
   };
 
-  if (!BuyList) {
+  // If none of the buy item is selected
+  if (!BuyList || !Price) {
     return <div>Empty</div>;
   }
 
@@ -57,10 +65,10 @@ function InvoiceTable({ buyList }) {
       </div>
       <div className="table-section col">
         {tableRow("SUBTOTAL", null, BuyList.price, true)}
-        {tableRow("Tax (12.5%)", null, Price.tax)}
+        {tableRow("Tax (12.5%)", null, Price.tax.toFixed(2))}
       </div>
       <div className="table-section col no-border">
-        {tableRow("TOTAL", null, Price.total)}
+        {tableRow("TOTAL", null, Price.total.toFixed(2))}
       </div>
     </div>
   );

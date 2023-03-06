@@ -13,23 +13,26 @@ const stripePromise = loadStripe(
 
 /**
  * Payment component that allows paying for a membership.
+ * @param {*} totalCost
+ * @param {string} currency
  * @returns Payment component
  */
-function Payment() {
+function Payment({ totalCost, currency }) {
   const [ClientSecret, setClientSecret] = useState(null);
 
   useEffect(() => {
-    const reqBody = { items: [{ id: "xl-tshirt" }] };
+    if (!totalCost || !currency) return;
+    const reqBody = { totalCost: totalCost, currency: currency };
     // Create a new PaymentIntent
     axios
-      .post("/api/payments/paymentintent", reqBody)
+      .post("/api/payments/payment-intent", reqBody)
       .then((res) => {
         setClientSecret(res.data.clientSecret);
       })
       .catch((err) => {
         console.log(`Error: ${err.response.data.error}`);
       });
-  }, []);
+  }, [totalCost, currency]);
 
   // Customize the appearance of the payment form
   const appearance = {

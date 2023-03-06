@@ -18,7 +18,7 @@ const endpointSecret =
 
 // Calculate the order total on the server
 // to prevent people from directly manipulating the amount on the client
-const calculateOrderAmount = (items) => {
+const calculateOrderAmount = (totalCost) => {
   // Replace this constant with a calculation of the order's amount
   return 1400;
 };
@@ -57,22 +57,19 @@ const summarizeInvoice = (invoice) => {
  * Create a PaymentIntent.
  * One PaymentIntent is created for each order or customer session.
  * */
-paymentsRouter.post("/paymentintent", async (req, res) => {
-  const { items } = req.body;
-  // if any of the arguments is missing, return an error
-  if (items === undefined) {
+paymentsRouter.post("/payment-intent", async (req, res) => {
+  const reqBody = req.body;
+  // If any of the arguments is missing, return an error
+  if (!reqBody.totalCost || !reqBody.currency) {
     return res.status(422).json({ error: "Invalid arguments" });
   }
 
   try {
     // Create a PaymentIntent with the order amount and currency
     const paymentIntent = await stripe.paymentIntents.create({
-      amount: calculateOrderAmount(items),
-      currency: "cad", // "usd"
+      amount: calculateOrderAmount(reqBody.totalCost),
+      currency: reqBody.currency,
       payment_method_types: ["card"],
-      // automatic_payment_methods: {
-      //   enabled: true, // Enable cards and other common payment methods
-      // },
     });
     // Finish the payment
     return res.status(200).json({ clientSecret: paymentIntent.client_secret });
@@ -92,24 +89,19 @@ paymentsRouter.post("/paymentintent", async (req, res) => {
 });
 
 paymentsRouter.post("/checkout-session", async (req, res) => {
-  // Get price from lookup_key (which will be creatorId)
-  const prices = await stripe.prices.list({
-    // lookup_keys: [req.body.lookupKey],
-    expand: ["data.product"],
-  });
-  const priceData = prices.data;
-  if (priceData && priceData.length > 0) {
+  const priceId = req.body.priceId;
+  if (priceId) {
     const session = await stripe.checkout.sessions.create({
       mode: "subscription",
       billing_address_collection: "auto",
       line_items: [
         {
-          price: priceData[0].id,
+          price: priceId,
           // For metered billing, do not pass quantity
           quantity: 1,
         },
       ],
-      // metadata: { user_id: userId },
+      // metadata: { user_id: req.body.userId },
       // subscription_data: {
       //   metadata: { user_id: current_user.id },
       // },
