@@ -25,6 +25,11 @@ const convertDate = (date) => {
   return new_date;
 };
 
+/* Convert balance to actual amount. */
+const convertBalance = (balance) => {
+  return (balance / 100).toFixed(2);
+};
+
 /**
  * Payment confirmation page.
  * @returns ConfirmPage component
@@ -81,6 +86,7 @@ function ConfirmPage() {
             {invoiceRow("Payment Date", convertDate(Invoice.payment.datePaid))}
             {invoiceRow("Currency", Invoice.currency)}
             {invoiceRow("Payment Total", Invoice.payment.amountPaid)}
+            {invoiceRow("Balance", convertBalance(Invoice.payment.balance))}
             <div className="invoice-button no-select">
               <a
                 href={Invoice.invoicePDF}

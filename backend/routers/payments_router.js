@@ -32,6 +32,7 @@ const calculateOrderAmount = (totalCost) => {
  */
 const summarizeInvoice = (invoice) => {
   if (invoice === undefined) return;
+  console.log(invoice);
   const newInvoice = {
     invoiceNum: invoice.number,
     receiptNum: invoice.receipt_number,
@@ -49,6 +50,7 @@ const summarizeInvoice = (invoice) => {
       amountDue: invoice.amount_due,
       amountPaid: invoice.amount_paid,
       amountRemaining: invoice.amount_remaining,
+      balance: invoice.ending_balance,
       attemptCount: invoice.attempt_count,
       billingReason: invoice.billing_reason,
       dateFinalized: invoice.status_transitions.finalized_at,
