@@ -23,6 +23,7 @@ function PurchasePage({ plan }) {
   const [SelectPlan, setSelectPlan] = useState(null);
   const [BuyList, setBuyList] = useState(null);
   const [TotalCost, setTotalCost] = useState(null);
+  const [IsChecked, setIsChecked] = useState(false);
 
   /* Get membership of the creator */
   useEffect(() => {
@@ -55,6 +56,10 @@ function PurchasePage({ plan }) {
 
   const onInvoice = (total) => {
     setTotalCost(total);
+  };
+
+  const onCheck = (isChecked) => {
+    setIsChecked(isChecked);
   };
 
   const memberships =
@@ -95,11 +100,13 @@ function PurchasePage({ plan }) {
                   <span>Privacy Policy</span>.
                 </p>
               }
+              onCheck={onCheck}
             />
             <SubscribeButton
               currency={"cad"}
               membership={BuyList.membershipId}
               price={TotalCost}
+              isChecked={IsChecked}
             />
           </div>
         ) : (

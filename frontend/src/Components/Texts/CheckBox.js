@@ -1,14 +1,19 @@
-import React from "react";
+import React, { useState } from "react";
 
 /**
  * CheckBox component.
- * @param {*} text, onCheck
+ * @param {*} text
+ * @param {boolean} onCheck: Function to update checkbox status
  * @returns CheckBox component
  */
 function CheckBox({ text, onCheck }) {
+  const [Checked, setChecked] = useState(false);
+
   const onClick = () => {
     if (!onCheck) return;
-    onCheck();
+    const checked = !Checked;
+    setChecked(checked);
+    onCheck(checked);
   };
 
   return (

@@ -9,10 +9,11 @@ import "../PurchasePage.css";
  * Subscribe button component to checkout.
  * @param {string} currency: Currency
  * @param {string} membership: Membership id that the user is purchasing for
- * @param {*} price: Total cost of the payment
+ * @param {Number} price: Total cost of the payment
+ * @param {boolean} isChecked: If Terms & Conditions and Privacy Policy are agreed
  * @returns Subscribe button component
  */
-function SubscribeButton({ currency, membership, price }) {
+function SubscribeButton({ currency, membership, price, isChecked }) {
   let [Success, setSuccess] = useState(false);
   let [SessionId, setSessionId] = useState("");
 
@@ -42,6 +43,12 @@ function SubscribeButton({ currency, membership, price }) {
   /* Checkout membership subscription */
   const onCheckOut = (e) => {
     e.preventDefault();
+    if (!isChecked) {
+      console.log(
+        "To continue, you must agree to the Terms & Conditions and Privacy Policy."
+      );
+      return;
+    }
     module
       .addPrice(currency, membership, price)
       .then((res) => {
