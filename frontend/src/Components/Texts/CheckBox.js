@@ -2,8 +2,8 @@ import React, { useState } from "react";
 
 /**
  * CheckBox component.
- * @param {*} text
- * @param {boolean} onCheck: Function to update checkbox status
+ * @param {Object} text: text to display next to the checkbox
+ * @param {boolean} onCheck: function to update checkbox status
  * @returns CheckBox component
  */
 function CheckBox({ text, onCheck }) {

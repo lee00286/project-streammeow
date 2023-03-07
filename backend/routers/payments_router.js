@@ -18,8 +18,8 @@ const endpointSecret =
 
 /**
  * Calculate the order total on the server
- * to prevent people from directly manipulating the amount on the client
- * @param {Number} totalCost
+ * to prevent people from directly manipulating the amount on the client.
+ * @param {number} totalCost: total cost of the order
  */
 const calculateOrderAmount = (totalCost) => {
   // TODO: Replace this constant with a calculation of the order's amount
@@ -28,7 +28,7 @@ const calculateOrderAmount = (totalCost) => {
 
 /**
  * Summarize invoice data to send to the client.
- * @param {*} invoice
+ * @param {Object} invoice: invoice of the payment
  */
 const summarizeInvoice = (invoice) => {
   if (invoice === undefined) return;

@@ -3,9 +3,9 @@ import module from "../../../ApiService";
 
 /**
  * Subscription component that displays membership.
- * @param {*} membership: Membership object
- * @param {boolean} isSelected: If the membership plan is selected
- * @param {*} onSelect: Function to operate if the membership is selected
+ * @param {Object} membership: membership object
+ * @param {boolean} isSelected: if the membership plan is selected
+ * @param {Function} onSelect: function to operate if the membership is selected
  * @returns Subscription component
  */
 function Subscription({ membership, isSelected, onSelect }) {

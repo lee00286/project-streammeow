@@ -15,7 +15,7 @@ const creatorId = "1";
 
 /**
  * Purchase page component.
- * @param {string} plan
+ * @param {string} plan: plan to purchase
  * @returns Purchase page component
  */
 function PurchasePage({ plan }) {
@@ -54,10 +54,12 @@ function PurchasePage({ plan }) {
     }
   };
 
+  // Set total cost
   const onInvoice = (total) => {
     setTotalCost(total);
   };
 
+  // Check if agreement checkbox is checked
   const onCheck = (isChecked) => {
     setIsChecked(isChecked);
   };
@@ -65,7 +67,10 @@ function PurchasePage({ plan }) {
   const memberships =
     Memberships && Memberships.length > 0
       ? Memberships.map((membership, index) => {
-          const isSelected = SelectPlan && SelectPlan === membership.id;
+          const isSelected =
+            SelectPlan !== undefined &&
+            SelectPlan !== null &&
+            SelectPlan === membership.id;
           return (
             <div className="tier" key={`tier-${index}`}>
               <Subscription

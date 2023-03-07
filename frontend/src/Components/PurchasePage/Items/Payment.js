@@ -13,8 +13,8 @@ const stripePromise = loadStripe(
 
 /**
  * Payment component that allows paying for a membership.
- * @param {*} totalCost
- * @param {string} currency
+ * @param {number} totalCost: total cost to pay
+ * @param {string} currency: currency of the cost
  * @returns Payment component
  */
 function Payment({ totalCost, currency }) {
@@ -22,7 +22,6 @@ function Payment({ totalCost, currency }) {
 
   useEffect(() => {
     if (!totalCost || !currency) return;
-    const reqBody = { totalCost: totalCost, currency: currency };
     // Create a new PaymentIntent
     module
       .addPaymentIntent(totalCost, currency)

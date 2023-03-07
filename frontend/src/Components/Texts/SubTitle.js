@@ -2,7 +2,7 @@ import React from "react";
 
 /**
  * Page subtitle component for the page.
- * @param {*} text
+ * @param {string} text: text to display as a subtitle
  * @returns Page subtitle component
  */
 function SubTitle({ text }) {

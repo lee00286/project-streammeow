@@ -7,10 +7,10 @@ import "../PurchasePage.css";
 
 /**
  * Subscribe button component to checkout.
- * @param {string} currency: Currency
- * @param {string} membership: Membership id that the user is purchasing for
- * @param {Number} price: Total cost of the payment
- * @param {boolean} isChecked: If Terms & Conditions and Privacy Policy are agreed
+ * @param {string} currency: currency
+ * @param {string} membership: membership id that the user is purchasing for
+ * @param {number} price: total cost of the payment
+ * @param {boolean} isChecked: if Terms & Conditions and Privacy Policy are agreed
  * @returns Subscribe button component
  */
 function SubscribeButton({ currency, membership, price, isChecked }) {

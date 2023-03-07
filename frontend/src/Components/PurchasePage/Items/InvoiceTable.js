@@ -15,8 +15,8 @@ const addCalculate = (left, right) => {
 
 /**
  * Invoice table that shows invoice of purchase.
- * @param {*} buyList: A selected item to purchase
- * @param {*} totalCost: Function for PurchasPage to get total cost
+ * @param {Object} buyList: a selected item to purchase
+ * @param {Function} totalCost: function for PurchasePage to get total cost
  * @returns Invoice table component
  */
 function InvoiceTable({ buyList, totalCost }) {
@@ -65,10 +65,10 @@ function InvoiceTable({ buyList, totalCost }) {
       </div>
       <div className="table-section col">
         {tableRow("SUBTOTAL", null, BuyList.price, true)}
-        {tableRow("Tax (12.5%)", null, Price.tax.toFixed(2))}
+        {tableRow("Tax (12.5%)", null, Price.tax ? Price.tax.toFixed(2) : null)}
       </div>
       <div className="table-section col no-border">
-        {tableRow("TOTAL", null, Price.total.toFixed(2))}
+        {tableRow("TOTAL", null, Price.total ? Price.total.toFixed(2) : null)}
       </div>
     </div>
   );

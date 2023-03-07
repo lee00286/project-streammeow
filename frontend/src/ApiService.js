@@ -32,7 +32,7 @@ module.getAllMembership = (creatorId) => {
 /**
  * Update attributes in membership.
  * @param {string} membershipId
- * @param {*} variables: attributes to update
+ * @param {Object} variables: attributes to update
  */
 module.updateMembership = (membershipId, variables) => {
   return axios.patch(`/api/memberships/${membershipId}`, variables);
@@ -42,7 +42,7 @@ module.updateMembership = (membershipId, variables) => {
  * Create a new price for a membership.
  * @param {string} currency: currency of the price
  * @param {string} product: id of the membership
- * @param {Number} unit_amount_decimal: price of the membership
+ * @param {number} unit_amount_decimal: price of the membership
  */
 module.addPrice = (currency, product, unit_amount_decimal) => {
   return axios.post("/api/memberships/prices", {
@@ -93,7 +93,7 @@ module.summarizePayment = (invoiceId) => {
 
 /**
  * Create a new payment intent.
- * @param {Number} totalCost: total cost after adding tax
+ * @param {number} totalCost: total cost after adding tax
  * @param {string} currency: currency of the price
  */
 module.addPaymentIntent = (totalCost, currency) => {

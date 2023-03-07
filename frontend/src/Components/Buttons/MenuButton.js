@@ -3,26 +3,28 @@ import "./Buttons.css";
 
 /**
  * Button component that have significant color on its border or background.
- * @param {*} props // { textColor, text }
+ * @param {string} textColor: color of the text
+ * @param {string} text: text to display on a button
+ * @param {Function} buttonFunction: function to be called when the button is clicked
  * @returns Button component
  */
-function MenuButton(props) {
+function MenuButton({ text, textColor, buttonFunction }) {
   const [TextColor, setTextColor] = useState("#000");
   const [Text, setText] = useState("");
 
   useEffect(() => {
-    if (!props) return;
+    if (!textColor || !text) return;
     // Update button styles from parent(s), if exists
-    if (props.textColor) setTextColor(props.textColor);
+    if (textColor) setTextColor(textColor);
     // Display texts on the button
-    if (props.text) setText(props.text);
-  }, [props]);
+    if (text) setText(text);
+  }, [textColor, text]);
 
   // Action when the button is clicked
   const onButton = (e) => {
     e.preventDefault();
     // Use the function from parent(s), if exists
-    if (props.buttonFunction) props.buttonFunction();
+    if (buttonFunction) buttonFunction();
   };
 
   return (
