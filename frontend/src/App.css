@@ -1,0 +1,42 @@
+.App {
+  display: grid;
+  grid-template-columns: auto;
+  /* grid-template-rows: [row1-start] 64px [row1-end] auto [third-line] 200px [last-line]; */
+  grid-template-rows: [row1-start] 64px [row1-end] auto [third-line] 0px [last-line];
+  width: 100vw;
+  height: 100vh;
+  text-align: center;
+}
+
+.navigation {
+  /* grid-area: header; */
+  grid-row-start: row1-start;
+  grid-row-end: row1-end;
+}
+
+.grid-body {
+  grid-row-start: row1-end;
+  grid-row-end: third-line;
+}
+
+.page {
+  padding: 50px;
+}
+
+.horizontal-line {
+  margin: 10px 0 20px;
+  border-bottom: 1px solid #fff;
+  width: 100%;
+  text-align: center;
+  line-height: 0.1em;
+  user-select: none;
+}
+
+.horizontal-line span {
+  padding: 0 10px;
+  background-color: #fff;
+}
+
+.no-select {
+  user-select: none;
+}

@@ -1,0 +1,199 @@
+.purchase {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-top: 30px;
+  width: 100%;
+  height: 100%;
+}
+
+.purchase-left {
+  margin-right: 20px;
+  width: 100%;
+  height: 100%;
+}
+
+.purchase-right {
+  padding: 30px 20px;
+  width: 100%;
+  background-color: var(--yellow1);
+}
+
+/* Subscription */
+.purchase-left .sub-title {
+  margin-top: 0;
+}
+
+.membership {
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding-bottom: 20px;
+  width: 100%;
+}
+
+.membership-box {
+  margin: 0 20px 20px 0;
+  padding: 15px;
+  border: 2px solid var(--gray1);
+  border-radius: 10px;
+  width: 160px;
+  background-color: #fff;
+  cursor: pointer;
+}
+
+.membership-box.selected-plan {
+  border-color: var(--yellow4);
+}
+
+.membership-box .title {
+  margin: 0 0 20px 0;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.price {
+  justify-content: center;
+  align-items: flex-end;
+  height: 40px;
+}
+
+.price p {
+  margin: 0;
+  font-size: 12px;
+}
+
+.price .currency {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: flex-start;
+  height: 100%;
+}
+
+.price .price-num {
+  font-size: 30px;
+  font-weight: bold;
+}
+
+.membership-box button {
+  margin-top: 15px;
+  border: none;
+  background-color: #fff;
+  color: var(--yellow4);
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.membership-box button:hover {
+  color: var(--yellow4);
+  text-decoration: underline;
+}
+
+/* Invoice Table */
+.table-header {
+  padding: 0 20px 15px 20px;
+  border-bottom: 2px solid var(--yellow4);
+  color: var(--yellow4);
+  font-weight: bold;
+}
+
+.table-section {
+  padding: 15px 20px;
+  border-bottom: 1px dotted var(--yellow4);
+  color: var(--yellow4);
+}
+
+.table-row {
+  width: 100%;
+}
+
+.table-row-space {
+  margin-bottom: 15px !important;
+}
+
+.purchase-right .checkbox {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+/* Confirm Page */
+.invoice {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.invoice-ticket {
+  justify-content: center;
+  align-items: center;
+  padding: 30px;
+  width: 30%;
+  min-width: 390px;
+  height: auto;
+  background-color: var(--yellow1);
+  color: var(--yellow4);
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.invoice-top,
+.invoice-bottom {
+  width: 100%;
+}
+
+.invoice-top img {
+  margin-bottom: 20px;
+  width: 20%;
+}
+
+.invoice-top h2 {
+  margin-top: 0;
+  margin-bottom: 25px;
+}
+
+.invoice-top p {
+  margin: 0;
+}
+
+.invoice-top p span {
+  font-weight: bold;
+}
+
+.invoice .horizontal-line {
+  margin: 30px 0;
+  border-bottom: 1px solid var(--yellow4);
+}
+
+.invoice .horizontal-line span {
+  background-color: var(--yellow1);
+  font-size: 12px;
+}
+
+.invoice-row {
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px 0;
+}
+
+.invoice-label {
+  text-align: right;
+  font-weight: bold;
+}
+
+.invoice-detail {
+  text-align: left;
+}
+
+.invoice-button {
+  margin-top: 30px;
+}
+
+.invoice-button a {
+  background-color: var(--yellow4);
+  color: #fff;
+  text-decoration: none;
+}
+
+.invoice-button a:hover {
+  opacity: 0.8;
+}
