@@ -1,6 +1,7 @@
 import express, { Router } from "express";
 import { Stripe } from "stripe";
 import dotenv from "dotenv";
+import { isValidArgument, stripeCatchError } from "../error_check.js";
 
 export const paymentsRouter = Router();
 dotenv.config();
@@ -32,7 +33,6 @@ const calculateOrderAmount = (totalCost) => {
  */
 const summarizeInvoice = (invoice) => {
   if (invoice === undefined) return;
-  console.log(invoice);
   const newInvoice = {
     invoiceNum: invoice.number,
     receiptNum: invoice.receipt_number,
@@ -68,11 +68,12 @@ const summarizeInvoice = (invoice) => {
  * */
 paymentsRouter.post("/payment-intent", async (req, res) => {
   const reqBody = req.body;
-  // If any of the arguments is missing, return an error
-  if (!reqBody.totalCost || !reqBody.currency) {
-    return res.status(422).json({ error: "Invalid arguments" });
-  }
-
+  // Check validity of argument
+  if (
+    !isValidArgument(reqBody.totalCost, "number") ||
+    !isValidArgument(reqBody.currency, "string")
+  )
+    return res.status(422).json({ error: "Invalid arguments." });
   try {
     // Create a PaymentIntent with the order amount and currency
     const paymentIntent = await stripe.paymentIntents.create({
@@ -83,17 +84,8 @@ paymentsRouter.post("/payment-intent", async (req, res) => {
     // Finish the payment
     return res.status(200).json({ clientSecret: paymentIntent.client_secret });
   } catch (e) {
-    switch (e.type) {
-      case "StripeCardError":
-        console.log(`A payment error occurred: ${e.message}`);
-        break;
-      case "StripeInvalidRequestError":
-        console.log("An invalid request occurred.");
-        break;
-      default:
-        console.log("Another problem occurred, maybe unrelated to Stripe.");
-        break;
-    }
+    const errorMsg = stripeCatchError(e);
+    console.log(errorMsg);
   }
 });
 
@@ -102,7 +94,10 @@ paymentsRouter.post("/payment-intent", async (req, res) => {
  */
 paymentsRouter.post("/checkout-session", async (req, res) => {
   const priceId = req.body.priceId;
-  if (priceId) {
+  // Check validity of argument
+  if (!isValidArgument(priceId, "string"))
+    return res.status(422).json({ error: "Invalid arguments." });
+  try {
     const session = await stripe.checkout.sessions.create({
       mode: "subscription",
       billing_address_collection: "auto",
@@ -121,8 +116,10 @@ paymentsRouter.post("/checkout-session", async (req, res) => {
       cancel_url: `http://localhost:3000/purchase/confirm?canceled=true`,
     });
     return res.status(200).json({ url: session.url });
+  } catch (e) {
+    const errorMsg = stripeCatchError(e);
+    console.log(errorMsg);
   }
-  res.send();
 });
 
 /**
@@ -130,7 +127,9 @@ paymentsRouter.post("/checkout-session", async (req, res) => {
  */
 paymentsRouter.get("/session/:sessionId", async (req, res) => {
   const { sessionId } = req.params;
-  if (!sessionId) return res.status(422).json("Invalid sessionId.");
+  // Check validity of sessionId
+  if (!isValidArgument(sessionId, "string"))
+    return res.status(422).json({ error: "Invalid sessionId." });
   const session = await stripe.checkout.sessions.retrieve(sessionId);
   if (!session) return res.status(404).send("Session not found");
   return res.status(200).json(session);
@@ -144,6 +143,9 @@ paymentsRouter.post("/create-portal-session", async (req, res) => {
   // For demonstration purposes, we're using the Checkout session to retrieve the customer ID.
   // Typically this is stored alongside the authenticated user in your database.
   const { session_id } = req.body;
+  // Check validity of sessionId
+  if (!isValidArgument(session_id, "string"))
+    return res.status(422).json({ error: "Invalid sessionId." });
   const checkoutSession = await stripe.checkout.sessions.retrieve(session_id);
 
   // URL where the customer will be redirected after the payment
@@ -164,22 +166,21 @@ paymentsRouter.post("/create-portal-session", async (req, res) => {
 paymentsRouter.post(
   "/webhook",
   express.raw({ type: "application/json" }),
-  (request, response) => {
-    let event = request.body;
-    console.log(event);
+  (req, res) => {
+    let event = req.body;
     // Verify the event if endpoint secret is defined
     if (endpointSecret) {
       // Get the signature sent by Stripe
-      const signature = request.headers["stripe-signature"];
+      const signature = req.headers["stripe-signature"];
       try {
         // Event object
         event = stripe.webhooks.constructEvent(
-          request.body,
+          req.body,
           signature,
           endpointSecret
         );
       } catch (err) {
-        return response.status(400).send(`Webhook Error: ${err.message}`);
+        return res.status(400).send(`Webhook Error: ${err.message}`);
       }
     } // Otherwise, use the basic event
 
@@ -221,7 +222,7 @@ paymentsRouter.post(
         console.log(`Unhandled event type ${event.type}.`);
     }
     // Return a 200 response to acknowledge receipt of the event
-    return response.status(200);
+    return res.status(200);
   }
 );
 
@@ -229,14 +230,17 @@ paymentsRouter.post(
  * Summarize the payment method details and get invoice.
  */
 paymentsRouter.post("/summarize", async (req, res) => {
+  const invoiceId = req.body.invoiceId;
+  // Check validity of invoiceId
+  if (!isValidArgument(invoiceId, "string"))
+    return res.status(422).json({ error: "Invalid invoiceId." });
   try {
-    const reqBody = req.body;
     // Retrieve invoice
-    const invoice = await stripe.invoices.retrieve(reqBody.invoiceId);
+    const invoice = await stripe.invoices.retrieve(invoiceId);
     // Send the response to the client
     res.status(200).json(summarizeInvoice(invoice));
   } catch (e) {
-    // Display error on client
-    return res.status(500).json({ error: e.message });
+    const errorMsg = stripeCatchError(e);
+    console.log(errorMsg);
   }
 });

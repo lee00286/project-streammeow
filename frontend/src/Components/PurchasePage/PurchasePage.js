@@ -27,10 +27,13 @@ function PurchasePage({ plan }) {
 
   /* Get membership of the creator */
   useEffect(() => {
-    module.getAllMembership(creatorId).then((res) => {
-      if (res.error) return console.log(res.error);
-      setMemberships(res.data.memberships);
-    });
+    module
+      .getAllMembership(creatorId)
+      .then((res) => {
+        if (res.error) return console.log(res.error);
+        setMemberships(res.data.memberships);
+      })
+      .catch((e) => console.log(e));
   }, []);
 
   /* Update inherited SelectPlan */

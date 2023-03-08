@@ -48,10 +48,13 @@ function ConfirmPage() {
         else return res.data;
       })
       .then((data) => {
-        module.summarizePayment(data.invoice).then((res) => {
-          console.log(res.data);
-          setInvoice(res.data);
-        });
+        module
+          .summarizePayment(data.invoice)
+          .then((res) => {
+            if (res.error) return console.log(res.error);
+            setInvoice(res.data);
+          })
+          .catch((e) => console.log(e));
       });
   }, []);
 

@@ -37,7 +37,12 @@ function SubscribeButton({ currency, membership, price, isChecked }) {
   /* Create portal session */
   const onManage = (e) => {
     e.preventDefault();
-    module.addPortalSession();
+    module
+      .addPortalSession()
+      .then((res) => {
+        if (res.error) return console.log(res.error);
+      })
+      .catch((e) => console.log(e));
   };
 
   /* Checkout membership subscription */
@@ -68,11 +73,16 @@ function SubscribeButton({ currency, membership, price, isChecked }) {
       })
       .then((priceId) => {
         // Create a checkout-session using priceId
-        module.addCheckoutSession(priceId).then((res) => {
-          console.log(res);
-          // Payment (replace with my own payment page)
-          window.open(res.data.url, "_self");
-        });
+        module
+          .addCheckoutSession(priceId)
+          .then((res) => {
+            if (res.error) return console.log(res.error);
+            // Payment (replace with my own payment page)
+            window.open(res.data.url, "_self");
+          })
+          .catch((e) => {
+            console.log(e);
+          });
       });
   };
 
