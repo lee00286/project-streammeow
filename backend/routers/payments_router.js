@@ -6,6 +6,9 @@ import { isValidArgument, stripeCatchError } from "../error_check.js";
 export const paymentsRouter = Router();
 dotenv.config();
 
+// Client URL
+const CLIENT_HOST = process.env.CLIENT_HOST || "localhost:3000";
+
 // Stripe API key
 const publicSampleTestKey = "sk_test_Hrs6SAopgFPF0bZXSN3f6ELN";
 const stripe = Stripe(process.env.STRIPE_API_KEY || publicSampleTestKey, {
@@ -112,8 +115,8 @@ paymentsRouter.post("/checkout-session", async (req, res) => {
       // subscription_data: {
       //   metadata: { user_id: current_user.id },
       // },
-      success_url: `http://localhost:3000/purchase/confirm?success=true&session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `http://localhost:3000/purchase/confirm?canceled=true`,
+      success_url: `http://${CLIENT_HOST}/purchase/confirm?success=true&session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `http://${CLIENT_HOST}/purchase/confirm?canceled=true`,
     });
     return res.status(200).json({ url: session.url });
   } catch (e) {
@@ -149,7 +152,7 @@ paymentsRouter.post("/create-portal-session", async (req, res) => {
   const checkoutSession = await stripe.checkout.sessions.retrieve(session_id);
 
   // URL where the customer will be redirected after the payment
-  const returnUrl = "http://localhost:3000/purchase/confirm";
+  const returnUrl = `http://${CLIENT_HOST}:${CLIENT_PORT}/purchase/confirm`;
 
   const portalSession = await stripe.billingPortal.sessions.create({
     customer: checkoutSession.customer,

@@ -12,8 +12,8 @@ app.use(bodyParser.json());
 dotenv.config();
 
 // CORS for a list of allowed origins (specify for safety)
-// const allowedOrigins = ["http://localhost:3000"];
-const allowedOrigins = ["http://localhost:3000", "https://checkout.stripe.com"];
+const CLIENT_HOST = process.env.CLIENT_HOST || "http://localhost:3000";
+const allowedOrigins = [CLIENT_HOST, "https://checkout.stripe.com"];
 // const allowedOrigins = ["*"];
 const options = {
   origin: allowedOrigins,
@@ -39,8 +39,9 @@ app.get("/api/test", (req, res) => {
 app.use("/api/payments", paymentsRouter);
 app.use("/api/memberships", membershipsRouter);
 
+const HOST = process.env.HOST || "localhost";
 const PORT = process.env.PORT || 5001;
 
 app.listen(PORT, () => {
-  console.log(`HTTP server on http://localhost:${PORT}`);
+  console.log(`HTTP server on http://${HOST}:${PORT}`);
 });

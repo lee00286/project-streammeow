@@ -7,6 +7,9 @@ import {
   useStripe,
 } from "@stripe/react-stripe-js";
 
+// Client URL
+const CLIENT_HOST = process.env.CLIENT_HOST || "localhost:3000";
+
 /**
  * CheckOutForm component.
  * @returns CheckOutForm component
@@ -71,7 +74,7 @@ function CheckOutForm() {
     const { error } = await stripe.confirmPayment({
       elements,
       confirmParams: {
-        return_url: "http://localhost:3000/purchase/confirm", // redirected after the payment
+        return_url: `http://${CLIENT_HOST}/purchase/confirm`, // redirected after the payment
         receipt_email: Email, // stripe only sends in live mode
       },
     });
