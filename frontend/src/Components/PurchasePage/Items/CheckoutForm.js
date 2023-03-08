@@ -7,6 +7,10 @@ import {
   useStripe,
 } from "@stripe/react-stripe-js";
 
+/**
+ * CheckOutForm component.
+ * @returns CheckOutForm component
+ */
 function CheckOutForm() {
   const stripe = useStripe();
   const elements = useElements();
@@ -55,6 +59,7 @@ function CheckOutForm() {
     layout: "tabs",
   };
 
+  // Checkout payment
   const handleSubmit = async (e) => {
     e.preventDefault();
     // Stripe.js has not yet loaded

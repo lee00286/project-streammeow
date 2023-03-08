@@ -1,5 +1,27 @@
 .page-title {
   color: var(--yellow4);
   text-align: left;
-  user-select: none;
+}
+
+.sub-title {
+  color: #000;
+  text-align: left;
+}
+
+.checkbox {
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+}
+
+.checkbox p {
+  margin: 0;
+  font-size: 15px;
+  color: var(--yellow4);
+  text-align: left;
+}
+
+.checkbox p span {
+  font-weight: bold;
 }

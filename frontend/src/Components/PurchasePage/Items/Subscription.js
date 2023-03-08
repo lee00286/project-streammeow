@@ -1,101 +1,55 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import module from "../../../ApiService";
 
-function Subscription() {
-  let [message, setMessage] = useState("");
-  let [success, setSuccess] = useState(false);
-  let [sessionId, setSessionId] = useState("");
+/**
+ * Subscription component that displays membership.
+ * @param {Object} membership: membership object
+ * @param {boolean} isSelected: if the membership plan is selected
+ * @param {Function} onSelect: function to operate if the membership is selected
+ * @returns Subscription component
+ */
+function Subscription({ membership, isSelected, onSelect }) {
+  const [MembershipPrice, setMembershipPrice] = useState(null);
 
   useEffect(() => {
-    // Check to see if this is a redirect back from Checkout
-    const query = new URLSearchParams(window.location.search);
+    // If plan is selected, send information
+    if (isSelected) onSelectPlan();
+  }, [isSelected]);
 
-    if (query.get("success")) {
-      setSuccess(true);
-      setSessionId(query.get("session_id"));
-    }
+  /* Get price of the membership */
+  useEffect(() => {
+    if (!membership) return;
+    module
+      .getPriceById(membership.default_price)
+      .then((res) => {
+        if (res.error) console.log(res.error);
+        const price = parseFloat(res.data.price.unit_amount_decimal);
+        setMembershipPrice(price);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [membership]);
 
-    if (query.get("canceled")) {
-      setSuccess(false);
-      setMessage(
-        "Order canceled -- continue to shop around and checkout when you're ready."
-      );
-    }
-  }, [sessionId]);
-
-  const onCheckOut = (e) => {
-    e.preventDefault();
-    const variable = { lookupKey: e.target[0].value };
-    axios.post("/api/payments/checkout-session", variable).then((res) => {
-      console.log(res);
-      // Payment (replace with my own payment page)
-      window.open(res.data.url, "_self");
-    });
+  /* Select membership plan */
+  const onSelectPlan = () => {
+    if (onSelect) onSelect(membership.id, MembershipPrice);
   };
 
-  const onManage = (e) => {
-    e.preventDefault();
-    axios.post("/api/payments/create-portal-session", {}).then((res) => {
-      console.log(res);
-    });
-  };
-
-  const productDisplay = () => {
-    return (
-      <div>
-        <div className="product">
-          <div className="description">
-            <h3>Standard</h3>
-            <h5>$2.99 / month</h5>
-          </div>
-        </div>
-        <form onSubmit={onCheckOut}>
-          {/* Add a hidden field with the lookup_key of your Price */}
-          <input type="hidden" name="lookup_key" value="standard" />
-          <button id="checkout-and-portal-button" type="submit">
-            Checkout
-          </button>
-        </form>
+  return (
+    <div
+      onClick={onSelectPlan}
+      className={`membership-box ${isSelected ? "selected-plan" : ""}`}
+    >
+      <p className="title">{membership.name}</p>
+      <div className="price row">
+        <div className="currency">$</div>
+        <p className="price-num">{MembershipPrice}</p>
+        <p>/ month</p>
       </div>
-    );
-  };
-
-  const successDisplay = (sessionId) => {
-    return (
-      <section>
-        <div className="product Box-root">
-          <div className="description Box-root">
-            <h3>Subscription to starter plan successful!</h3>
-          </div>
-        </div>
-        <form onSubmit={onManage}>
-          <input
-            type="hidden"
-            id="session-id"
-            name="session_id"
-            value={sessionId}
-          />
-          <button id="checkout-and-portal-button" type="submit">
-            Manage your billing information
-          </button>
-        </form>
-      </section>
-    );
-  };
-
-  const messageBlock = (message) => (
-    <section>
-      <p>{message}</p>
-    </section>
+      <button>See Details</button>
+    </div>
   );
-
-  if (!success && message === "") {
-    return productDisplay();
-  } else if (success && sessionId !== "") {
-    return successDisplay(sessionId);
-  } else {
-    return messageBlock(message);
-  }
 }
 
 export default Subscription;

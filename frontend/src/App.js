@@ -1,5 +1,4 @@
 import { Route, Routes } from "react-router-dom";
-import axios from "axios";
 // Components
 import NavBar from "./Components/NavBar/NavBar";
 import HomePage from "./Components/HomePage/HomePage";

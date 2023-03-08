@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import module from "../../../ApiService";
 // Stripe
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
@@ -11,21 +11,27 @@ const stripePromise = loadStripe(
   process.env.STRIPE_API_KEY || publicSampleTestAPIKey
 );
 
-function Payment() {
+/**
+ * Payment component that allows paying for a membership.
+ * @param {number} totalCost: total cost to pay
+ * @param {string} currency: currency of the cost
+ * @returns Payment component
+ */
+function Payment({ totalCost, currency }) {
   const [ClientSecret, setClientSecret] = useState(null);
 
   useEffect(() => {
-    const reqBody = { items: [{ id: "xl-tshirt" }] };
+    if (!totalCost || !currency) return;
     // Create a new PaymentIntent
-    axios
-      .post("/api/payments/paymentintent", reqBody)
+    module
+      .addPaymentIntent(totalCost, currency)
       .then((res) => {
         setClientSecret(res.data.clientSecret);
       })
       .catch((err) => {
         console.log(`Error: ${err.response.data.error}`);
       });
-  }, []);
+  }, [totalCost, currency]);
 
   // Customize the appearance of the payment form
   const appearance = {
