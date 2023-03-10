@@ -59,9 +59,10 @@ function MembershipPrice({ price }) {
   // TODO: make it flexible to currency symbol
   return (
     // TODO make horizontal, superscript the currency, make price bigger
-    <div className="membership-price">
-      <h4>${price}</h4>
-      <p>/month</p>
+    <div className="price row">
+      <div className="currency">$</div>
+      <p className="price-num">{price}</p>
+      <p>/ month</p>
     </div>
   );
 }

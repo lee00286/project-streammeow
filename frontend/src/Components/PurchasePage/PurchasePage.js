@@ -93,7 +93,9 @@ function PurchasePage({ plan }) {
         <div className="purchase-left col-7">
           <SubTitle text="Membership Plan" />
           {Memberships && (
-            <div className="membership row no-select">{memberships}</div>
+            <div className="purchase-membership row no-select">
+              {memberships}
+            </div>
           )}
           {/* {SelectPlan && <SubTitle text="Payment Details" />}
           {SelectPlan && <Payment totalCost={TotalCost} currency="cad" />} */}
