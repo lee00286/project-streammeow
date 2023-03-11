@@ -1,22 +1,10 @@
 import React, { useEffect, useState } from "react";
+import calculations from "../../calculations";
 import "../PurchasePage.css";
 
 const taxCalculate = (price, taxRate) => {
   if (!price || !taxRate) return;
   return (price * taxRate) / 100;
-};
-
-const addCalculate = (left, right) => {
-  if (!left || !right) return;
-  if (typeof left === "string" || typeof right === "string")
-    return parseFloat(left) + parseFloat(right);
-  return left + right;
-};
-
-/* Round to 2 decimal places */
-const roundNum = (num, digits, base) => {
-  var pow = Math.pow(base || 10, digits);
-  return Math.round(num * pow) / pow;
 };
 
 /**
@@ -36,8 +24,8 @@ function InvoiceTable({ buyList, totalCost }) {
     let priceObject = {
       price: buyList.price,
       tax: taxCalculate(buyList.price, 12.5),
+      total: calculations.addNum(priceObject.price, priceObject.tax),
     };
-    priceObject.total = addCalculate(priceObject.price, priceObject.tax);
     setPrice(priceObject);
     // Send total cost to PurchasePage component
     if (totalCost) totalCost(priceObject.total);
@@ -74,11 +62,15 @@ function InvoiceTable({ buyList, totalCost }) {
         {tableRow(
           "Tax (12.5%)",
           null,
-          Price.tax ? roundNum(Price.tax, 2) : null
+          Price.tax ? calculations.roundNum(Price.tax, 2) : null
         )}
       </div>
       <div className="table-section col no-border">
-        {tableRow("TOTAL", null, Price.total ? roundNum(Price.total, 2) : null)}
+        {tableRow(
+          "TOTAL",
+          null,
+          Price.total ? calculations.roundNum(Price.total, 2) : null
+        )}
       </div>
     </div>
   );
