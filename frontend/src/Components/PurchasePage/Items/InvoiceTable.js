@@ -13,6 +13,12 @@ const addCalculate = (left, right) => {
   return left + right;
 };
 
+/* Round to 2 decimal places */
+const roundNum = (num, digits, base) => {
+  var pow = Math.pow(base || 10, digits);
+  return Math.round(num * pow) / pow;
+};
+
 /**
  * Invoice table that shows invoice of purchase.
  * @param {Object} buyList: a selected item to purchase
@@ -65,10 +71,14 @@ function InvoiceTable({ buyList, totalCost }) {
       </div>
       <div className="table-section col">
         {tableRow("SUBTOTAL", null, BuyList.price, true)}
-        {tableRow("Tax (12.5%)", null, Price.tax ? Price.tax.toFixed(2) : null)}
+        {tableRow(
+          "Tax (12.5%)",
+          null,
+          Price.tax ? roundNum(Price.tax, 2) : null
+        )}
       </div>
       <div className="table-section col no-border">
-        {tableRow("TOTAL", null, Price.total ? Price.total.toFixed(2) : null)}
+        {tableRow("TOTAL", null, Price.total ? roundNum(Price.total, 2) : null)}
       </div>
     </div>
   );

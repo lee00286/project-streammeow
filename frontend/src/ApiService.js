@@ -3,26 +3,29 @@ import axios from "axios";
 let module = {};
 
 /**
- * Create a new membership.
- * @param {string} name: title of the membership
+ * Create a new membership to DB.
+ * @param {string} name: name of the membership
  * @param {string} description: description of the membership
- * @param {string} price: price of the membership
- * @param {string} creatorId: id of the creator
+ * @param {Array} benefits: benefits of the membership
+ * @param {string} currency: currency of the price
+ * @param {number} price: price of the membership
  */
-module.addMembership = (name, description, price, creatorId) => {
+module.addMembership = (name, description, benefits, currency, price) => {
   return axios.post("/api/memberships/", {
     name,
     description,
-    default_price_data: price,
-    creatorId,
+    benefits,
+    currency,
+    price,
   });
 };
 
 /**
- * Retrieve all existing memberships.
+ * Retrieve all existing memberships from DB.
+ * If creatorId is provided, retrieve all memberships of the creator.
  * @param {string} creatorId: id of the creator
  */
-module.getAllMembership = (creatorId) => {
+module.getAllMemberships = (creatorId) => {
   // Get all memberships of the creator
   if (creatorId) return axios.get(`/api/memberships?creatorId=${creatorId}`);
   // Get all existing memberships
@@ -30,8 +33,17 @@ module.getAllMembership = (creatorId) => {
 };
 
 /**
+ * Retrieve a membership from DB.
+ * @param {string} membershipId: id of the membership
+ */
+module.getMembershipById = (membershipId) => {
+  // Get a membership using membershipId
+  return axios.get(`/api/memberships/${membershipId}`);
+};
+
+/**
  * Update attributes in membership.
- * @param {string} membershipId
+ * @param {string} membershipId: id of the membership
  * @param {Object} variables: attributes to update
  */
 module.updateMembership = (membershipId, variables) => {
@@ -39,32 +51,53 @@ module.updateMembership = (membershipId, variables) => {
 };
 
 /**
- * Create a new price for a membership.
+ * Delete a membership from DB.
+ * @param {string} membershipId: id of the membership
+ */
+module.deleteMembership = (membershipId) => {
+  return axios.delete(`/api/memberships/${membershipId}`);
+};
+
+/**
+ * Create a new price for a membership in Stripe.
+ * @param {string} membershipName: name of the membership
  * @param {string} currency: currency of the price
- * @param {string} product: id of the membership
- * @param {number} unit_amount_decimal: price of the membership
+ * @param {number} price: price of the membership
  */
-module.addPrice = (currency, product, unit_amount_decimal) => {
-  return axios.post("/api/memberships/prices", {
-    currency,
-    product,
-    unit_amount_decimal,
-  });
+module.addPrice = (membershipName, currency, price) => {
+  return axios.post("/api/prices", { membershipName, currency, price });
 };
 
 /**
- * Retrive all existing prices.
+ * Retrive all existing prices from Stripe.
  */
-module.getAllPrice = () => {
-  return axios.get("/api/memberships/prices");
+module.getAllPrices = () => {
+  return axios.get("/api/prices");
 };
 
 /**
- * Retrieve a price by priceId.
+ * Retrieve a price from Stripe, by priceId.
  * @param {string} priceId: id of the price
  */
 module.getPriceById = (priceId) => {
-  return axios.get(`/api/memberships/prices/${priceId}`);
+  return axios.get(`/api/prices/${priceId}`);
+};
+
+/**
+ * Update attributes in price.
+ * @param {string} priceId: id of the price
+ * @param {Object} variables: attributes to update
+ */
+module.updatePrice = (priceId, variables) => {
+  return axios.patch(`/api/prices/${priceId}`, variables);
+};
+
+/**
+ * Delete a price from Stripe.
+ * @param {string} priceId: id of the price
+ */
+module.deletePrice = (priceId) => {
+  return axios.delete(`/api/prices/${priceId}`);
 };
 
 /**

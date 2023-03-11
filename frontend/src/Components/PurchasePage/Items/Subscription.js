@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import module from "../../../ApiService";
 
 /**
  * Subscription component that displays membership.
@@ -16,24 +15,16 @@ function Subscription({ membership, isSelected, onSelect }) {
     if (isSelected) onSelectPlan();
   }, [isSelected]);
 
-  /* Get price of the membership */
+  /* Set price of the membership */
   useEffect(() => {
-    if (!membership) return;
-    module
-      .getPriceById(membership.default_price)
-      .then((res) => {
-        if (res.error) console.log(res.error);
-        const price = parseFloat(res.data.price.unit_amount_decimal);
-        setMembershipPrice(price);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    if (!membership?.price) return;
+    const price = parseFloat(membership.price);
+    setMembershipPrice(price);
   }, [membership]);
 
   /* Select membership plan */
   const onSelectPlan = () => {
-    if (onSelect) onSelect(membership.id, MembershipPrice);
+    if (onSelect) onSelect(membership.id, membership.priceId, MembershipPrice);
   };
 
   return (
