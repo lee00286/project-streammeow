@@ -24,19 +24,18 @@ function InvoiceTable({ buyList, totalCost }) {
     let priceObject = {
       price: buyList.price,
       tax: taxCalculate(buyList.price, 12.5),
-      total: calculations.addNum(priceObject.price, priceObject.tax),
     };
+    priceObject.total = calculations.addNum(priceObject.price, priceObject.tax);
     setPrice(priceObject);
     // Send total cost to PurchasePage component
     if (totalCost) totalCost(priceObject.total);
   }, [buyList, totalCost]);
 
   // Row of the table body
-  const tableRow = (item, quantity, price, space) => {
+  const tableRow = (item, price, space) => {
     return (
       <div className={`table-row row ${space ? "table-row-space" : ""}`}>
         <div className="col-auto text-l">{item}</div>
-        <div className="col-3 text-r">{quantity}</div>
         <div className="col-2 text-r">{price}</div>
       </div>
     );
@@ -51,24 +50,21 @@ function InvoiceTable({ buyList, totalCost }) {
     <div>
       <div className="table-header row no-select">
         <div className="col-auto text-l">Item</div>
-        <div className="col-3 text-r">Quantity</div>
         <div className="col-2 text-r">Price</div>
       </div>
       <div className="table-section col">
-        {tableRow(BuyList.item, BuyList.quantity, Price.price)}
+        {tableRow(BuyList.item, Price.price)}
       </div>
       <div className="table-section col">
-        {tableRow("SUBTOTAL", null, BuyList.price, true)}
+        {tableRow("SUBTOTAL", BuyList.price, true)}
         {tableRow(
           "Tax (12.5%)",
-          null,
           Price.tax ? calculations.roundNum(Price.tax, 2) : null
         )}
       </div>
       <div className="table-section col no-border">
         {tableRow(
           "TOTAL",
-          null,
           Price.total ? calculations.roundNum(Price.total, 2) : null
         )}
       </div>

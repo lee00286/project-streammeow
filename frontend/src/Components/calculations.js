@@ -25,7 +25,7 @@ calculations.roundNum = (num, digits, base) => {
 };
 
 /* Add two numbers */
-const addNum = (left, right) => {
+calculations.addNum = (left, right) => {
   if (!left || !right) return;
   if (typeof left === "string" || typeof right === "string")
     return parseFloat(left) + parseFloat(right);
