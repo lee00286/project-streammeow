@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { isValidArgument } from "../error_check.js";
-import { Membership } from "../models/memberships.js";
+import { Memberships } from "../models/memberships.js";
 
 export const membershipsRouter = Router();
 
@@ -23,7 +23,7 @@ membershipsRouter.post("/", async (req, res) => {
     let creatorId = "1";
 
     // Create a new membership
-    const membership = await Membership.create({
+    const membership = await Memberships.create({
       name: reqBody.name,
       description: reqBody.description,
       benefits: reqBody.benefits,
@@ -56,7 +56,7 @@ membershipsRouter.get("/", async (req, res) => {
       options.where = { creatorId: creatorId };
     }
     // Retrieve memberships
-    const memberships = await Membership.findAll(options);
+    const memberships = await Memberships.findAll(options);
 
     if (!memberships)
       return res.status(404).json({ error: "Failed to retrieve memberships." });
@@ -77,7 +77,7 @@ membershipsRouter.get("/:membershipId/", async (req, res, next) => {
   if (!isValidArgument(membershipId, "string"))
     return res.status(422).json({ error: "Invalid membershipId." });
   try {
-    const membership = await Membership.findByPk(membershipId);
+    const membership = await Memberships.findByPk(membershipId);
     if (!membership)
       return res
         .status(404)
@@ -103,7 +103,7 @@ membershipsRouter.patch("/:membershipId/", async (req, res) => {
     return res.status(422).json({ error: "Invalid arguments." });
   try {
     // Update a membership
-    const membership = await Membership.update(variables, {
+    const membership = await Memberships.update(variables, {
       where: { id: membershipId },
     });
     // If membership doesn't exist
@@ -127,7 +127,7 @@ membershipsRouter.delete("/:membershipId/", async (req, res) => {
   if (!isValidArgument(membershipId, "string"))
     return res.status(422).json({ error: "Invalid membershipId." });
   try {
-    const membership = await Membership.findByPk(membershipId);
+    const membership = await Memberships.findByPk(membershipId);
     // If membership doesn't exist
     if (!membership)
       res

@@ -24,8 +24,7 @@ app.use(cors(options));
 // Run this before the other code
 try {
   await sequelize.authenticate();
-  // Automatically detect all of your defined models and create (or modify) the tables for you.
-  // This is not recommended for production-use, but that is a topic for a later time!
+  // Automatically detect all of your defined models and create (or modify) the tables for you
   await sequelize.sync({ alter: { drop: false } });
   console.log("Connection has been established successfully.");
 } catch (error) {

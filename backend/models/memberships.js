@@ -3,7 +3,7 @@ import { DataTypes } from "sequelize";
 // import { User } from "./users.js";
 // import { Creator } from "./users.js"; (IS-A relationship from User?)
 
-export const Membership = sequelize.define("Membership", {
+export const Memberships = sequelize.define("Memberships", {
   name: {
     type: DataTypes.STRING,
     allowNull: false,
@@ -12,18 +12,17 @@ export const Membership = sequelize.define("Membership", {
     type: DataTypes.STRING,
     allowNull: true,
   },
-  benefits: [
-    {
-      type: DataTypes.STRING,
-    },
-  ],
+  benefits: {
+    type: DataTypes.ARRAY(DataTypes.STRING),
+    allowNull: true,
+  },
   currency: {
     type: DataTypes.STRING,
     defaultValue: "cad",
     allowNull: false,
   },
   price: {
-    type: DataTypes.NUMBER,
+    type: DataTypes.DOUBLE,
     defaultValue: 0,
     allowNull: false,
   },
@@ -36,7 +35,7 @@ export const Membership = sequelize.define("Membership", {
     allowNull: false,
     defaultValue: DataTypes.NOW,
   },
-  modifiedAt: {
+  updatedAt: {
     type: DataTypes.DATE,
     allowNull: true,
   },
@@ -45,26 +44,25 @@ export const Membership = sequelize.define("Membership", {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  //   creatorId: {
-  //     type: DataTypes.STRING,
-  //     references: {
-  //       model: "Creator",
-  //       key: "id",
-  //     },
-  //     allowNull: false, // consider what if creator deletes one's acocunt
+  // creatorId: {
+  //   type: DataTypes.STRING,
+  //   references: {
+  //     model: "Creator",
+  //     key: "id",
   //   },
-  //   subscribers: [
-  //     {
-  //       type: DataTypes.STRING,
-  //       references: {
-  //         model: "User",
-  //         key: "id",
-  //       },
-  //     },
-  //   ],
+  //   allowNull: false, // TODO: consider what if creator deletes acocunt
+  // },
+  // subscribers: {
+  //   type: DataTypes.ARRAY(DataTypes.STRING),
+  //   references: {
+  //     model: "User",
+  //     key: "id",
+  //   },
+  //   allowNull: true,
+  // },
 });
 
-// Membership.belongsTo(User);
-// User.hasMany(Membership);
-// Membership.belongsTo(Creator);
-// Creator.hasMany(Membership);
+// Memberships.belongsTo(User);
+// User.hasMany(Memberships);
+// Memberships.belongsTo(Creator);
+// Creator.hasMany(Memberships);
