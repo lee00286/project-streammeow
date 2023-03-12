@@ -1,0 +1,25 @@
+.membership {
+  padding-bottom: 20px;
+  width: 100%;
+  max-width: 300px;
+  background: white;
+  border: 2px;
+  border-style: solid;
+  border-color: var(--yellow3);
+  border-radius: 16px;
+}
+
+.membership-name {
+  text-align: center;
+  color: white;
+  font-weight: bold;
+  background-color: var(--yellow3);
+}
+
+.membership-content {
+  padding: 20px;
+}
+
+.membership-description {
+  text-align: left;
+}

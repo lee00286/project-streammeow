@@ -22,37 +22,40 @@ function PurchasePage({ plan }) {
   const [Memberships, setMemberships] = useState([]);
   const [SelectPlan, setSelectPlan] = useState(null);
   const [BuyList, setBuyList] = useState(null);
+  const [PriceId, setPriceId] = useState(null);
   const [TotalCost, setTotalCost] = useState(null);
   const [IsChecked, setIsChecked] = useState(false);
 
   /* Get membership of the creator */
   useEffect(() => {
     module
-      .getAllMembership(creatorId)
+      .getAllMemberships(creatorId)
       .then((res) => {
         if (res.error) return console.log(res.error);
         setMemberships(res.data.memberships);
       })
       .catch((e) => console.log(e));
-  }, []);
+  }, [SelectPlan]);
 
   /* Update inherited SelectPlan */
   useEffect(() => {
     if (Memberships && SelectPlan === null && plan) setSelectPlan(plan);
   }, [Memberships, plan]);
 
-  const onSelect = (membershipId, price) => {
+  // Set selected membership plan
+  const onSelect = (membershipId, priceId, price) => {
     setSelectPlan(membershipId);
+    setPriceId(priceId);
     for (let i = 0; i < Memberships.length; i++) {
       if (Memberships[i].id === membershipId) {
         const variable = {
           membershipId: Memberships[i].id,
           item: Memberships[i].name,
           quantity: 1,
-          priceId: Memberships[i].default_price,
           price: price,
         };
         setBuyList(variable);
+        return;
       }
     }
   };
@@ -93,7 +96,9 @@ function PurchasePage({ plan }) {
         <div className="purchase-left col-7">
           <SubTitle text="Membership Plan" />
           {Memberships && (
-            <div className="membership row no-select">{memberships}</div>
+            <div className="purchase-membership row no-select">
+              {memberships}
+            </div>
           )}
           {/* {SelectPlan && <SubTitle text="Payment Details" />}
           {SelectPlan && <Payment totalCost={TotalCost} currency="cad" />} */}
@@ -111,9 +116,11 @@ function PurchasePage({ plan }) {
               onCheck={onCheck}
             />
             <SubscribeButton
-              currency={"cad"}
-              membership={BuyList.membershipId}
+              membershipId={BuyList.membershipId}
+              membershipName={BuyList.item}
+              priceId={PriceId ?? ""}
               price={TotalCost}
+              currency={"cad"}
               isChecked={IsChecked}
             />
           </div>

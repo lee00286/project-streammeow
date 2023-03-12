@@ -40,3 +40,27 @@
 .no-select {
   user-select: none;
 }
+
+.price {
+  justify-content: center;
+  align-items: flex-end;
+  height: 40px;
+}
+
+.price p {
+  margin: 0;
+  font-size: 12px;
+}
+
+.price .currency {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: flex-start;
+  height: 100%;
+}
+
+.price .price-num {
+  font-size: 30px;
+  font-weight: bold;
+}
