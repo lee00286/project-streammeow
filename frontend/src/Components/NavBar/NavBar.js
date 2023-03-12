@@ -19,6 +19,11 @@ function NavBar() {
     navigate("/");
   };
 
+  // Navigate to credit
+  const onCredit = () => {
+    navigate("/credits");
+  };
+
   // Navigate to login
   const onLogIn = () => {
     navigate("/signin");
@@ -37,7 +42,11 @@ function NavBar() {
       <div className="nav-menu row col-auto">
         <MenuButton text="About" textColor="var(--yellow4)" />
         <MenuButton text="Streaming" textColor="var(--yellow4)" />
-        <MenuButton text="Artworks" textColor="var(--yellow4)" />
+        <MenuButton
+          text="Credits"
+          textColor="var(--yellow4)"
+          buttonFunction={onCredit}
+        />
       </div>
       <div className="nav-buttons col-3">
         {!isAuth && (
