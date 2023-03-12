@@ -15,6 +15,11 @@ export const creditList = [
         siteName: "Stackoverflow",
         link: "https://stackoverflow.com/questions/5214127/css-technique-for-a-horizontal-line-with-words-in-the-middle",
       },
+      {
+        name: "Aspect ratio",
+        siteName: "CSS Tricks",
+        link: "https://css-tricks.com/almanac/properties/a/aspect-ratio/",
+      },
     ],
   },
   {
@@ -108,6 +113,26 @@ export const creditList = [
         name: "Complete Icon",
         siteName: "Iconfinder",
         link: "https://www.iconfinder.com/icons/3643781/check_checklist_complete_done_mark_icon",
+      },
+      {
+        name: "Settings Icon",
+        siteName: "Iconfinder",
+        link: "https://www.iconfinder.com/icons/1564529/mechanism_options_settings_configuration_setting_icon",
+      },
+      {
+        name: "Fullcreen Icon",
+        siteName: "Iconfinder",
+        link: "https://www.iconfinder.com/icons/3994367/expand_full_fullscreen_maximize_screen_icon",
+      },
+      {
+        name: "Exit Fullscreen Icon",
+        siteName: "Iconfinder",
+        link: "https://www.iconfinder.com/icons/3994360/exit_fullscreen_fullscreen_interface_minimize_shrink_icon",
+      },
+      {
+        name: "Sound Icon",
+        siteName: "Iconfinder",
+        link: "https://www.iconfinder.com/icons/3994409/audio_music_sound_speaker_volume_icon",
       },
     ],
   },
