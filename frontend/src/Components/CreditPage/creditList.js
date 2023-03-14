@@ -84,6 +84,11 @@ export const creditList = [
         siteName: "Sequelize.org",
         link: "https://sequelize.org/docs/v6/other-topics/migrations/",
       },
+      {
+        name: "Use environment variable for local sequelize configuration",
+        siteName: "Stackoverflow",
+        link: "https://stackoverflow.com/questions/38757728/using-an-enviroment-variable-for-local-sequelize-configuration",
+      },
     ],
   },
   {
