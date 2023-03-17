@@ -140,4 +140,36 @@ module.addPortalSession = () => {
   return axios.post("/api/payments/create-portal-session", {});
 };
 
+/**
+ * User registration.
+ * @param {string} email: email of the user
+ * @param {string} password: password of the user
+ */
+module.UserRegister = (email, password) => {
+  return axios.post("/api/users/signup", { email, password });
+};
+
+/**
+ * User login.
+ * @param {string} email: email of the user
+ * @param {string} password: password of the user
+ */
+module.UserLogin = (email, password) => {
+  return axios.post("/api/users/login", { email, password });
+};
+
+/**
+ * User logout.
+ */
+module.UserLogout = () => {
+  return axios.get("/api/users/logout");
+};
+
+/**
+ * Retrieve current user id.
+ */
+module.getUserId = () => {
+  return axios.get("/api/users/me");
+};
+
 export default module;
