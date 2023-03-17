@@ -2,6 +2,12 @@ import { sequelize } from "../datasource.js";
 import { DataTypes } from "sequelize";
 
 export const User = sequelize.define("User", {
+  id: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    autoIncrement: true,
+    primaryKey: true,
+  },
   name: {
     type: DataTypes.STRING,
   },
@@ -18,5 +24,9 @@ export const User = sequelize.define("User", {
     type: DataTypes.DATE,
     allowNull: false,
     defaultValue: DataTypes.NOW,
+  },
+  updatedAt: {
+    type: DataTypes.DATE,
+    allowNull: true,
   },
 });
