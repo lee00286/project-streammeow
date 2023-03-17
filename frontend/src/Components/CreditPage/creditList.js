@@ -15,6 +15,21 @@ export const creditList = [
         siteName: "Stackoverflow",
         link: "https://stackoverflow.com/questions/5214127/css-technique-for-a-horizontal-line-with-words-in-the-middle",
       },
+      {
+        name: "A complete guide to flexbox",
+        siteName: "CSS-Tricks",
+        link: "https://css-tricks.com/snippets/css/a-guide-to-flexbox/",
+      },
+      {
+        name: "Positioning an element at the bottom of a container",
+        siteName: "Stackoverflow",
+        link: "https://stackoverflow.com/questions/526035/how-can-i-position-my-div-at-the-bottom-of-its-container",
+      },
+      {
+        name: "Using transform property to center an absolute position element",
+        siteName: "Medium",
+        link: "https://medium.com/front-end-weekly/absolute-centering-in-css-ea3a9d0ad72e",
+      },
     ],
   },
   {
