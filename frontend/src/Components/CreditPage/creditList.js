@@ -16,6 +16,21 @@ export const creditList = [
         link: "https://stackoverflow.com/questions/5214127/css-technique-for-a-horizontal-line-with-words-in-the-middle",
       },
       {
+        name: "A complete guide to flexbox",
+        siteName: "CSS-Tricks",
+        link: "https://css-tricks.com/snippets/css/a-guide-to-flexbox/",
+      },
+      {
+        name: "Positioning an element at the bottom of a container",
+        siteName: "Stackoverflow",
+        link: "https://stackoverflow.com/questions/526035/how-can-i-position-my-div-at-the-bottom-of-its-container",
+      },
+      {
+        name: "Using transform property to center an absolute position element",
+        siteName: "Medium",
+        link: "https://medium.com/front-end-weekly/absolute-centering-in-css-ea3a9d0ad72e",
+      },
+      {
         name: "Aspect ratio",
         siteName: "CSS Tricks",
         link: "https://css-tricks.com/almanac/properties/a/aspect-ratio/",
@@ -38,6 +53,11 @@ export const creditList = [
       {
         name: "Date and time",
         link: "https://javascript.info/date",
+      },
+      {
+        name: "Hide password",
+        siteName: "Stackoverflow",
+        link: "https://stackoverflow.com/questions/71679442/show-hide-multiple-password-in-react-js",
       },
     ],
   },
@@ -138,6 +158,16 @@ export const creditList = [
         name: "Sound Icon",
         siteName: "Iconfinder",
         link: "https://www.iconfinder.com/icons/3994409/audio_music_sound_speaker_volume_icon",
+      },
+      {
+        name: "password show icon",
+        siteName: "Flaticon",
+        link: "https://www.flaticon.com/free-icons/password",
+      },
+      {
+        name: "Password icons created by th studio - Flaticon",
+        siteName: "Flaticon",
+        link: "https://www.flaticon.com/free-icons/password",
       },
     ],
   },

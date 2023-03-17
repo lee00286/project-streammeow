@@ -6,6 +6,8 @@ import { sequelize } from "./datasource.js";
 import { paymentsRouter } from "./routers/payments_router.js";
 import { membershipsRouter } from "./routers/memberships_router.js";
 import { pricesRouter } from "./routers/prices_router.js";
+import { usersRouter } from "./routers/users_router.js";
+import session from "express-session";
 
 export const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -20,6 +22,14 @@ const options = {
   origin: allowedOrigins,
 };
 app.use(cors(options));
+
+app.use(
+  session({
+    secret: "please change this secret",
+    resave: false,
+    saveUninitialized: true,
+  })
+);
 
 // Run this before the other code
 try {
@@ -39,6 +49,7 @@ app.get("/api/test", (req, res) => {
 app.use("/api/payments", paymentsRouter);
 app.use("/api/memberships", membershipsRouter);
 app.use("/api/prices", pricesRouter);
+app.use("/api/users", usersRouter);
 
 const HOST = process.env.HOST || "localhost";
 const PORT = process.env.PORT || 5001;

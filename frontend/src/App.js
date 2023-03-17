@@ -7,6 +7,8 @@ import CreatorPage from "./Components/CreatorPage/CreatorPage";
 import StreamingPage from "./Components/StreamingPage/StreamingPage";
 import PurchasePage from "./Components/PurchasePage/PurchasePage";
 import ConfirmPage from "./Components/PurchasePage/ConfirmPage";
+import LoginPage from "./Components/LoginPage/LoginPage";
+import RegisterPage from "./Components/LoginPage/RegisterPage";
 // Style
 import "./App.css";
 import "./Components/cols.css";
@@ -17,8 +19,8 @@ function App() {
       <NavBar />
       <Routes>
         <Route path="/" element={<HomePage />} />
-        {/* <Route path="/signin" element={<COMPONENT-NAME />} /> */}
-        {/* <Route path="/signup" element={<COMPONENT-NAME />} /> */}
+        <Route path="/signin" element={<LoginPage />} />
+        <Route path="/signup" element={<RegisterPage />} />
         <Route path="/credits" element={<CreditPage />} />
         <Route path="/creators" element={<CreatorPage />} />
         <Route path="/streaming/:streamId" element={<StreamingPage />} />
