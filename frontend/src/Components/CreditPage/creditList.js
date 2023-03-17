@@ -30,6 +30,11 @@ export const creditList = [
         siteName: "Medium",
         link: "https://medium.com/front-end-weekly/absolute-centering-in-css-ea3a9d0ad72e",
       },
+      {
+        name: "Aspect ratio",
+        siteName: "CSS Tricks",
+        link: "https://css-tricks.com/almanac/properties/a/aspect-ratio/",
+      },
     ],
   },
   {
@@ -133,6 +138,26 @@ export const creditList = [
         name: "Complete Icon",
         siteName: "Iconfinder",
         link: "https://www.iconfinder.com/icons/3643781/check_checklist_complete_done_mark_icon",
+      },
+      {
+        name: "Settings Icon",
+        siteName: "Iconfinder",
+        link: "https://www.iconfinder.com/icons/1564529/mechanism_options_settings_configuration_setting_icon",
+      },
+      {
+        name: "Fullcreen Icon",
+        siteName: "Iconfinder",
+        link: "https://www.iconfinder.com/icons/3994367/expand_full_fullscreen_maximize_screen_icon",
+      },
+      {
+        name: "Exit Fullscreen Icon",
+        siteName: "Iconfinder",
+        link: "https://www.iconfinder.com/icons/3994360/exit_fullscreen_fullscreen_interface_minimize_shrink_icon",
+      },
+      {
+        name: "Sound Icon",
+        siteName: "Iconfinder",
+        link: "https://www.iconfinder.com/icons/3994409/audio_music_sound_speaker_volume_icon",
       },
       {
         name: "password show icon",
