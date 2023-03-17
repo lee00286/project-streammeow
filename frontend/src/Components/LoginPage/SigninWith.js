@@ -4,7 +4,7 @@ import "./LoginPage.css";
 
 function SigninWith() {
   const navigate = useNavigate();
-  const onSignIn = () => {
+  const toSignIn = () => {
     navigate("/signin");
   };
 
@@ -27,7 +27,7 @@ function SigninWith() {
           <div className="login-footer-text">
             <p>
               Already have an account?
-              <button className="footer-button" onClick={onSignIn}>
+              <button className="footer-button" onClick={toSignIn}>
                 SIGN IN
               </button>
             </p>

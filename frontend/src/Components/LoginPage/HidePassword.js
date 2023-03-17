@@ -5,7 +5,6 @@ import "./LoginPage.css";
 
 function HidePassword() {
   const [isVisible, setVisible] = useState(false);
-
   const toggle = () => {
     setVisible(!isVisible);
   };

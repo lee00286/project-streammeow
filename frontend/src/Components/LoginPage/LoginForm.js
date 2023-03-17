@@ -1,8 +1,9 @@
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 import HidePassword from "./HidePassword";
 import "./LoginPage.css";
 
-function LoginForm({ login, register }) {
+function LoginForm({ login, register, onLogin, onRegister }) {
   const navigate = useNavigate();
 
   const toSignUp = () => {
@@ -13,12 +14,32 @@ function LoginForm({ login, register }) {
     navigate("/signin");
   };
 
-  const onSignUp = () => {
-    //todo
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
+  const onSignUp = (e) => {
+    e.preventDefault();
+
+    if (password !== confirmPassword) {
+      alert("Passwords don't match");
+      return;
+    }
+
+    onRegister(email, password);
+
+    setEmail("");
+    setPassword("");
+    setConfirmPassword("");
   };
 
-  const onSignIn = () => {
-    //todo
+  const onSignIn = (e) => {
+    e.preventDefault();
+
+    onLogin(email, password);
+
+    setEmail("");
+    setPassword("");
   };
 
   return (
@@ -30,11 +51,25 @@ function LoginForm({ login, register }) {
           </div>
           <div className="login-input col">
             <label>EMAIL</label>
-            <input type="text" placeholder="Email" required />
+            <input
+              type="text"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
             <label>PASSWORD</label>
-            <HidePassword />
+            <HidePassword
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
             {register ? <label>CONFIRM PASSWORD</label> : null}
-            {register ? <HidePassword /> : null}
+            {register ? (
+              <HidePassword
+                value={confirmPassword}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            ) : null}
           </div>
           {login ? (
             <button className="login-button" onClick={onSignIn}>
