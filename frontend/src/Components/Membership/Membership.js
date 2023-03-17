@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 
 import ColorButton from "../Buttons/ColorButton";
 import "./Membership.css";
@@ -6,38 +6,46 @@ import "./Membership.css";
 // TODO decide if parent is responsible for the action buttons (select, edit, etc) or make this component expose those options
 /**
  *
- * @param {string} name the membership name
- * @param {string} price the membership price. for example "2.99"
- * @param {string} description the membership description
- * @param {string[]} benefits the list of membership benefits
+ * @param {number} membershipId membership id
+ * @param {string} name membership name
+ * @param {string} price membership price, for example "2.99"
+ * @param {string} description membership description
+ * @param {string[]} benefits list of membership benefits
+ * @param {function} onSelect callback when the Select button is pressed
  * @returns
  */
-export default function Membership({ name, price, description, benefits }) {
-  // TODO IMPLEMENT
-  function onSelect() {
-    console.log("selected membership");
-  }
-
+export default function Membership({
+  membershipId,
+  name,
+  price,
+  description,
+  benefits,
+  onSelect,
+}) {
   return (
-    <div className="membership">
+    <div className="membership rounded">
       <MembershipName name={name} />
       <MembershipContent
+        membershipId={membershipId}
         price={price}
         description={description}
         benefits={benefits}
       />
       {/* TODO: direct to purchase or signin page */}
-      <ColorButton
-        buttonColor="var(--yellow3)"
-        text="Select"
-        textColor="white"
-        buttonFunction={onSelect}
-      />
+      <div className="membership-bottom">
+        <ColorButton
+          buttonColor="var(--yellow3)"
+          text="Select"
+          textColor="white"
+          buttonFunction={onSelect}
+        />
+      </div>
     </div>
   );
 }
 
 function MembershipName({ name }) {
+  // TODO minor fix: tiny curve by the corners not being filled by the background colour
   return (
     <div className="membership-name">
       <h3>{name}</h3>
@@ -45,12 +53,14 @@ function MembershipName({ name }) {
   );
 }
 
-function MembershipContent({ price, description, benefits }) {
+// TODO make it fixed height and hide details if the content is long. then
+// make it expandable to show all details
+function MembershipContent({ membershipId, price, description, benefits }) {
   return (
     <div className="membership-content">
       <MembershipPrice price={price} />
       <MembershipDescription description={description} />
-      <MembershipBenefits benefits={benefits} />
+      <MembershipBenefits membershipId={membershipId} benefits={benefits} />
     </div>
   );
 }
@@ -75,16 +85,17 @@ function MembershipDescription({ description }) {
   );
 }
 
-function MembershipBenefits({ benefits }) {
+function MembershipBenefits({ membershipId, benefits }) {
   const allBenefits = benefits.map((benefit, index) => {
     // TODO: use a better key
     return (
-      <li key={`benefit-${index}`}>
+      <li key={`${membershipId}-${index}`}>
         <p>{benefit}</p>
       </li>
     );
   });
 
+  // todo use a different icon for bullet points. maybe checkmarks
   return (
     <div className="membership-benefits">
       <ul>{allBenefits}</ul>
