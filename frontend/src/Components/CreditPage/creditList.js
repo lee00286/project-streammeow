@@ -34,6 +34,11 @@ export const creditList = [
         name: "Date and time",
         link: "https://javascript.info/date",
       },
+      {
+        name: "Hide password",
+        siteName: "Stackoverflow",
+        link: "https://stackoverflow.com/questions/71679442/show-hide-multiple-password-in-react-js",
+      },
     ],
   },
   {
@@ -113,6 +118,16 @@ export const creditList = [
         name: "Complete Icon",
         siteName: "Iconfinder",
         link: "https://www.iconfinder.com/icons/3643781/check_checklist_complete_done_mark_icon",
+      },
+      {
+        name: "password show icon",
+        siteName: "Flaticon",
+        link: "https://www.flaticon.com/free-icons/password",
+      },
+      {
+        name: "Password icons created by th studio - Flaticon",
+        siteName: "Flaticon",
+        link: "https://www.flaticon.com/free-icons/password",
       },
     ],
   },
