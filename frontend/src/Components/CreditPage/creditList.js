@@ -92,6 +92,16 @@ export const creditList = [
     ],
   },
   {
+    title: "External API - Pion WebRTC",
+    credits: [
+      {
+        name: "Pion WebRTC application - WebRTC with Broadcast example",
+        siteName: "GitHub",
+        link: "https://github.com/pion/webrtc/tree/master/examples/broadcast",
+      },
+    ],
+  },
+  {
     title: "Node.js Dependency - Sequelize",
     credits: [
       {
