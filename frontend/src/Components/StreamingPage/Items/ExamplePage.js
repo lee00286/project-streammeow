@@ -7,16 +7,11 @@ const STREAMING_PORT = process.env.STREAMING_PORT || 8080;
 function ExamplePage() {
   const videoRef = useRef(null);
 
-  const [PeerConnection, setPeerConnection] = useState(null);
-  const [AutoPlay, setAutoPlay] = useState(true);
-  const [Controls, setControls] = useState(true);
-  const [HideSignal, setHideSignal] = useState(true);
-  const [HideButton, setHideButton] = useState(false);
-  const [Log, setLog] = useState("");
-  // Browser base64 Session Description
-  const [SessionDescription, setSessionDescription] = useState("");
   // Golang base64 Session Description
   const [GSD, setGSD] = useState("");
+  const [PeerConnection, setPeerConnection] = useState(null);
+  const [Controls, setControls] = useState(true);
+  const [Log, setLog] = useState("");
 
   useEffect(() => {
     const pc = new RTCPeerConnection({
@@ -26,11 +21,16 @@ function ExamplePage() {
         },
       ],
     });
-    pc.oniceconnectionstatechange = (e) => log(pc.iceConnectionState);
+    pc.oniceconnectionstatechange = (e) => onLog(pc.iceConnectionState);
+    onIceCandidate(pc);
+    setPeerConnection(pc);
+  }, []);
+
+  const onIceCandidate = (pc) => {
     pc.onicecandidate = async (event) => {
       if (event.candidate === null) {
+        // Browser base64 Session Description
         const sessionDescription = btoa(JSON.stringify(pc.localDescription));
-        setSessionDescription(sessionDescription);
         // Send local session description to get golang session description
         const response = await axios.post(
           `http://${STREAMING_HOST}:${STREAMING_PORT}/sdp`,
@@ -49,20 +49,22 @@ function ExamplePage() {
           // Remove "done"
           const gsd = response.data.slice(4);
           setGSD(gsd);
-          console.log(gsd);
         }
       }
     };
-    setPeerConnection(pc);
-  }, []);
-
-  const log = (msg) => {
-    setLog(msg + "<br>");
   };
 
-  const createSession = (isPublisher) => {
+  // Write log
+  const onLog = (msg) => {
+    setLog(msg);
+  };
+
+  // Create session
+  const createSession = (isCreator) => {
     if (PeerConnection === null) return;
-    if (isPublisher) {
+    onIceCandidate(PeerConnection);
+    // If user is creator
+    if (isCreator) {
       navigator.mediaDevices
         .getUserMedia({ video: true, audio: false })
         .then((stream) => {
@@ -72,34 +74,32 @@ function ExamplePage() {
           videoRef.current.srcObject = stream;
           PeerConnection.createOffer()
             .then((d) => PeerConnection.setLocalDescription(d))
-            .catch(log);
+            .catch(onLog);
         })
-        .catch(log);
+        .catch(onLog);
     } else {
+      // If user is subscriber
       PeerConnection.addTransceiver("video");
       PeerConnection.createOffer()
         .then((d) => PeerConnection.setLocalDescription(d))
-        .catch(log);
+        .catch(onLog);
       PeerConnection.ontrack = function (event) {
         videoRef.current.srcObject = event.streams[0];
-        setAutoPlay(true);
         setControls(true);
       };
     }
-
-    setHideButton(true);
-    setHideSignal(false);
   };
 
+  // Start streaming session
   const startSession = () => {
-    console.log(GSD);
-    const sd = GSD;
-    if (sd === "") {
+    const sessionDescription = GSD;
+    // If session description is empty
+    if (sessionDescription === "") {
       return alert("Session Description must not be empty");
     }
-
     try {
-      PeerConnection.setRemoteDescription(JSON.parse(atob(sd)));
+      // Set sessionDescription of remote peer
+      PeerConnection.setRemoteDescription(JSON.parse(atob(sessionDescription)));
     } catch (e) {
       alert(e);
     }
@@ -107,46 +107,13 @@ function ExamplePage() {
 
   return (
     <div>
-      <div className={HideSignal ? "display-none" : "display-block"}>
-        Browser base64 Session Description
-        <textarea
-          id="localSessionDescription"
-          value={SessionDescription}
-          readOnly={true}
-        ></textarea>
-        Golang base64 Session Description
-        <textarea id="remoteSessionDescription"></textarea>
-        <button onClick={startSession}> Start Session </button>
-      </div>
       <div className="stream-video col col-8">
-        <video
-          id="video1"
-          width="160"
-          height="120"
-          autoPlay={AutoPlay}
-          muted
-          controls={Controls}
-          ref={videoRef}
-        ></video>
+        <video controls={Controls} muted ref={videoRef}></video>
       </div>
-      <button
-        className={`createSessionButton ${
-          HideButton ? "display-none" : "display-block"
-        }`}
-        onClick={() => createSession(true)}
-      >
-        Publish a Broadcast
-      </button>
-      <button
-        className={`createSessionButton ${
-          HideButton ? "display-none" : "display-block"
-        }`}
-        onClick={() => createSession(false)}
-      >
-        Join a Broadcast
-      </button>
-      Logs
-      <div id="logs">{Log}</div>
+      <button onClick={() => createSession(true)}>Publish a live</button>
+      <button onClick={() => createSession(false)}>Join live</button>
+      <button onClick={startSession}>Start Session</button>
+      <div id="logs">Logs: {Log}</div>
     </div>
   );
 }
