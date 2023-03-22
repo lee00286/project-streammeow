@@ -75,6 +75,11 @@
   background-color: var(--yellow1);
 }
 
+.stream-video video {
+  width: 100%;
+  height: 100%;
+}
+
 .stream-video .setting-bar {
   justify-content: flex-end;
   align-items: center;

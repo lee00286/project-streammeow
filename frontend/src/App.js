@@ -13,6 +13,8 @@ import RegisterPage from "./Components/LoginPage/RegisterPage";
 import "./App.css";
 import "./Components/cols.css";
 
+import ExamplePage from "./Components/StreamingPage/Items/ExamplePage";
+
 function App() {
   return (
     <div className="App">
@@ -23,6 +25,7 @@ function App() {
         <Route path="/signup" element={<RegisterPage />} />
         <Route path="/credits" element={<CreditPage />} />
         <Route path="/creators" element={<CreatorPage />} />
+        <Route path="/streaming" element={<ExamplePage />} />
         <Route path="/streaming/:streamId" element={<StreamingPage />} />
         <Route path="/purchase" element={<PurchasePage />} />
         <Route path="/purchase/confirm" element={<ConfirmPage />} />

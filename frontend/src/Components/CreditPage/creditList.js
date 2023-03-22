@@ -59,6 +59,15 @@ export const creditList = [
         siteName: "Stackoverflow",
         link: "https://stackoverflow.com/questions/71679442/show-hide-multiple-password-in-react-js",
       },
+      {
+        name: "Set srcObject in React",
+        siteName: "Stackoverflow",
+        link: "https://stackoverflow.com/questions/57095478/html5-getusermedia-cannot-set-property-srcobject-of-null",
+      },
+      {
+        name: "Convert curl command to node axios",
+        link: "https://curlconverter.com/node-axios/",
+      },
     ],
   },
   {
