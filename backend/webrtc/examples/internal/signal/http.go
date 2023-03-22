@@ -15,9 +15,14 @@ func HTTPSDPServer() chan string {
 
 	sdpChan := make(chan string)
 	http.HandleFunc("/sdp", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.Header().Set("Access-Control-Allow-Methods", http.MethodPost)
+		w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+		w.Header().Set("Content-Type", "application/json")
 		body, _ := ioutil.ReadAll(r.Body)
 		fmt.Fprintf(w, "done")
 		sdpChan <- string(body)
+		w.Write(body)
 	})
 
 	go func() {

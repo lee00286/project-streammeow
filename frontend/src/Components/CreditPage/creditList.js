@@ -108,6 +108,16 @@ export const creditList = [
         siteName: "GitHub",
         link: "https://github.com/pion/webrtc/tree/master/examples/broadcast",
       },
+      {
+        name: "Go HTTP Handler CORS",
+        siteName: "GitHub",
+        link: "https://github.com/pion/webrtc/issues/1149",
+      },
+      {
+        name: "Go HTTP Handler JSON response",
+        siteName: "Stackoverflow",
+        link: "https://stackoverflow.com/questions/31622052/how-to-serve-up-a-json-response-using-go",
+      },
     ],
   },
   {
