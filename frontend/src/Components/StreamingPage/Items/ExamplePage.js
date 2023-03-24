@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import "../StreamingPage.css";
-const STREAMING_HOST = process.env.STREAMING_HOST || "localhost";
-const STREAMING_PORT = process.env.STREAMING_PORT || 8080;
+const STREAMING_HOST = process.env.REACT_APP_STREAMING_HOST || "localhost";
+const STREAMING_PORT = process.env.REACT_APP_STREAMING_PORT || 8080;
 
 function ExamplePage() {
   const videoRef = useRef(null);

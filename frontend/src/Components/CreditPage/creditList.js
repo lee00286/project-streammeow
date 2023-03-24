@@ -68,6 +68,11 @@ export const creditList = [
         name: "Convert curl command to node axios",
         link: "https://curlconverter.com/node-axios/",
       },
+      {
+        name: "Use environment variables in React",
+        siteName: "Stackoverflow",
+        link: "https://stackoverflow.com/questions/48378337/create-react-app-not-picking-up-env-files",
+      },
     ],
   },
   {
