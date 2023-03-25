@@ -35,6 +35,11 @@ export const creditList = [
         siteName: "CSS Tricks",
         link: "https://css-tricks.com/almanac/properties/a/aspect-ratio/",
       },
+      {
+        name: "Stylize select arrow",
+        siteName: "Stackoverflow",
+        link: "https://stackoverflow.com/questions/14218307/select-arrow-style-change",
+      },
     ],
   },
   {

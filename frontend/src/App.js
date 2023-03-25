@@ -4,6 +4,7 @@ import NavBar from "./Components/NavBar/NavBar";
 import HomePage from "./Components/HomePage/HomePage";
 import CreditPage from "./Components/CreditPage/CreditPage";
 import CreatorPage from "./Components/CreatorPage/CreatorPage";
+import ReadyPage from "./Components/StreamingPage/ReadyPage";
 import StreamingPage from "./Components/StreamingPage/StreamingPage";
 import PurchasePage from "./Components/PurchasePage/PurchasePage";
 import ConfirmPage from "./Components/PurchasePage/ConfirmPage";
@@ -26,6 +27,7 @@ function App() {
         <Route path="/credits" element={<CreditPage />} />
         <Route path="/creators" element={<CreatorPage />} />
         <Route path="/streaming" element={<ExamplePage />} />
+        <Route path="/streaming/start" element={<ReadyPage />} />
         <Route path="/streaming/:streamId" element={<StreamingPage />} />
         <Route path="/purchase" element={<PurchasePage />} />
         <Route path="/purchase/confirm" element={<ConfirmPage />} />
