@@ -83,6 +83,43 @@ module.exports = {
         allowNull: false,
       },
     });
+    await queryInterface.createTable("Streamings", {
+      id: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+      },
+      title: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      description: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
+      permission: {
+        type: Sequelize.ARRAY(Sequelize.STRING),
+        allowNull: true, // if null, then no restriction
+      },
+      createdAt: {
+        type: Sequelize.DATE,
+        allowNull: false,
+        defaultValue: Sequelize.NOW,
+      },
+      updatedAt: {
+        type: Sequelize.DATE,
+        allowNull: true,
+      },
+      creatorId: {
+        type: Sequelize.STRING,
+        references: {
+          model: "Users", // TODO: change to Creator
+          key: "id",
+        },
+        allowNull: false, // TODO: consider what if creator deletes acocunt
+      },
+    });
   },
   async down(queryInterface, Sequelize) {
     await queryInterface.dropAllTables();
