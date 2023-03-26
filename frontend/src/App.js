@@ -6,6 +6,7 @@ import NavBar from "./Components/NavBar/NavBar";
 import HomePage from "./Components/HomePage/HomePage";
 import CreditPage from "./Components/CreditPage/CreditPage";
 import CreatorPage from "./Components/CreatorPage/CreatorPage";
+import StreamingListPage from "./Components/StreamingPage/StreamingListPage";
 import ReadyPage from "./Components/StreamingPage/ReadyPage";
 import StreamingPage from "./Components/StreamingPage/StreamingPage";
 import PurchasePage from "./Components/PurchasePage/PurchasePage";
@@ -15,8 +16,6 @@ import RegisterPage from "./Components/LoginPage/RegisterPage";
 // Style
 import "./App.css";
 import "./Components/cols.css";
-
-import ExamplePage from "./Components/StreamingPage/Items/ExamplePage";
 
 function App() {
   const [UserId, setUserId] = useState("");
@@ -41,7 +40,7 @@ function App() {
         <Route path="/signup" element={<RegisterPage />} />
         <Route path="/credits" element={<CreditPage />} />
         <Route path="/creators" element={<CreatorPage />} />
-        <Route path="/streaming" element={<ExamplePage />} />
+        <Route path="/streaming" element={<StreamingListPage />} />
         <Route
           path="/streaming/:creatorId"
           element={

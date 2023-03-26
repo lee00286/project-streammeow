@@ -78,6 +78,11 @@ export const creditList = [
         siteName: "Stackoverflow",
         link: "https://stackoverflow.com/questions/48378337/create-react-app-not-picking-up-env-files",
       },
+      {
+        name: "React Select dependency",
+        siteName: "React Select",
+        link: "https://react-select.com/home",
+      },
     ],
   },
   {

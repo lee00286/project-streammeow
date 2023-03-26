@@ -27,12 +27,16 @@ export const Streamings = sequelize.define("Streamings", {
   },
   creatorId: {
     type: DataTypes.STRING,
-    references: {
-      model: "Users", // TODO: change to Creator
-      key: "id",
-    },
-    allowNull: false, // TODO: consider what if creator deletes acocunt
+    allowNull: false,
   },
+  // creatorId: {
+  //   type: DataTypes.STRING,
+  //   references: {
+  //     model: "Users", // TODO: change to Creator
+  //     key: "id",
+  //   },
+  //   allowNull: false, // TODO: consider what if creator deletes acocunt
+  // },
 });
 
 Streamings.belongsTo(User);

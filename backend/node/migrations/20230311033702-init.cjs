@@ -113,12 +113,16 @@ module.exports = {
       },
       creatorId: {
         type: Sequelize.STRING,
-        references: {
-          model: "Users", // TODO: change to Creator
-          key: "id",
-        },
-        allowNull: false, // TODO: consider what if creator deletes acocunt
+        allowNull: false,
       },
+      // creatorId: {
+      //   type: Sequelize.STRING,
+      //   references: {
+      //     model: "Users", // TODO: change to Creator
+      //     key: "id",
+      //   },
+      //   allowNull: false, // TODO: consider what if creator deletes acocunt
+      // },
     });
   },
   async down(queryInterface, Sequelize) {

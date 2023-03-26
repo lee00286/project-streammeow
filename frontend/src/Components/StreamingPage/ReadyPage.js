@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import module from "../../ApiService";
+// Components
 import StreamVideo from "./Items/StreamVideo";
 import ColorButton from "../Buttons/ColorButton";
+import Select from "react-select";
+// Style
 import "./StreamingPage.css";
 
 /**
@@ -8,37 +13,30 @@ import "./StreamingPage.css";
  * @param {Function} props.onTitle: title of the streaming
  * @param {Function} props.onDescription: description of the streaming
  * @param {Array} props.membershipList: list of memberships
- * @param {Function} props.onMembership: memberships that can watch the streaming
+ * @param {Function} props.onPermission: memberships with permission to watch the streaming
  * @param {Function} props.onGSD: session description for streaming
  * @returns Streaming information input component
  */
 function StreamInfo(props) {
   const [Title, setTitle] = useState("");
   const [Description, setDescription] = useState("");
-  const [MembershipList, setMembershipList] = useState(["Everyone"]);
-  const [Membership, setMembership] = useState(0);
+  const [PermissionOptions, setPermissionOptions] = useState([]);
   const [GSD, setGSD] = useState("");
 
   useEffect(() => {
     if (!props.membershipList) return;
-    setMembershipList(props.membershipList);
+    const membershipList = props.membershipList;
+    if (membershipList.length === 0) membershipList.push("Everyone");
+    // Set permission options for the dropdown menu
+    let permissionOptions = [];
+    for (let i = 0; i < membershipList.length; i++) {
+      permissionOptions.push({
+        value: i,
+        label: membershipList[i].name,
+      });
+    }
+    setPermissionOptions(permissionOptions);
   }, [props]);
-
-  // Membership options for the dropdown menu
-  const membershipSelect =
-    MembershipList && MembershipList.length > 0 ? (
-      MembershipList.map((membership, index) => {
-        return (
-          <option key={index} value={index}>
-            {membership}
-          </option>
-        );
-      })
-    ) : (
-      <option key={0} value={0}>
-        Everyone
-      </option>
-    );
 
   // Set title of the streaming
   const onTitle = (title) => {
@@ -54,11 +52,11 @@ function StreamInfo(props) {
     props.onDescription(description);
   };
 
-  // Limit the streaming to specific membership
-  const onMembership = (membership) => {
-    setMembership(membership);
-    if (!props.onMembership) return;
-    props.onMembership(membership);
+  // Limit the permission to specific membership
+  const onPermission = (permissions) => {
+    // Send the change to parent component
+    if (!props.onPermission) return;
+    props.onPermission(permissions);
   };
 
   // Set session description of the streaming
@@ -78,9 +76,7 @@ function StreamInfo(props) {
         onChange={(e) => onDescription(e.target.value)}
       />
       <p>Permission</p>
-      <select value={Membership} onChange={(e) => onMembership(e.target.value)}>
-        {membershipSelect}
-      </select>
+      <Select options={PermissionOptions} onChange={onPermission} isMulti />
       <p>Session Description</p>
       <textarea value={GSD} onChange={(e) => onGSD(e.target.value)}></textarea>
     </div>
@@ -92,22 +88,27 @@ function StreamInfo(props) {
  * @returns Streaming page component
  */
 function ReadyPage() {
+  const { creatorId } = useParams();
+
+  // Streaming Information
   const [Title, setTitle] = useState("");
   const [Description, setDescription] = useState("");
-  const [Membership, setMembership] = useState(0);
+  const [Permission, setPermission] = useState([]);
   const [MembershipList, setMembershipList] = useState(["Everyone"]);
   // Video Streaming
   const [GSD, setGSD] = useState("");
   const [SendGSD, setSendGSD] = useState("");
   const [StartVideo, setStartVideo] = useState(false);
   const [StartSession, setStartSession] = useState(false);
-  const [Success, setSuccess] = useState(false);
 
   useEffect(() => {
-    const membershipList = ["Everyone"];
-    // TODO: Get creator's membership list from backend
-    membershipList.push("Membership 1");
-    setMembershipList(membershipList);
+    if (creatorId === undefined || creatorId === null || creatorId === "")
+      return;
+    // Get creator's membership list from database
+    module.getAllMemberships(creatorId).then((res) => {
+      if (res.error) return console.log(res.error);
+      setMembershipList(res.data.memberships);
+    });
   }, []);
 
   // Save streaming title
@@ -120,9 +121,15 @@ function ReadyPage() {
     setDescription(description);
   };
 
-  // Save membership permission
-  const onMembership = (membership) => {
-    setMembership(membership);
+  // Save membership permissions
+  const onPermission = (permissions) => {
+    let modifiedList = [];
+    // Modify the array to contain membership id
+    for (let i = 0; i < permissions.length; i++) {
+      const index = permissions[i].value;
+      modifiedList.push(MembershipList[index].id);
+    }
+    setPermission(modifiedList);
   };
 
   // Save session description
@@ -137,12 +144,13 @@ function ReadyPage() {
 
   // Start streaming
   const onStartStreaming = () => {
-    const variables = {
-      title: Title,
-      description: Description,
-      membership: Membership,
-    };
-    // TODO: Save streaming information to database
+    // Save streaming information to database
+    const response = module
+      .addStreaming(Title, Description, Permission)
+      .catch((e) => console.log(e));
+    console.log(response);
+    if (response.error) return console.log(response.error);
+    // Start streaming session
     setStartSession(true);
     setSendGSD(GSD);
   };
@@ -160,7 +168,7 @@ function ReadyPage() {
           onTitle={onTitle}
           onDescription={onDescription}
           membershipList={MembershipList}
-          onMembership={onMembership}
+          onPermission={onPermission}
           onGSD={onGSD}
         />
       </div>

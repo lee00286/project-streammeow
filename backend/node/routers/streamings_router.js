@@ -16,9 +16,6 @@ streamingsRouter.post("/", async (req, res) => {
     return res.status(422).json({ error: "Invalid arguments." });
   try {
     let creatorId = req.session.userId;
-    if (!isValidArgument(creatorId, "string"))
-      return res.status(401).json({ error: "Unauthorized." });
-
     // Create a new streaming
     const streaming = await Streamings.create({
       title: req.body.title,
