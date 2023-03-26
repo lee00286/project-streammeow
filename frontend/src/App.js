@@ -1,4 +1,6 @@
+import { useEffect, useState } from "react";
 import { Route, Routes } from "react-router-dom";
+import module from "./ApiService";
 // Components
 import NavBar from "./Components/NavBar/NavBar";
 import HomePage from "./Components/HomePage/HomePage";
@@ -17,6 +19,19 @@ import "./Components/cols.css";
 import ExamplePage from "./Components/StreamingPage/Items/ExamplePage";
 
 function App() {
+  const [UserId, setUserId] = useState("");
+  const [IsCreator, setIsCreator] = useState(false);
+
+  useEffect(() => {
+    // Get user id
+    module.getUserId().then((res) => {
+      if (res.data.user === undefined) return;
+      setUserId(res.data.user.id);
+      // TODO: Change after creator field is created in User
+      setIsCreator(res.data.user.id === 1);
+    });
+  }, []);
+
   return (
     <div className="App">
       <NavBar />
@@ -27,8 +42,20 @@ function App() {
         <Route path="/credits" element={<CreditPage />} />
         <Route path="/creators" element={<CreatorPage />} />
         <Route path="/streaming" element={<ExamplePage />} />
-        <Route path="/streaming/:creatorId" element={<ReadyPage />} />
-        {/* <Route path="/streaming/:streamId" element={<StreamingPage />} /> */}
+        <Route
+          path="/streaming/:creatorId"
+          element={
+            UserId !== "" ? (
+              IsCreator ? (
+                <ReadyPage />
+              ) : (
+                <StreamingPage />
+              )
+            ) : (
+              <div></div>
+            )
+          }
+        />
         <Route path="/purchase" element={<PurchasePage />} />
         <Route path="/purchase/confirm" element={<ConfirmPage />} />
       </Routes>

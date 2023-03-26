@@ -1,11 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import StreamVideo from "./Items/StreamVideo";
 import ColorButton from "../Buttons/ColorButton";
 import "./StreamingPage.css";
-
-// TODO: Change
-const creatorId = "1";
 
 /**
  * Streaming information input component that the creator can input.
@@ -96,16 +92,16 @@ function StreamInfo(props) {
  * @returns Streaming page component
  */
 function ReadyPage() {
-  const navigate = useNavigate();
-
   const [Title, setTitle] = useState("");
   const [Description, setDescription] = useState("");
   const [Membership, setMembership] = useState(0);
   const [MembershipList, setMembershipList] = useState(["Everyone"]);
   // Video Streaming
   const [GSD, setGSD] = useState("");
+  const [SendGSD, setSendGSD] = useState("");
   const [StartVideo, setStartVideo] = useState(false);
   const [StartSession, setStartSession] = useState(false);
+  const [Success, setSuccess] = useState(false);
 
   useEffect(() => {
     const membershipList = ["Everyone"];
@@ -148,6 +144,7 @@ function ReadyPage() {
     };
     // TODO: Save streaming information to database
     setStartSession(true);
+    setSendGSD(GSD);
   };
 
   return (
@@ -157,7 +154,7 @@ function ReadyPage() {
           isCreator={true}
           hasStartVideo={StartVideo}
           hasStartSession={StartSession}
-          gsd={GSD}
+          gsd={SendGSD}
         />
         <StreamInfo
           onTitle={onTitle}

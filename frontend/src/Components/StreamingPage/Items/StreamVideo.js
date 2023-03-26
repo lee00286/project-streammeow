@@ -19,7 +19,6 @@ const config = {
  * @param {boolean} hasStartVideo: if video is started
  * @param {boolean} hasStartSession: if streaming is started
  * @param {string} gsd: Golang base64 session description
- * @param {function} onStartSession: function to start watching streaming
  * @returns Stream video component
  */
 function StreamVideo({
@@ -27,7 +26,6 @@ function StreamVideo({
   hasStartVideo = false,
   hasStartSession = false,
   gsd = "",
-  onStartSession,
 }) {
   const videoRef = useRef(null);
 
@@ -35,14 +33,18 @@ function StreamVideo({
   const [GSD, setGSD] = useState("");
   const [Controls, setControls] = useState(true);
   const [Log, setLog] = useState("");
+  const [Success, setSuccess] = useState(false);
 
   useEffect(() => {
+    if (Success) return;
     // Set GSD manually
     // TODO: Fix main.go and http.go to get GSD from request
-    if (!gsd && gsd !== "") setGSD(gsd);
-  }, [gsd]);
+    if (gsd && gsd !== "" && gsd.length > 0) setGSD(gsd);
+  }, [gsd, Success]);
 
   useEffect(() => {
+    if (Success) return;
+    // Create new PeerConnection
     const pc = new RTCPeerConnection(config);
     pc.oniceconnectionstatechange = (e) => onLog(pc.iceConnectionState);
     onIceCandidate(pc);
@@ -51,21 +53,19 @@ function StreamVideo({
     if (hasStartVideo) {
       if (isCreator) createCreatorSession(pc);
       else createSubscriberSession(pc);
-      console.log(GSD);
       // If session is started, start streaming
-      if (hasStartSession && GSD !== "") {
-        console.log(GSD);
+      if (hasStartSession && gsd !== "") {
         startSession();
       }
     }
-  }, [isCreator, hasStartVideo, hasStartSession]);
+  }, [isCreator, hasStartVideo, hasStartSession, gsd, Success]);
 
   const onIceCandidate = (pc) => {
     pc.onicecandidate = async (event) => {
       if (event.candidate === null) {
         // Browser base64 Session Description
         const sessionDescription = btoa(JSON.stringify(pc.localDescription));
-        console.log(sessionDescription);
+        // console.log(sessionDescription);
         // Send local session description to get golang session description
         const response = await axios.post(
           // `http://${STREAMING_HOST}:${STREAMING_PORT}/sdp`,
@@ -77,7 +77,7 @@ function StreamVideo({
             },
           }
         );
-        console.log(response);
+        // console.log(response);
         if (
           response.status === 200 &&
           response.data !== null &&
@@ -86,8 +86,7 @@ function StreamVideo({
           // Remove "done"
           // const gsd = response.data;
           // const gsd = response.data.slice(4);
-          const gsd = response.data.slice(0, -4);
-          setGSD(gsd);
+          // setGSD(gsd);
         }
       }
     };
@@ -111,9 +110,7 @@ function StreamVideo({
 
   // Create session for subscriber
   const createSubscriberSession = (pc) => {
-    console.log("?");
     if (pc === null || isCreator) return;
-    console.log("??");
     onIceCandidate(pc);
     pc.addTransceiver("video");
     pc.createOffer()
@@ -127,7 +124,7 @@ function StreamVideo({
 
   // Start streaming session
   const startSession = () => {
-    const sessionDescription = GSD;
+    const sessionDescription = GSD && GSD !== "" ? GSD : gsd;
     // If session description is empty
     if (sessionDescription === "") {
       return alert("Session Description must not be empty");
@@ -135,7 +132,7 @@ function StreamVideo({
     try {
       // Set sessionDescription of remote peer
       PeerConnection.setRemoteDescription(JSON.parse(atob(sessionDescription)));
-      if (onStartSession) onStartSession();
+      setSuccess(true);
     } catch (e) {
       alert(e);
     }

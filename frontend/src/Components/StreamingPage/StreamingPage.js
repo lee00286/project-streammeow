@@ -79,15 +79,16 @@ function StreamingPage() {
   const [Streamer, setStreamer] = useState(null);
   // Video Streaming
   const [GSD, setGSD] = useState("");
+  const [SendGSD, setSendGSD] = useState("");
   const [StartSession, setStartSession] = useState(false);
 
   useEffect(() => {
-    if (!streamId) return;
+    if (!streamId || StartSession) return;
     // TODO: GET request to get stream information
     setStream(null);
     // TODO: GET request to get streamer information
     setStreamer(null);
-  }, []);
+  }, [StartSession]);
 
   // Save session description
   const onGSD = (gsd) => {
@@ -96,32 +97,33 @@ function StreamingPage() {
 
   // If session started
   const onStartSession = () => {
+    setSendGSD(GSD);
     setStartSession(true);
   };
 
   return (
     <div className="stream grid-body page col">
-      <div
-        className={`streaming-before col ${StartSession ? "display-none" : ""}`}
-      >
-        <h2>Creator's Streaming</h2>
-        <textarea
-          value={GSD}
-          onChange={(e) => onGSD(e.target.value)}
-        ></textarea>
-        <ColorButton
-          text="Watch Streaming"
-          textColor="#fff"
-          buttonColor="var(--yellow4)"
-        />
-      </div>
+      {!StartSession && (
+        <div className="streaming-before col">
+          <h2>Creator's Streaming</h2>
+          <textarea
+            value={GSD}
+            onChange={(e) => onGSD(e.target.value)}
+          ></textarea>
+          <ColorButton
+            text="Watch Streaming"
+            textColor="#fff"
+            buttonColor="var(--yellow4)"
+            buttonFunction={onStartSession}
+          />
+        </div>
+      )}
       <div className={`stream-top row ${!StartSession ? "hidden" : ""}`}>
         <StreamVideo
           isCreator={false}
           hasStartVideo={true}
           hasStartSession={StartSession}
-          gsd={GSD}
-          onStartSession={onStartSession}
+          gsd={SendGSD}
         />
         <div className="stream-chat col-auto"></div>
       </div>
