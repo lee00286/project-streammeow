@@ -27,8 +27,8 @@ function App() {
         <Route path="/credits" element={<CreditPage />} />
         <Route path="/creators" element={<CreatorPage />} />
         <Route path="/streaming" element={<ExamplePage />} />
-        <Route path="/streaming/start" element={<ReadyPage />} />
-        <Route path="/streaming/:streamId" element={<StreamingPage />} />
+        <Route path="/streaming/:creatorId" element={<ReadyPage />} />
+        {/* <Route path="/streaming/:streamId" element={<StreamingPage />} /> */}
         <Route path="/purchase" element={<PurchasePage />} />
         <Route path="/purchase/confirm" element={<ConfirmPage />} />
       </Routes>

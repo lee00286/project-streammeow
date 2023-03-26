@@ -4,14 +4,16 @@ import StreamVideo from "./Items/StreamVideo";
 import ColorButton from "../Buttons/ColorButton";
 import "./StreamingPage.css";
 
+// TODO: Change
 const creatorId = "1";
 
 /**
  * Streaming information input component that the creator can input.
  * @param {Function} props.onTitle: title of the streaming
  * @param {Function} props.onDescription: description of the streaming
- * @param {array} props.membershipList: list of memberships
+ * @param {Array} props.membershipList: list of memberships
  * @param {Function} props.onMembership: memberships that can watch the streaming
+ * @param {Function} props.onGSD: session description for streaming
  * @returns Streaming information input component
  */
 function StreamInfo(props) {
@@ -19,10 +21,10 @@ function StreamInfo(props) {
   const [Description, setDescription] = useState("");
   const [MembershipList, setMembershipList] = useState(["Everyone"]);
   const [Membership, setMembership] = useState(0);
+  const [GSD, setGSD] = useState("");
 
   useEffect(() => {
     if (!props.membershipList) return;
-    console.log(props.membershipList);
     setMembershipList(props.membershipList);
   }, [props]);
 
@@ -42,12 +44,14 @@ function StreamInfo(props) {
       </option>
     );
 
+  // Set title of the streaming
   const onTitle = (title) => {
     setTitle(title);
     if (!props.onTitle) return;
     props.onTitle(title);
   };
 
+  // Set description of the streaming
   const onDescription = (description) => {
     setDescription(description);
     if (!props.onDescription) return;
@@ -59,6 +63,13 @@ function StreamInfo(props) {
     setMembership(membership);
     if (!props.onMembership) return;
     props.onMembership(membership);
+  };
+
+  // Set session description of the streaming
+  const onGSD = (gsd) => {
+    setGSD(gsd);
+    if (!props.onGSD) return;
+    props.onGSD(gsd);
   };
 
   return (
@@ -74,6 +85,8 @@ function StreamInfo(props) {
       <select value={Membership} onChange={(e) => onMembership(e.target.value)}>
         {membershipSelect}
       </select>
+      <p>Session Description</p>
+      <textarea value={GSD} onChange={(e) => onGSD(e.target.value)}></textarea>
     </div>
   );
 }
@@ -89,6 +102,10 @@ function ReadyPage() {
   const [Description, setDescription] = useState("");
   const [Membership, setMembership] = useState(0);
   const [MembershipList, setMembershipList] = useState(["Everyone"]);
+  // Video Streaming
+  const [GSD, setGSD] = useState("");
+  const [StartVideo, setStartVideo] = useState(false);
+  const [StartSession, setStartSession] = useState(false);
 
   useEffect(() => {
     const membershipList = ["Everyone"];
@@ -107,8 +124,19 @@ function ReadyPage() {
     setDescription(description);
   };
 
+  // Save membership permission
   const onMembership = (membership) => {
     setMembership(membership);
+  };
+
+  // Save session description
+  const onGSD = (gsd) => {
+    setGSD(gsd);
+  };
+
+  // Start video
+  const onStartVideo = () => {
+    setStartVideo(true);
   };
 
   // Start streaming
@@ -116,23 +144,37 @@ function ReadyPage() {
     const variables = {
       title: Title,
       description: Description,
+      membership: Membership,
     };
-    console.log(variables);
-    navigate(`/streaming/${creatorId}`);
+    // TODO: Save streaming information to database
+    setStartSession(true);
   };
 
   return (
     <div className="stream grid-body page col">
       <div className="stream-top row">
-        <StreamVideo />
+        <StreamVideo
+          isCreator={true}
+          hasStartVideo={StartVideo}
+          hasStartSession={StartSession}
+          gsd={GSD}
+        />
         <StreamInfo
           onTitle={onTitle}
           onDescription={onDescription}
           membershipList={MembershipList}
           onMembership={onMembership}
+          onGSD={onGSD}
         />
       </div>
       <div className="stream-bottom">
+        <ColorButton
+          text="Start Video"
+          textColor="var(--yellow4)"
+          buttonColor="#fff"
+          buttonFunction={onStartVideo}
+          border="1px solid var(--yellow4)"
+        />
         <ColorButton
           text="Start Streaming"
           textColor="#fff"

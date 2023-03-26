@@ -4,6 +4,9 @@ import StreamVideo from "./Items/StreamVideo";
 import ColorButton from "../Buttons/ColorButton";
 import "./StreamingPage.css";
 
+// TODO: Check if the streaming has started
+// TODO: Streaming permission
+
 /**
  * Streamer information component that shows information about the streamer.
  * @param {Object} streamer: streamer information
@@ -60,6 +63,7 @@ function StreamInfo({ info }) {
     <div className="stream-info col">
       <h2>Title of the Streaming</h2>
       <p>Description of the Streaming</p>
+      <p>Session Description</p>
     </div>
   );
 }
@@ -73,6 +77,9 @@ function StreamingPage() {
 
   const [Stream, setStream] = useState(null);
   const [Streamer, setStreamer] = useState(null);
+  // Video Streaming
+  const [GSD, setGSD] = useState("");
+  const [StartSession, setStartSession] = useState(false);
 
   useEffect(() => {
     if (!streamId) return;
@@ -82,15 +89,45 @@ function StreamingPage() {
     setStreamer(null);
   }, []);
 
+  // Save session description
+  const onGSD = (gsd) => {
+    setGSD(gsd);
+  };
+
+  // If session started
+  const onStartSession = () => {
+    setStartSession(true);
+  };
+
   return (
     <div className="stream grid-body page col">
-      <div className="stream-top row">
-        <StreamVideo />
+      <div
+        className={`streaming-before col ${StartSession ? "display-none" : ""}`}
+      >
+        <h2>Creator's Streaming</h2>
+        <textarea
+          value={GSD}
+          onChange={(e) => onGSD(e.target.value)}
+        ></textarea>
+        <ColorButton
+          text="Watch Streaming"
+          textColor="#fff"
+          buttonColor="var(--yellow4)"
+        />
+      </div>
+      <div className={`stream-top row ${!StartSession ? "hidden" : ""}`}>
+        <StreamVideo
+          isCreator={false}
+          hasStartVideo={true}
+          hasStartSession={StartSession}
+          gsd={GSD}
+          onStartSession={onStartSession}
+        />
         <div className="stream-chat col-auto"></div>
       </div>
-      <div className="stream-bottom col">
+      <div className={`stream-bottom col ${!StartSession ? "hidden" : ""}`}>
         <StreamerInfo streamer={Streamer} />
-        <StreamInfo info={Stream} />
+        <StreamInfo info={Stream} onGSD={onGSD} />
       </div>
     </div>
   );
