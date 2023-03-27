@@ -74,9 +74,10 @@ export default function CreatorPage() {
   // more memberships than the screen width (probably more than 3)
   const navigate = useNavigate();
 
-  function goToPurchase() {
-    navigate("/purchase");
-  }
+  const goToPurchase = (id) => {
+    console.log(id);
+    navigate(`/purchase/${creatorId}`, { state: { membershipId: id } });
+  };
 
   return (
     <div className="page center">
@@ -88,7 +89,7 @@ export default function CreatorPage() {
             <Membership
               key={membership.id}
               {...membership}
-              onSelect={goToPurchase}
+              onSelectMembership={goToPurchase}
             />
           );
         })}
