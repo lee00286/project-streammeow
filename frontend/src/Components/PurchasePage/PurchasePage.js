@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import module from "../../ApiService";
 // Components
 import PageTitle from "../Texts/PageTitle";
@@ -10,32 +11,35 @@ import SubscribeButton from "./Items/SubscribeButton";
 // Style
 import "./PurchasePage.css";
 
-// TODO: Replace
-const creatorId = "1";
-
 /**
  * Purchase page component.
  * @param {string} plan: plan to purchase
  * @returns Purchase page component
  */
 function PurchasePage({ plan }) {
+  const { creatorId } = useParams();
+
   const [Memberships, setMemberships] = useState([]);
   const [SelectPlan, setSelectPlan] = useState(null);
   const [BuyList, setBuyList] = useState(null);
   const [PriceId, setPriceId] = useState(null);
-  const [TotalCost, setTotalCost] = useState(null);
   const [IsChecked, setIsChecked] = useState(false);
 
-  /* Get membership of the creator */
+  /* Get memberships of the creator */
   useEffect(() => {
+    if (!creatorId) return;
     module
       .getAllMemberships(creatorId)
       .then((res) => {
         if (res.error) return console.log(res.error);
-        setMemberships(res.data.memberships);
+        const memberships = res.data.memberships;
+        setMemberships(memberships);
+        for (let i = 0; i < memberships.length; i++) {
+          loadPriceId(memberships[i]);
+        }
       })
       .catch((e) => console.log(e));
-  }, [SelectPlan]);
+  }, [creatorId, SelectPlan]);
 
   /* Update inherited SelectPlan */
   useEffect(() => {
@@ -60,9 +64,23 @@ function PurchasePage({ plan }) {
     }
   };
 
-  // Set total cost
-  const onInvoice = (total) => {
-    setTotalCost(total);
+  // Create a new price model if membership doesn't have one
+  const loadPriceId = (membership) => {
+    if (!membership) return;
+    if (membership.priceId !== null && membership.priceId !== "") return;
+    // Create a new price with total price
+    module
+      .addPrice(membership.name, membership.currency, membership.price)
+      .then((res) => {
+        if (res.error) return console.log(res.error);
+        // Add a priceId to membership
+        return module.updateMembership(membership.id, {
+          priceId: res.data.price.id,
+        });
+      })
+      .catch((e) => {
+        console.log(e);
+      });
   };
 
   // Check if agreement checkbox is checked
@@ -105,7 +123,7 @@ function PurchasePage({ plan }) {
         </div>
         {SelectPlan && BuyList ? (
           <div className="purchase-right col-auto">
-            <InvoiceTable buyList={BuyList} totalCost={onInvoice} />
+            <InvoiceTable buyList={BuyList} />
             <CheckBox
               text={
                 <p>
@@ -117,10 +135,7 @@ function PurchasePage({ plan }) {
             />
             <SubscribeButton
               membershipId={BuyList.membershipId}
-              membershipName={BuyList.item}
               priceId={PriceId ?? ""}
-              price={TotalCost}
-              currency={"cad"}
               isChecked={IsChecked}
             />
           </div>

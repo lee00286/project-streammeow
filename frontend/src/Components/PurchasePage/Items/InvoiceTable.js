@@ -10,10 +10,9 @@ const taxCalculate = (price, taxRate) => {
 /**
  * Invoice table that shows invoice of purchase.
  * @param {Object} buyList: a selected item to purchase
- * @param {Function} totalCost: function for PurchasePage to get total cost
  * @returns Invoice table component
  */
-function InvoiceTable({ buyList, totalCost }) {
+function InvoiceTable({ buyList }) {
   const [BuyList, setBuyList] = useState(null);
   const [Price, setPrice] = useState(null);
 
@@ -27,9 +26,7 @@ function InvoiceTable({ buyList, totalCost }) {
     };
     priceObject.total = calculations.addNum(priceObject.price, priceObject.tax);
     setPrice(priceObject);
-    // Send total cost to PurchasePage component
-    if (totalCost) totalCost(priceObject.total);
-  }, [buyList, totalCost]);
+  }, [buyList]);
 
   // Row of the table body
   const tableRow = (item, price, space) => {

@@ -65,7 +65,6 @@ function ConfirmPage() {
     module
       .getSession(query.get("session_id"))
       .then((res) => {
-        console.log(res.data);
         if (res.data.error) console.log(res.data.error);
         else return res.data;
       })
