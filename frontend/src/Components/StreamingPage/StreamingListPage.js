@@ -46,6 +46,7 @@ function StreamingListPage() {
         // Set streaming list by live and live replay
         const liveList = [];
         const liveReplayList = [];
+        // TODO: Change this to use the backend with pagination
         streamingList.forEach((streaming) => {
           if (streaming.isEnded === null || streaming.isEnded === false)
             liveList.push(streaming);
@@ -85,7 +86,7 @@ function StreamingListPage() {
       <div className="streaming-slide row">
         <div className="slide-card row">
           <div className="slide-thumbnail col-auto"></div>
-          <div className="slide-text col col-7">
+          <div className="slide-text col col-8">
             <div className="slide-title">title</div>
             <div className="slide-description">description</div>
           </div>
