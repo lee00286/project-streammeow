@@ -8,6 +8,7 @@ import { membershipsRouter } from "./routers/memberships_router.js";
 import { pricesRouter } from "./routers/prices_router.js";
 import { usersRouter } from "./routers/users_router.js";
 import session from "express-session";
+import { auth } from "express-openid-connect";
 
 export const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -40,6 +41,23 @@ try {
 } catch (error) {
   console.error("Unable to connect to the database:", error);
 }
+
+const config = {
+  authRequired: false,
+  auth0Logout: true,
+  secret: "a long, randomly-generated string stored in env",
+  baseURL: "http://localhost:3000",
+  clientID: "akOnLy6JPjTfjgIchOofLqNBdkpQwuIh",
+  issuerBaseURL: "https://dev-xz5orhy8rzrhzt80.us.auth0.com",
+};
+
+// auth router attaches /login, /logout, and /callback routes to the baseURL
+app.use(auth(config));
+
+// req.isAuthenticated is provided from the auth router
+app.get("/", (req, res) => {
+  res.send(req.oidc.isAuthenticated() ? "Logged in" : "Logged out");
+});
 
 app.get("/api/test", (req, res) => {
   res.status(200).json({ message: "Hello World!" });
