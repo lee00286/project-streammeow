@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import module from "../../ApiService";
+// Components
+import SubTitle from "../Texts/SubTitle";
 import "./StreamingPage.css";
 
 function StreamingCard({ streaming }) {
@@ -17,7 +19,7 @@ function StreamingCard({ streaming }) {
   };
 
   return (
-    <div className="streaming-card col col-3" onClick={onStreaming}>
+    <div className="streaming-card col" onClick={onStreaming}>
       <div className="card-thumbnail"></div>
       <div className="card-title">{Streaming.title}</div>
       <div className="card-description">{Streaming.description}</div>
@@ -48,7 +50,21 @@ function StreamingListPage() {
   ));
 
   return (
-    <div className="grid-body page streaming-list row">{streamingList}</div>
+    <div className="grid-body page all-streaming">
+      <div className="streaming-slide row">
+        <div className="slide-card row">
+          <div className="slide-thumbnail col-auto"></div>
+          <div className="slide-text col col-7">
+            <div className="slide-title">title</div>
+            <div className="slide-description">description</div>
+          </div>
+        </div>
+      </div>
+      <SubTitle text="On Live" />
+      <div className="streaming-list">{streamingList}</div>
+      <SubTitle text="Live Replay" />
+      <div className="streaming-list">{streamingList}</div>
+    </div>
   );
 }
 
