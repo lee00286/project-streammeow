@@ -44,15 +44,16 @@ function StreamingCard({ streaming, isLive }) {
  */
 function StreamingList({ streamingList, isLive }) {
   const [StreamingList, setStreamingList] = useState([]);
-  let emptyString = "";
+  const [EmptyString, setEmptyString] = useState("");
 
   useEffect(() => {
-    if (!streamingList || streamingList.length <= 0) return;
-    setStreamingList(streamingList);
     // Set message when there is no streaming to display
-    if (isLive) emptyString = "No live streaming";
-    else emptyString = "No live replay";
-  }, [streamingList]);
+    if (isLive) setEmptyString("No live streaming");
+    else setEmptyString("No live replay");
+    // Set streaming list
+    if (!streamingList) return;
+    setStreamingList(streamingList);
+  }, [streamingList, isLive]);
 
   // List of streamings
   const liveList = StreamingList.map((streaming, index) => (
@@ -63,12 +64,13 @@ function StreamingList({ streamingList, isLive }) {
     />
   ));
 
-  // If there is no streaming to display
-  if (!StreamingList || StreamingList.length <= 0 || StreamingList === []) {
-    return <div className="streaming-empty">{emptyString}</div>;
+  // If streaming list is not empty
+  if (StreamingList && StreamingList !== [] && StreamingList.length > 0) {
+    return <div className="streaming-list">{liveList}</div>;
   }
 
-  return <div className="streaming-list">{liveList}</div>;
+  // If there is no streaming to display
+  return <div className="streaming-empty">{EmptyString}</div>;
 }
 
 /**
