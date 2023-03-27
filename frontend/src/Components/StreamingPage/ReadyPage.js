@@ -101,6 +101,47 @@ function ReadyPage() {
   const [StartVideo, setStartVideo] = useState(false);
   const [StartSession, setStartSession] = useState(false);
 
+  // Prevent creator from leaving the page
+  useEffect(() => {
+    const unloadCallback = (event) => {
+      event.preventDefault();
+      event.returnValue = "";
+      return "";
+    };
+    window.addEventListener("beforeunload", unloadCallback);
+    return () => window.removeEventListener("beforeunload", unloadCallback);
+  }, []);
+
+  // Make sure all previous lives are ended
+  useEffect(() => {
+    if (creatorId === undefined || StartSession) return;
+    module
+      .getAllStreamings(creatorId)
+      .then((res) => {
+        if (res.error) return console.log(res.error);
+        const streamings = res.data.streamings;
+        return streamings;
+      })
+      .then((streamings) => {
+        if (!streamings || streamings.length === 0) return;
+        for (let i = 0; i < streamings.length; i++) {
+          if (
+            streamings[i].isEnded === null ||
+            streamings[i].isEnded === false
+          ) {
+            // Modify all streamings to be ended
+            const update = module.updateStreaming(streamings[i].id, {
+              isEnded: true,
+            });
+            if (update.error) return console.log(update.error);
+            console.log(update);
+          }
+        }
+      })
+      .catch((e) => console.log(e));
+  }, [creatorId]);
+
+  // Get creator's membership list
   useEffect(() => {
     if (creatorId === undefined || creatorId === null || creatorId === "")
       return;

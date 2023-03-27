@@ -83,6 +83,11 @@ export const creditList = [
         siteName: "React Select",
         link: "https://react-select.com/home",
       },
+      {
+        name: "React beforeunload event",
+        siteName: "Stackoverflow",
+        link: "https://stackoverflow.com/questions/68932621/put-a-warning-if-page-refresh-in-reactjs",
+      },
     ],
   },
   {

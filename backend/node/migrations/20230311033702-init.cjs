@@ -102,6 +102,11 @@ module.exports = {
         type: Sequelize.ARRAY(Sequelize.STRING),
         allowNull: true, // if null, then no restriction
       },
+      isEnded: {
+        type: Sequelize.BOOLEAN,
+        allowNull: true,
+        defaultValue: false,
+      },
       createdAt: {
         type: Sequelize.DATE,
         allowNull: false,

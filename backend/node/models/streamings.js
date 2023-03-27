@@ -16,6 +16,11 @@ export const Streamings = sequelize.define("Streamings", {
     type: DataTypes.ARRAY(DataTypes.STRING),
     allowNull: true, // if null, then no restriction
   },
+  isEnded: {
+    type: DataTypes.BOOLEAN,
+    allowNull: true,
+    defaultValue: false,
+  },
   createdAt: {
     type: DataTypes.DATE,
     allowNull: false,

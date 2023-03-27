@@ -32,6 +32,8 @@ function StreamingCard({ streaming }) {
  * @returns Streaming list page component
  */
 function StreamingListPage() {
+  const [LiveList, setLiveList] = useState([]);
+  const [LiveReplayList, setLiveReplayList] = useState([]);
   const [StreamingList, setStreamingList] = useState([]);
 
   useEffect(() => {
@@ -41,14 +43,42 @@ function StreamingListPage() {
       .then((res) => {
         if (res.error) return console.log(res.error);
         const streamingList = res.data.streamings;
-        setStreamingList(streamingList);
+        // Set streaming list by live and live replay
+        const liveList = [];
+        const liveReplayList = [];
+        streamingList.forEach((streaming) => {
+          if (streaming.isEnded === null || streaming.isEnded === false)
+            liveList.push(streaming);
+          else liveReplayList.push(streaming);
+        });
+        setLiveList(liveList);
+        setLiveReplayList(liveReplayList);
       })
       .catch((e) => console.log(e));
   }, []);
 
-  const streamingList = StreamingList.map((streaming, index) => (
-    <StreamingCard key={`streaming-${index}`} streaming={streaming} />
-  ));
+  // List of streamings that are currently on live
+  const liveList =
+    LiveList && LiveList.length > 0 ? (
+      LiveList.map((streaming, index) => {
+        if (streaming.isEnded === null || streaming.isEnded === false)
+          return (
+            <StreamingCard key={`streaming-${index}`} streaming={streaming} />
+          );
+      })
+    ) : (
+      <div className="streaming-empty">No live streaming</div>
+    );
+
+  // List of streamings that are ended
+  const liveReplayList =
+    LiveReplayList && LiveReplayList.length > 0 ? (
+      LiveReplayList.map((streaming, index) => (
+        <StreamingCard key={`streaming-${index}`} streaming={streaming} />
+      ))
+    ) : (
+      <div className="streaming-empty">No live replay</div>
+    );
 
   return (
     <div className="grid-body page all-streaming">
@@ -62,9 +92,17 @@ function StreamingListPage() {
         </div>
       </div>
       <SubTitle text="On Live" />
-      <div className="streaming-list">{streamingList}</div>
+      {LiveList && LiveList.length > 0 ? (
+        <div className="streaming-list">{liveList}</div>
+      ) : (
+        <div className="streaming-empty">No live streaming</div>
+      )}
       <SubTitle text="Live Replay" />
-      <div className="streaming-list">{streamingList}</div>
+      {LiveReplayList && LiveReplayList.length > 0 ? (
+        <div className="streaming-list">{liveReplayList}</div>
+      ) : (
+        <div className="streaming-empty">No live replay</div>
+      )}
     </div>
   );
 }
