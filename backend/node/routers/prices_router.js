@@ -18,6 +18,11 @@ const roundNum = (num, digits, base) => {
   return Math.round(num * pow) / pow;
 };
 
+const calculateTax = (price, taxRate) => {
+  if (!price || !taxRate) return;
+  return (price * taxRate) / 100;
+};
+
 /**
  * Create a price for a membership in Stripe.
  * */
@@ -30,6 +35,7 @@ pricesRouter.post("/", async (req, res) => {
     !isValidArgument(reqBody.price, "number")
   )
     return res.status(422).json({ error: "Invalid arguments." });
+  const taxPrice = calculateTax(reqBody.price, 12.5);
   try {
     // Create a price
     // TODO: For recurring, think about year interval as well
@@ -38,7 +44,7 @@ pricesRouter.post("/", async (req, res) => {
         name: reqBody.membershipName,
       },
       currency: reqBody.currency,
-      unit_amount_decimal: roundNum(reqBody.price, 2),
+      unit_amount_decimal: roundNum(taxPrice, 2),
       recurring: { interval: "month" },
     });
     return res.status(200).json({ price });

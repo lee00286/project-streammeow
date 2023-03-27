@@ -57,7 +57,7 @@ function App() {
             )
           }
         />
-        <Route path="/purchase" element={<PurchasePage />} />
+        <Route path="/purchase/:creatorId" element={<PurchasePage />} />
         <Route path="/purchase/confirm" element={<ConfirmPage />} />
       </Routes>
     </div>

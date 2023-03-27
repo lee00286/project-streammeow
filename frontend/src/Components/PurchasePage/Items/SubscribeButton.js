@@ -8,10 +8,7 @@ import "../PurchasePage.css";
 /**
  * Subscribe button component to checkout.
  * @param {string} props.membershipId: membership id that the user is purchasing for
- * @param {string} props.membershipName: membership name that the user is purchasing for
  * @param {string} props.priceId: price id that the user is purchasing for
- * @param {number} props.price: total cost of the payment
- * @param {string} props.currency: currency
  * @param {boolean} props.isChecked: if Terms & Conditions and Privacy Policy are agreed
  * @returns Subscribe button component
  */
@@ -23,32 +20,16 @@ function SubscribeButton(props) {
 
   /* Set priceId of the membership */
   useEffect(() => {
+    // If null priceId
     if (!props || props.priceId === null || props.priceId === undefined) {
       setPriceId(null);
       return;
     }
-    // If no price is saved in membership
+    // If price is already saved in membership
     if (props.priceId !== "") {
       setPriceId(props.priceId);
       return;
     }
-    // Create a new price with total price
-    module
-      .addPrice(props.membershipName, props.currency, props.price)
-      .then((res) => {
-        if (res.error) return console.log(res.error);
-        // Add a priceId to membership
-        return module.updateMembership(props.membershipId, {
-          priceId: res.data.price.id,
-        });
-      })
-      .then((res) => {
-        if (res.error) return console.log(res.error);
-        setPriceId(res.data.membership.priceId);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
   }, [props]);
 
   /* After checkout */
