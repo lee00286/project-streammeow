@@ -5,7 +5,13 @@ import module from "../../ApiService";
 import SubTitle from "../Texts/SubTitle";
 import "./StreamingPage.css";
 
-function StreamingCard({ streaming }) {
+/**
+ * Streaming card component that displays streaming information.
+ * @param {Object} streaming: streaming object
+ * @param {boolean} isLive: true if the streaming is live
+ * @returns Streaming card component
+ */
+function StreamingCard({ streaming, isLive }) {
   const navigate = useNavigate();
 
   const [Streaming, setStreaming] = useState(streaming);
@@ -14,8 +20,11 @@ function StreamingCard({ streaming }) {
     setStreaming(streaming);
   }, [streaming]);
 
+  // When the card is clicked
   const onStreaming = () => {
-    navigate(`/streaming/${Streaming.creatorId}`);
+    if (isLive) navigate(`/streaming/${Streaming.creatorId}`);
+    else navigate(`/streaming/replay?streaming=${Streaming.id}`);
+    // TODO: Make a page for replay (use save-to-disk in Pion)
   };
 
   return (
@@ -28,13 +37,68 @@ function StreamingCard({ streaming }) {
 }
 
 /**
+ * Streaming list component that displays streaming cards.
+ * @param {Array} streamingList: list of streamings
+ * @param {boolean} isLive: true if the streaming is live
+ * @returns Streaming list component
+ */
+function StreamingList({ streamingList, isLive }) {
+  const [StreamingList, setStreamingList] = useState([]);
+  let emptyString = "";
+
+  useEffect(() => {
+    if (!streamingList || streamingList.length <= 0) return;
+    setStreamingList(streamingList);
+    // Set message when there is no streaming to display
+    if (isLive) emptyString = "No live streaming";
+    else emptyString = "No live replay";
+  }, [streamingList]);
+
+  // List of streamings
+  const liveList = StreamingList.map((streaming, index) => (
+    <StreamingCard
+      key={`streaming-${index}`}
+      streaming={streaming}
+      isLive={isLive}
+    />
+  ));
+
+  // If there is no streaming to display
+  if (!StreamingList || StreamingList.length <= 0 || StreamingList === []) {
+    return <div className="streaming-empty">{emptyString}</div>;
+  }
+
+  return <div className="streaming-list">{liveList}</div>;
+}
+
+/**
+ * Streaming slide component that displays a few streamings in header.
+ * @returns Streaming list component
+ */
+function StreamingSlide() {
+  // TODO: Get a few streamings that are live or live replay
+  // TODO: Re-design UI
+
+  return (
+    <div className="streaming-slide row">
+      <div className="slide-card row">
+        <div className="slide-thumbnail col-auto"></div>
+        <div className="slide-text col col-8">
+          <div className="slide-title">title</div>
+          <div className="slide-description">description</div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/**
  * Streaming list page component that displays all streamings.
  * @returns Streaming list page component
  */
 function StreamingListPage() {
   const [LiveList, setLiveList] = useState([]);
   const [LiveReplayList, setLiveReplayList] = useState([]);
-  const [StreamingList, setStreamingList] = useState([]);
 
   useEffect(() => {
     // Retrieve all streamings
@@ -58,52 +122,13 @@ function StreamingListPage() {
       .catch((e) => console.log(e));
   }, []);
 
-  // List of streamings that are currently on live
-  const liveList =
-    LiveList && LiveList.length > 0 ? (
-      LiveList.map((streaming, index) => {
-        if (streaming.isEnded === null || streaming.isEnded === false)
-          return (
-            <StreamingCard key={`streaming-${index}`} streaming={streaming} />
-          );
-      })
-    ) : (
-      <div className="streaming-empty">No live streaming</div>
-    );
-
-  // List of streamings that are ended
-  const liveReplayList =
-    LiveReplayList && LiveReplayList.length > 0 ? (
-      LiveReplayList.map((streaming, index) => (
-        <StreamingCard key={`streaming-${index}`} streaming={streaming} />
-      ))
-    ) : (
-      <div className="streaming-empty">No live replay</div>
-    );
-
   return (
     <div className="grid-body page all-streaming">
-      <div className="streaming-slide row">
-        <div className="slide-card row">
-          <div className="slide-thumbnail col-auto"></div>
-          <div className="slide-text col col-8">
-            <div className="slide-title">title</div>
-            <div className="slide-description">description</div>
-          </div>
-        </div>
-      </div>
+      <StreamingSlide />
       <SubTitle text="On Live" />
-      {LiveList && LiveList.length > 0 ? (
-        <div className="streaming-list">{liveList}</div>
-      ) : (
-        <div className="streaming-empty">No live streaming</div>
-      )}
+      <StreamingList streamingList={LiveList} isLive={true} />
       <SubTitle text="Live Replay" />
-      {LiveReplayList && LiveReplayList.length > 0 ? (
-        <div className="streaming-list">{liveReplayList}</div>
-      ) : (
-        <div className="streaming-empty">No live replay</div>
-      )}
+      <StreamingList streamingList={LiveReplayList} isLive={false} />
     </div>
   );
 }

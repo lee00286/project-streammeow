@@ -41,6 +41,8 @@ function App() {
         <Route path="/credits" element={<CreditPage />} />
         <Route path="/creators" element={<CreatorPage />} />
         <Route path="/streaming" element={<StreamingListPage />} />
+        {/* TODO */}
+        {/* <Route path="/streaming/replay" element={<StreamingListPage />} /> */}
         <Route
           path="/streaming/:creatorId"
           element={
