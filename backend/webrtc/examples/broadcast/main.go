@@ -11,6 +11,7 @@ import (
 
 	"github.com/pion/rtcp"
 	"github.com/pion/webrtc/v3"
+	// "examples/internal/signal"
 	"github.com/pion/webrtc/v3/examples/internal/signal"
 )
 
@@ -117,6 +118,9 @@ func main() { // nolint:gocognit
 
 	localTrack := <-localTrackChan
 	for {
+		// TODO: Erase this - this print statement is to keep track of changes
+		fmt.Println("?_?")
+
 		fmt.Println("")
 		fmt.Println("Curl an base64 SDP to start sendonly peer connection")
 

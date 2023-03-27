@@ -19,10 +19,22 @@ func HTTPSDPServer() chan string {
 		w.Header().Set("Access-Control-Allow-Methods", http.MethodPost)
 		w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 		w.Header().Set("Content-Type", "application/json")
+		
 		body, _ := ioutil.ReadAll(r.Body)
+		
+		// strBody := make(chan string)
+		// go handleRequest(strBody, body)
+		// fmt.Fprint(w, <-strBody)
+		// sdpChan <- string(body)
+		
+		// fmt.Fprint(w, "done")
+		// sdpChan <- string(body)
+		// w.WriteHeader(http.StatusOK)
+		// w.Write(body)
+		
 		fmt.Fprintf(w, "done")
 		sdpChan <- string(body)
-		w.Write(body)
+		// TODO: Find a way to write the respons without stopping the server
 	})
 
 	go func() {
@@ -33,4 +45,9 @@ func HTTPSDPServer() chan string {
 	}()
 
 	return sdpChan
+}
+
+func handleRequest(ch chan string, body []byte) {
+	// Send the response on the channel
+	ch <- string(body)
 }
