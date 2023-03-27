@@ -1,8 +1,8 @@
-version: '3'
+version: "3"
 services:
   frontend:
     container_name: frontend
-    build: './frontend'
+    build: "./frontend"
     ports:
       - "3000:3000"
     depends_on:
@@ -40,7 +40,7 @@ services:
       test: pg_isready -U postgres
   node:
     container_name: node
-    build: './backend/node'
+    build: "./backend/node"
     depends_on:
       - db
     links:
@@ -54,7 +54,7 @@ services:
       - POSTGRES_HOST=db
   webrtc:
     container_name: webrtc
-    build: './backend/webrtc'
+    build: "./backend/webrtc"
     ports:
       - "8080:8081"
 volumes:
