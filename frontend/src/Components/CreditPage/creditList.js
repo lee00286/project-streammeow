@@ -59,6 +59,30 @@ export const creditList = [
         siteName: "Stackoverflow",
         link: "https://stackoverflow.com/questions/71679442/show-hide-multiple-password-in-react-js",
       },
+      {
+        name: "Set srcObject in React",
+        siteName: "Stackoverflow",
+        link: "https://stackoverflow.com/questions/57095478/html5-getusermedia-cannot-set-property-srcobject-of-null",
+      },
+      {
+        name: "Convert curl command to node axios",
+        link: "https://curlconverter.com/node-axios/",
+      },
+      {
+        name: "Use environment variables in React",
+        siteName: "Stackoverflow",
+        link: "https://stackoverflow.com/questions/48378337/create-react-app-not-picking-up-env-files",
+      },
+      {
+        name: "React Select dependency",
+        siteName: "React Select",
+        link: "https://react-select.com/home",
+      },
+      {
+        name: "React beforeunload event",
+        siteName: "Stackoverflow",
+        link: "https://stackoverflow.com/questions/68932621/put-a-warning-if-page-refresh-in-reactjs",
+      },
     ],
   },
   {
@@ -92,6 +116,26 @@ export const creditList = [
     ],
   },
   {
+    title: "External API - Pion WebRTC",
+    credits: [
+      {
+        name: "Pion WebRTC application - WebRTC with Broadcast example",
+        siteName: "GitHub",
+        link: "https://github.com/pion/webrtc/tree/master/examples/broadcast",
+      },
+      {
+        name: "Go HTTP Handler CORS",
+        siteName: "GitHub",
+        link: "https://github.com/pion/webrtc/issues/1149",
+      },
+      {
+        name: "Go HTTP Handler JSON response",
+        siteName: "Stackoverflow",
+        link: "https://stackoverflow.com/questions/31622052/how-to-serve-up-a-json-response-using-go",
+      },
+    ],
+  },
+  {
     title: "Node.js Dependency - Sequelize",
     credits: [
       {
@@ -113,6 +157,40 @@ export const creditList = [
         name: "Use environment variable for local sequelize configuration",
         siteName: "Stackoverflow",
         link: "https://stackoverflow.com/questions/38757728/using-an-enviroment-variable-for-local-sequelize-configuration",
+      },
+    ],
+  },
+  {
+    title: "Docker",
+    credits: [
+      {
+        name: "Dockerizing a React App",
+        link: "https://mherman.org/blog/dockerizing-a-react-app/",
+      },
+      {
+        name: "Dockerizing a Node.js web app",
+        siteName: "Node.js Docs",
+        link: "https://nodejs.org/en/docs/guides/nodejs-docker-webapp/",
+      },
+      {
+        name: "Create a Dockerfile for Go image",
+        siteName: "Docker Docs",
+        link: "https://docs.docker.com/language/golang/build-images/#create-a-dockerfile-for-the-application",
+      },
+      {
+        name: "Define services in a Compose file",
+        siteName: "Docker Docs",
+        link: "https://docs.docker.com/compose/gettingstarted/#step-3-define-services-in-a-compose-file",
+      },
+      {
+        name: "Docker bcrypt error",
+        siteName: "Stackoverflow",
+        link: "https://stackoverflow.com/questions/32105251/bcrypt-invalid-elf-header-with-docker-and-sails-js",
+      },
+      {
+        name: "Docker compose postgres",
+        siteName: "GitHub",
+        link: "https://github.com/docker/awesome-compose/tree/master/nginx-golang-postgres",
       },
     ],
   },

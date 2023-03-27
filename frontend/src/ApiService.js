@@ -172,4 +172,65 @@ module.getUserId = () => {
   return axios.get("/api/users/me");
 };
 
+/**
+ * Retrieve a user from DB.
+ * @param {string} userId: id of the user
+ */
+module.getUserById = (userId) => {
+  // Get a userId using userId
+  return axios.get(`/api/users/${userId}`);
+};
+
+/**
+ * Create a new streaming to DB.
+ * @param {string} name: title of the streaming
+ * @param {string} description: description of the streaming
+ * @param {Array} permission: allowed streaming plans to watch the streaming
+ */
+module.addStreaming = (title, description, permission) => {
+  return axios.post("/api/streamings/", {
+    title,
+    description,
+    permission,
+  });
+};
+
+/**
+ * Retrieve all existing streamings from DB.
+ * If creatorId is provided, retrieve all streamings of the creator.
+ * @param {string} creatorId: id of the creator
+ */
+module.getAllStreamings = (creatorId) => {
+  // Get all streamings of the creator
+  if (creatorId) return axios.get(`/api/streamings?creatorId=${creatorId}`);
+  // Get all existing streamings
+  return axios.get("/api/streamings");
+};
+
+/**
+ * Retrieve a streaming from DB.
+ * @param {string} streamingId: id of the streaming
+ */
+module.getStreamingById = (streamingId) => {
+  // Get a streaming using streamingId
+  return axios.get(`/api/streamings/${streamingId}`);
+};
+
+/**
+ * Update attributes in streaming.
+ * @param {string} streamingId: id of the streaming
+ * @param {Object} variables: attributes to update
+ */
+module.updateStreaming = (streamingId, variables) => {
+  return axios.patch(`/api/streamings/${streamingId}`, variables);
+};
+
+/**
+ * Delete a streaming from DB.
+ * @param {string} streamingId: id of the streaming
+ */
+module.deleteStreaming = (streamingId) => {
+  return axios.delete(`/api/streamings/${streamingId}`);
+};
+
 export default module;
