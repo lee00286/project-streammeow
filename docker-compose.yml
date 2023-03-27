@@ -1,0 +1,61 @@
+version: '3'
+services:
+  frontend:
+    container_name: frontend
+    build: './frontend'
+    ports:
+      - "3000:3000"
+    depends_on:
+      - node
+      - webrtc
+    links:
+      - node
+      - webrtc
+  db:
+    image: postgres:15-alpine
+    # container_name: postgres
+    # build:
+    #   context: ./postgres
+    #   dockerfile: db.Dockerfile
+    # image: postgres
+    restart: always
+    # user: root
+    volumes:
+      # - ./var/pgdata:/var/lib/postgresql/data
+      # - dbdata:/var/lib/postgresql/data
+      - ./data/postgres:/var/lib/postgresql/data
+    environment:
+      # - POSTGRES_HOST=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=streammeow
+    # environment:
+    #   - POSTGRES_USER=leeyena
+    #   - POSTGRES_PASSWORD="    "
+    #   - POSTGRES_HOST=postgres
+    #   - POSTGRES_DB=streammeow
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: pg_isready -U postgres
+  node:
+    container_name: node
+    build: './backend/node'
+    depends_on:
+      - db
+    links:
+      - db
+    ports:
+      - "5001:5002"
+    environment:
+      - POSTGRES_DB=streammeow
+      - POSTGRES_USERNAME=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_HOST=db
+  webrtc:
+    container_name: webrtc
+    build: './backend/webrtc'
+    ports:
+      - "8080:8081"
+volumes:
+  dbdata:

@@ -35,11 +35,6 @@ export const creditList = [
         siteName: "CSS Tricks",
         link: "https://css-tricks.com/almanac/properties/a/aspect-ratio/",
       },
-      {
-        name: "Stylize select arrow",
-        siteName: "Stackoverflow",
-        link: "https://stackoverflow.com/questions/14218307/select-arrow-style-change",
-      },
     ],
   },
   {
@@ -162,6 +157,40 @@ export const creditList = [
         name: "Use environment variable for local sequelize configuration",
         siteName: "Stackoverflow",
         link: "https://stackoverflow.com/questions/38757728/using-an-enviroment-variable-for-local-sequelize-configuration",
+      },
+    ],
+  },
+  {
+    title: "Docker",
+    credits: [
+      {
+        name: "Dockerizing a React App",
+        link: "https://mherman.org/blog/dockerizing-a-react-app/",
+      },
+      {
+        name: "Dockerizing a Node.js web app",
+        siteName: "Node.js Docs",
+        link: "https://nodejs.org/en/docs/guides/nodejs-docker-webapp/",
+      },
+      {
+        name: "Create a Dockerfile for Go image",
+        siteName: "Docker Docs",
+        link: "https://docs.docker.com/language/golang/build-images/#create-a-dockerfile-for-the-application",
+      },
+      {
+        name: "Define services in a Compose file",
+        siteName: "Docker Docs",
+        link: "https://docs.docker.com/compose/gettingstarted/#step-3-define-services-in-a-compose-file",
+      },
+      {
+        name: "Docker bcrypt error",
+        siteName: "Stackoverflow",
+        link: "https://stackoverflow.com/questions/32105251/bcrypt-invalid-elf-header-with-docker-and-sails-js",
+      },
+      {
+        name: "Docker compose postgres",
+        siteName: "GitHub",
+        link: "https://github.com/docker/awesome-compose/tree/master/nginx-golang-postgres",
       },
     ],
   },
