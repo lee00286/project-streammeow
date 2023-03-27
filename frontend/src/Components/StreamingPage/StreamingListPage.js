@@ -40,7 +40,8 @@ function StreamingListPage() {
       .getAllStreamings()
       .then((res) => {
         if (res.error) return console.log(res.error);
-        setStreamingList(res.data.streamings);
+        const streamingList = res.data.streamings;
+        setStreamingList(streamingList);
       })
       .catch((e) => console.log(e));
   }, []);

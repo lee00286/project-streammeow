@@ -107,12 +107,15 @@ function StreamingPage() {
   useEffect(() => {
     if (!creatorId || !StartSession) return;
     // Get stream information
-    const response = module.getAllStreamings(creatorId);
-    if (response.error) return console.log(response.error);
-    console.log(response.data);
-    if (!response.data || response.data.streamings.length < 1)
-      return console.log("No streaming found");
-    setStream(response.data.streamings[0]);
+    module
+      .getAllStreamings(creatorId)
+      .then((res) => {
+        if (res.error) return console.log(res.error);
+        if (!res.data || res.data.streamings.length < 1)
+          return console.log("No streaming found");
+        setStream(res.data.streamings[0]);
+      })
+      .catch((e) => console.log(e));
   }, [creatorId, StartSession]);
 
   // Save session description

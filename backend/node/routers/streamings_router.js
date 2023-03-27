@@ -47,7 +47,7 @@ streamingsRouter.get("/", async (req, res) => {
       options.where = { creatorId: creatorId };
     }
     // TODO: Pagination
-    options.order = [["createdAt", "DESC"]];
+    options.order = [["id", "DESC"]];
     // Retrieve streamings
     const streamings = await Streamings.findAll(options);
     if (!streamings)
