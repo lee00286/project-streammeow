@@ -7,7 +7,8 @@ import "./Buttons.css";
  * @param {string} props.border: border style of the button
  * @param {string} props.textColor: color of the text
  * @param {string} props.text: text to display on a button
- * @param {Function} buttonFunction: function to be called when the button is clicked
+ * @param {Function} props.buttonFunction: function to be called when the button is clicked
+ * @param {boolean} props.disabled: if the button is disabled
  * @returns Button component
  */
 function ColorButton(props) {
@@ -38,6 +39,7 @@ function ColorButton(props) {
       className="button rounded-1 color-button no-select"
       style={{ border: Border, backgroundColor: ButtonColor, color: TextColor }}
       onClick={onButton}
+      disabled={props.disabled}
     >
       {Text}
     </button>

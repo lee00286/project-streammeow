@@ -1,0 +1,56 @@
+/* consider moving to more general location */
+.rounded {
+  border-radius: 16px;
+}
+
+.membership {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  padding-bottom: 20px;
+  min-width: 175px;
+  max-width: 250px;
+  background: white;
+  border: 2px;
+  border-style: solid;
+  border-color: var(--yellow3);
+  overflow: hidden;
+}
+
+.membership button {
+  font-weight: bold;
+  margin: 0;
+}
+
+.membership-name {
+  text-align: center;
+  color: white;
+  font-weight: bold;
+  background-color: var(--yellow3);
+}
+
+.membership-content {
+  margin: 20px;
+}
+
+.membership-description {
+  text-align: left;
+}
+
+.membership-benefits {
+  margin-left: 10px;
+}
+
+.membership-benefits ul {
+  padding: 0px;
+  text-align: left;
+}
+
+/* Center and bottom of container */
+.membership-bottom {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 0 0 10px;
+}

@@ -17,6 +17,12 @@
   justify-content: flex-start;
 }
 
+.nav-buttons {
+  justify-content: flex-end;
+  align-items: center;
+  margin-right: 20px !important;
+}
+
 .nav-buttons button {
   margin-left: 10px;
 }

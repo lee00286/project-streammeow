@@ -25,14 +25,14 @@
   margin-top: 0;
 }
 
-.membership {
+.purchase .purchase-membership {
   justify-content: flex-start;
   align-items: flex-start;
   padding-bottom: 20px;
   width: 100%;
 }
 
-.membership-box {
+.purchase .membership-box {
   margin: 0 20px 20px 0;
   padding: 15px;
   border: 2px solid var(--gray1);
@@ -42,41 +42,17 @@
   cursor: pointer;
 }
 
-.membership-box.selected-plan {
+.purchase .membership-box.selected-plan {
   border-color: var(--yellow4);
 }
 
-.membership-box .title {
+.purchase .membership-box .title {
   margin: 0 0 20px 0;
   font-size: 18px;
   font-weight: bold;
 }
 
-.price {
-  justify-content: center;
-  align-items: flex-end;
-  height: 40px;
-}
-
-.price p {
-  margin: 0;
-  font-size: 12px;
-}
-
-.price .currency {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: flex-start;
-  height: 100%;
-}
-
-.price .price-num {
-  font-size: 30px;
-  font-weight: bold;
-}
-
-.membership-box button {
+.purchase .membership-box button {
   margin-top: 15px;
   border: none;
   background-color: #fff;
@@ -85,7 +61,7 @@
   cursor: pointer;
 }
 
-.membership-box button:hover {
+.purchase .membership-box button:hover {
   color: var(--yellow4);
   text-decoration: underline;
 }
