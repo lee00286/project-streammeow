@@ -173,6 +173,15 @@ module.getUserId = () => {
 };
 
 /**
+ * Retrieve a user from DB.
+ * @param {string} userId: id of the user
+ */
+module.getUserById = (userId) => {
+  // Get a userId using userId
+  return axios.get(`/api/users/${userId}`);
+};
+
+/**
  * Create a new streaming to DB.
  * @param {string} name: title of the streaming
  * @param {string} description: description of the streaming

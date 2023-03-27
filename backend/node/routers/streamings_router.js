@@ -44,10 +44,10 @@ streamingsRouter.get("/", async (req, res) => {
       if (!isValidArgument(creatorId, "string"))
         return res.status(422).json({ error: "Invalid creatorId." });
       // Set options for retrieving streamings
-      // TODO: Pagination
-      options.order = [["createdAt", "DESC"]];
       options.where = { creatorId: creatorId };
     }
+    // TODO: Pagination
+    options.order = [["createdAt", "DESC"]];
     // Retrieve streamings
     const streamings = await Streamings.findAll(options);
     if (!streamings)

@@ -1,19 +1,31 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import module from "../../ApiService";
+// Components
 import StreamVideo from "./Items/StreamVideo";
 import ColorButton from "../Buttons/ColorButton";
 import "./StreamingPage.css";
 
-// TODO: Check if the streaming has started
 // TODO: Streaming permission
 
 /**
  * Streamer information component that shows information about the streamer.
- * @param {Object} streamer: streamer information
+ * @param {string} creatorId: id of the streamer
  * @returns Streamer information component
  */
-function StreamerInfo({ streamer }) {
+function StreamerInfo({ creatorId }) {
   const navigate = useNavigate();
+
+  const [CreatorInfo, setCreatorInfo] = useState(null);
+
+  useEffect(() => {
+    if (!creatorId) return;
+    // TODO: GET streamer information
+    module.getUserById(creatorId).then((res) => {
+      if (res.error) return console.log(res.error);
+      setCreatorInfo(res.data.user);
+    });
+  }, [creatorId]);
 
   const onCreator = () => {
     // TODO: Navigate to creator's page
@@ -31,7 +43,9 @@ function StreamerInfo({ streamer }) {
     <div className="streamer-container row">
       <div className="streamer-info row">
         <img src="/logo1.png" className="streamer-profile" />
-        <div className="streamer-name">Streamer's Name</div>
+        <div className="streamer-name">
+          {CreatorInfo && CreatorInfo.name ? CreatorInfo.name : ""}
+        </div>
       </div>
       <div className="streamer-button">
         <ColorButton
@@ -57,13 +71,22 @@ function StreamerInfo({ streamer }) {
  * @returns Streaming information component
  */
 function StreamInfo({ info }) {
-  // TODO: Replace title/description to the information in { info }
+  const [StreamingInfo, setStreamingInfo] = useState(null);
+
+  useEffect(() => {
+    if (!info) return;
+    setStreamingInfo(info);
+  }, [info]);
+
+  if (!StreamingInfo)
+    return (
+      <div className="stream-info col">No streaming information loaded</div>
+    );
 
   return (
     <div className="stream-info col">
-      <h2>Title of the Streaming</h2>
-      <p>Description of the Streaming</p>
-      <p>Session Description</p>
+      <h2>{StreamingInfo.title}</h2>
+      <p>{StreamingInfo.description ?? ""}</p>
     </div>
   );
 }
@@ -73,22 +96,24 @@ function StreamInfo({ info }) {
  * @returns Streaming page component
  */
 function StreamingPage() {
-  const { streamId } = useParams();
+  const { creatorId } = useParams();
 
   const [Stream, setStream] = useState(null);
-  const [Streamer, setStreamer] = useState(null);
   // Video Streaming
   const [GSD, setGSD] = useState("");
   const [SendGSD, setSendGSD] = useState("");
   const [StartSession, setStartSession] = useState(false);
 
   useEffect(() => {
-    if (!streamId || StartSession) return;
-    // TODO: GET request to get stream information
-    setStream(null);
-    // TODO: GET request to get streamer information
-    setStreamer(null);
-  }, [StartSession]);
+    if (!creatorId || !StartSession) return;
+    // Get stream information
+    const response = module.getAllStreamings(creatorId);
+    if (response.error) return console.log(response.error);
+    console.log(response.data);
+    if (!response.data || response.data.streamings.length < 1)
+      return console.log("No streaming found");
+    setStream(response.data.streamings[0]);
+  }, [creatorId, StartSession]);
 
   // Save session description
   const onGSD = (gsd) => {
@@ -128,7 +153,7 @@ function StreamingPage() {
         <div className="stream-chat col-auto"></div>
       </div>
       <div className={`stream-bottom col ${!StartSession ? "hidden" : ""}`}>
-        <StreamerInfo streamer={Streamer} />
+        <StreamerInfo streamer={creatorId} />
         <StreamInfo info={Stream} onGSD={onGSD} />
       </div>
     </div>

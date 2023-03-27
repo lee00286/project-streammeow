@@ -59,3 +59,24 @@ usersRouter.get("/me", async (req, res) => {
   }
   return res.status(200).json({ user });
 });
+
+/**
+ * Retrieve one user information using userId.
+ * */
+usersRouter.get("/:userId/", async (req, res) => {
+  const userId = req.params.userId;
+  // Check validity of userId
+  if (!isValidArgument(userId, "string"))
+    return res.status(422).json({ error: "Invalid userId." });
+  try {
+    const user = await User.findByPk(userId);
+    if (!user)
+      return res
+        .status(404)
+        .json({ error: `User(id=${userId}) doesn't exist.` });
+    return res.status(200).json({ user });
+  } catch (e) {
+    const errorMsg = "Failed to retrieve a user.";
+    console.log(errorMsg);
+  }
+});
