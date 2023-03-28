@@ -1,6 +1,18 @@
 import { useEffect, useState } from "react";
-import { Route, Routes } from "react-router-dom";
+import React from "react";
+import {
+  Route,
+  Routes,
+  useLocation,
+  useNavigationType,
+  createRoutesFromChildren,
+  matchRoutes,
+} from "react-router-dom";
+// import { Route, Routes } from "react-router-dom";
 import module from "./ApiService";
+// Sentry API
+import * as Sentry from "@sentry/react";
+import { BrowserTracing } from "@sentry/tracing";
 // Components
 import NavBar from "./Components/NavBar/NavBar";
 import HomePage from "./Components/HomePage/HomePage";
@@ -16,6 +28,25 @@ import RegisterPage from "./Components/LoginPage/RegisterPage";
 // Style
 import "./App.css";
 import "./Components/cols.css";
+
+// Enable Sentry to reach router context
+Sentry.init({
+  dsn: process.env.REACT_APP_DSN,
+  integrations: [
+    new BrowserTracing({
+      routingInstrumentation: Sentry.reactRouterV6Instrumentation(
+        React.useEffect,
+        useLocation,
+        useNavigationType,
+        createRoutesFromChildren,
+        matchRoutes
+      ),
+    }),
+  ],
+  tracesSampleRate: 1.0,
+});
+
+const SentryRoutes = Sentry.withSentryReactRouterV6Routing(Routes);
 
 function App() {
   const [UserId, setUserId] = useState("");
@@ -34,7 +65,7 @@ function App() {
   return (
     <div className="App">
       <NavBar />
-      <Routes>
+      <SentryRoutes>
         <Route path="/" element={<HomePage />} />
         <Route path="/signin" element={<LoginPage />} />
         <Route path="/signup" element={<RegisterPage />} />
@@ -59,7 +90,7 @@ function App() {
         />
         <Route path="/purchase/:creatorId" element={<PurchasePage />} />
         <Route path="/purchase/confirm" element={<ConfirmPage />} />
-      </Routes>
+      </SentryRoutes>
     </div>
   );
 }

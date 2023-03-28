@@ -2,6 +2,7 @@ import { Router } from "express";
 import { isValidArgument } from "../error_check.js";
 import { User } from "../models/users.js";
 import bcrypt from "bcryptjs";
+import Sentry from "@sentry/node";
 
 export const usersRouter = Router();
 
@@ -25,6 +26,7 @@ usersRouter.post("/signup", async (req, res) => {
   } catch (e) {
     const errorMsg = "Failed to create a user.";
     console.log(errorMsg);
+    Sentry.captureException(e);
   }
 });
 
@@ -79,5 +81,6 @@ usersRouter.get("/:userId/", async (req, res) => {
   } catch (e) {
     const errorMsg = "Failed to retrieve a user.";
     console.log(errorMsg);
+    Sentry.captureException(e);
   }
 });

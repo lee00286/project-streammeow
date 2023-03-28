@@ -136,6 +136,26 @@ export const creditList = [
     ],
   },
   {
+    title: "External API - Sentry",
+    credits: [
+      {
+        name: "Documentation for React",
+        siteName: "Sentry Docs",
+        link: "https://docs.sentry.io/platforms/javascript/guides/react/",
+      },
+      {
+        name: "Documentation for React Router Integration",
+        siteName: "Sentry Docs",
+        link: "https://docs.sentry.io/platforms/javascript/guides/react/configuration/integrations/react-router/",
+      },
+      {
+        name: "Documentation for Node",
+        siteName: "Sentry Docs",
+        link: "https://docs.sentry.io/platforms/node/",
+      },
+    ],
+  },
+  {
     title: "Node.js Dependency - Sequelize",
     credits: [
       {

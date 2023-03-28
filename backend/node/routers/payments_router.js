@@ -2,6 +2,7 @@ import express, { Router } from "express";
 import { Stripe } from "stripe";
 import dotenv from "dotenv";
 import { isValidArgument, stripeCatchError } from "../error_check.js";
+import Sentry from "@sentry/node";
 
 export const paymentsRouter = Router();
 dotenv.config();
@@ -89,6 +90,7 @@ paymentsRouter.post("/payment-intent", async (req, res) => {
   } catch (e) {
     const errorMsg = stripeCatchError(e);
     console.log(errorMsg);
+    Sentry.captureException(e);
   }
 });
 
@@ -122,6 +124,7 @@ paymentsRouter.post("/checkout-session", async (req, res) => {
   } catch (e) {
     const errorMsg = stripeCatchError(e);
     console.log(errorMsg);
+    Sentry.captureException(e);
   }
 });
 
@@ -183,6 +186,7 @@ paymentsRouter.post(
           endpointSecret
         );
       } catch (err) {
+        Sentry.captureException(err);
         return res.status(400).send(`Webhook Error: ${err.message}`);
       }
     } // Otherwise, use the basic event
@@ -245,5 +249,6 @@ paymentsRouter.post("/summarize", async (req, res) => {
   } catch (e) {
     const errorMsg = stripeCatchError(e);
     console.log(errorMsg);
+    Sentry.captureException(e);
   }
 });
