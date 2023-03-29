@@ -13,31 +13,22 @@ services:
       - webrtc
   db:
     image: postgres:15-alpine
-    # container_name: postgres
-    # build:
-    #   context: ./postgres
-    #   dockerfile: db.Dockerfile
-    # image: postgres
     restart: always
-    # user: root
     volumes:
-      # - ./var/pgdata:/var/lib/postgresql/data
-      # - dbdata:/var/lib/postgresql/data
+      - ./init/postgres/pg_hba.conf:/var/lib/postgresql/data/pg_hba.conf
+      - ./init/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
       - ./data/postgres:/var/lib/postgresql/data
     environment:
-      # - POSTGRES_HOST=postgres
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=streammeow
-    # environment:
-    #   - POSTGRES_USER=leeyena
-    #   - POSTGRES_PASSWORD="    "
-    #   - POSTGRES_HOST=postgres
-    #   - POSTGRES_DB=streammeow
+      - PGUSER=${PGUSER}
+      - PGDATA=${PGDATA}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
     ports:
-      - "5432:5432"
+      - "5435:5432"
     healthcheck:
-      test: pg_isready -U postgres
+      # test: pg_isready -U postgres
+      test: ["CMD", "pg_isready", "-q"]
   node:
     container_name: node
     build: "./backend/node"
@@ -48,10 +39,11 @@ services:
     ports:
       - "5001:5002"
     environment:
-      - POSTGRES_DB=streammeow
-      - POSTGRES_USERNAME=postgres
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_HOST=db
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USERNAME=${POSTGRES_USERNAME}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_HOST=${POSTGRES_HOST}
+      - POSTGRES_PORT=${POSTGRES_PORT}
   webrtc:
     container_name: webrtc
     build: "./backend/webrtc"
