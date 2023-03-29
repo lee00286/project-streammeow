@@ -1,0 +1,40 @@
+.user-page {
+  width: 100%;
+  height: 100%;
+}
+
+.user-sidebar {
+  margin-right: 20px;
+  user-select: none;
+}
+
+.sidebar-menu {
+  margin-bottom: 10px;
+  padding: 10px 15px;
+  border-radius: 10px;
+  background-color: var(--yellow2);
+  cursor: pointer;
+}
+
+.sidebar-menu:hover {
+  background-color: var(--yellow1);
+}
+
+.sidebar-menu.clicked-menu {
+  background-color: var(--yellow3);
+}
+
+.user-tabs {
+  width: 100%;
+}
+
+.user-tab {
+  padding: 20px;
+  border: 1px solid var(--yellow2);
+  border-radius: 10px;
+}
+
+.user-info {
+  justify-content: flex-start;
+  align-items: flex-start;
+}

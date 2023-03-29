@@ -25,6 +25,7 @@ import PurchasePage from "./Components/PurchasePage/PurchasePage";
 import ConfirmPage from "./Components/PurchasePage/ConfirmPage";
 import LoginPage from "./Components/LoginPage/LoginPage";
 import RegisterPage from "./Components/LoginPage/RegisterPage";
+import UserPage from "./Components/UserPage/UserPage";
 // Style
 import "./App.css";
 import "./Components/cols.css";
@@ -90,6 +91,7 @@ function App() {
         />
         <Route path="/purchase/:creatorId" element={<PurchasePage />} />
         <Route path="/purchase/confirm" element={<ConfirmPage />} />
+        <Route path="/mypage" element={<UserPage />} />
       </SentryRoutes>
     </div>
   );
