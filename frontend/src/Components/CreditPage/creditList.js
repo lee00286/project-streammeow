@@ -208,9 +208,48 @@ export const creditList = [
         link: "https://stackoverflow.com/questions/32105251/bcrypt-invalid-elf-header-with-docker-and-sails-js",
       },
       {
+        name: "Docker postgres image official document",
+        siteName: "Docker Hub",
+        link: "https://hub.docker.com/_/postgres",
+      },
+      {
+        name: "Add Postgres with Docker to an existing Node.js project",
+        link: "https://geshan.com.np/blog/2021/12/docker-postgres/",
+      },
+      {
         name: "Docker compose postgres",
         siteName: "GitHub",
         link: "https://github.com/docker/awesome-compose/tree/master/nginx-golang-postgres",
+      },
+      {
+        name: "pg_hba.conf entry",
+        siteName: "Stackoverflow",
+        link: "https://dba.stackexchange.com/questions/83984/connect-to-postgresql-server-fatal-no-pg-hba-conf-entry-for-host",
+      },
+      {
+        name: "PGUSER",
+        siteName: "Stackoverflow",
+        link: "https://stackoverflow.com/questions/60193781/postgres-with-docker-compose-gives-fatal-role-root-does-not-exist-error",
+      },
+      {
+        name: "PGDATA",
+        siteName: "Stackoverflow",
+        link: "https://stackoverflow.com/questions/62697071/docker-compose-postgres-upgrade-initdb-error-directory-var-lib-postgresql-da",
+      },
+      {
+        name: "Use entrypoint to run migrate and seed",
+        siteName: "Stackoverflow",
+        link: "https://stackoverflow.com/questions/60916919/docker-compose-unable-to-connect-to-mysql-app-builds-before-mysql?fbclid=IwAR2A8W0I6gSE4t8V8pYEWZgKzVAmd5fXqnOJzx5XxLKaJ4qPKzE00swo2-8",
+      },
+      {
+        name: "Docker compose Nginx React example",
+        siteName: "GitHub",
+        link: "https://github.com/docker/awesome-compose/tree/master/react-nginx",
+      },
+      {
+        name: "Docker compose Nginx Node.js example",
+        siteName: "GitHub",
+        link: "https://github.com/docker/awesome-compose/tree/master/nginx-nodejs-redis",
       },
     ],
   },
