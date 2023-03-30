@@ -7,16 +7,32 @@ import "../PurchasePage.css";
 
 /**
  * Subscribe button component to checkout.
- * @param {string} currency: currency
- * @param {string} membership: membership id that the user is purchasing for
- * @param {number} price: total cost of the payment
- * @param {boolean} isChecked: if Terms & Conditions and Privacy Policy are agreed
+ * @param {string} props.membershipId: membership id that the user is purchasing for
+ * @param {string} props.priceId: price id that the user is purchasing for
+ * @param {boolean} props.isChecked: if Terms & Conditions and Privacy Policy are agreed
  * @returns Subscribe button component
  */
-function SubscribeButton({ currency, membership, price, isChecked }) {
+function SubscribeButton(props) {
+  const [PriceId, setPriceId] = useState(null);
+
   let [Success, setSuccess] = useState(false);
   let [SessionId, setSessionId] = useState("");
 
+  /* Set priceId of the membership */
+  useEffect(() => {
+    // If null priceId
+    if (!props || props.priceId === null || props.priceId === undefined) {
+      setPriceId(null);
+      return;
+    }
+    // If price is already saved in membership
+    if (props.priceId !== "") {
+      setPriceId(props.priceId);
+      return;
+    }
+  }, [props]);
+
+  /* After checkout */
   useEffect(() => {
     // Check to see if this is a redirect back from Checkout
     const query = new URLSearchParams(window.location.search);
@@ -48,41 +64,23 @@ function SubscribeButton({ currency, membership, price, isChecked }) {
   /* Checkout membership subscription */
   const onCheckOut = (e) => {
     e.preventDefault();
-    if (!isChecked) {
+    if (!props.isChecked) {
       console.log(
         "To continue, you must agree to the Terms & Conditions and Privacy Policy."
       );
       return;
     }
+
+    // Create a checkout-session using priceId
     module
-      .addPrice(currency, membership, price)
+      .addCheckoutSession(PriceId)
       .then((res) => {
-        // Create a new price with total price
         if (res.error) return console.log(res.error);
-        const priceId = res.data.price.id;
-        return priceId;
+        // Payment (replace with my own payment page)
+        window.open(res.data.url, "_self");
       })
-      .then((priceId) => {
-        // Update memberships to have new priceId
-        module
-          .updateMembership(membership, { priceId: priceId })
-          .then((res) => {
-            if (res.error) return console.log(res.error);
-          });
-        return priceId;
-      })
-      .then((priceId) => {
-        // Create a checkout-session using priceId
-        module
-          .addCheckoutSession(priceId)
-          .then((res) => {
-            if (res.error) return console.log(res.error);
-            // Payment (replace with my own payment page)
-            window.open(res.data.url, "_self");
-          })
-          .catch((e) => {
-            console.log(e);
-          });
+      .catch((e) => {
+        console.log(e);
       });
   };
 
@@ -115,6 +113,7 @@ function SubscribeButton({ currency, membership, price, isChecked }) {
       textColor="#fff"
       text="Subscribe"
       buttonFunction={onCheckOut}
+      disabled={PriceId === null}
     />
   );
 }

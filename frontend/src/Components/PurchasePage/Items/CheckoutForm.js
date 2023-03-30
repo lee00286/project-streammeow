@@ -8,7 +8,7 @@ import {
 } from "@stripe/react-stripe-js";
 
 // Client URL
-const CLIENT_HOST = process.env.CLIENT_HOST || "localhost:3000";
+const CLIENT_HOST = process.env.REACT_APP_CLIENT_HOST || "localhost:3000";
 
 /**
  * CheckOutForm component.

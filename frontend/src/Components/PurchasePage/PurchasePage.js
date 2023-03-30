@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useLocation, useParams } from "react-router-dom";
 import module from "../../ApiService";
 // Components
 import PageTitle from "../Texts/PageTitle";
@@ -10,56 +11,86 @@ import SubscribeButton from "./Items/SubscribeButton";
 // Style
 import "./PurchasePage.css";
 
-// TODO: Replace
-const creatorId = "1";
-
 /**
  * Purchase page component.
  * @param {string} plan: plan to purchase
  * @returns Purchase page component
  */
 function PurchasePage({ plan }) {
+  const { creatorId } = useParams();
+  const location = useLocation();
+
   const [Memberships, setMemberships] = useState([]);
   const [SelectPlan, setSelectPlan] = useState(null);
   const [BuyList, setBuyList] = useState(null);
-  const [TotalCost, setTotalCost] = useState(null);
+  const [PriceId, setPriceId] = useState(null);
   const [IsChecked, setIsChecked] = useState(false);
 
-  /* Get membership of the creator */
+  /* Get memberships of the creator */
   useEffect(() => {
+    if (!creatorId) return;
     module
-      .getAllMembership(creatorId)
+      .getAllMemberships(creatorId)
       .then((res) => {
         if (res.error) return console.log(res.error);
-        setMemberships(res.data.memberships);
+        const memberships = res.data.memberships;
+        setMemberships(memberships);
+        for (let i = 0; i < memberships.length; i++) {
+          loadPriceId(memberships[i]);
+        }
       })
       .catch((e) => console.log(e));
-  }, []);
+  }, [creatorId, SelectPlan]);
 
   /* Update inherited SelectPlan */
   useEffect(() => {
-    if (Memberships && SelectPlan === null && plan) setSelectPlan(plan);
+    if (Memberships && SelectPlan === null) {
+      console.log(location);
+      if (plan) setSelectPlan(plan);
+      else if (location?.state?.membershipId) {
+        const selected = Memberships.find(
+          (m) => m.id === location.state.membershipId
+        );
+        if (selected) setSelectPlan(selected);
+      }
+    }
   }, [Memberships, plan]);
 
-  const onSelect = (membershipId, price) => {
+  // Set selected membership plan
+  const onSelect = (membershipId, priceId, price) => {
     setSelectPlan(membershipId);
+    setPriceId(priceId);
     for (let i = 0; i < Memberships.length; i++) {
       if (Memberships[i].id === membershipId) {
         const variable = {
           membershipId: Memberships[i].id,
           item: Memberships[i].name,
           quantity: 1,
-          priceId: Memberships[i].default_price,
           price: price,
         };
         setBuyList(variable);
+        return;
       }
     }
   };
 
-  // Set total cost
-  const onInvoice = (total) => {
-    setTotalCost(total);
+  // Create a new price model if membership doesn't have one
+  const loadPriceId = (membership) => {
+    if (!membership) return;
+    if (membership.priceId !== null && membership.priceId !== "") return;
+    // Create a new price with total price
+    module
+      .addPrice(membership.name, membership.currency, membership.price)
+      .then((res) => {
+        if (res.error) return console.log(res.error);
+        // Add a priceId to membership
+        return module.updateMembership(membership.id, {
+          priceId: res.data.price.id,
+        });
+      })
+      .catch((e) => {
+        console.log(e);
+      });
   };
 
   // Check if agreement checkbox is checked
@@ -93,14 +124,16 @@ function PurchasePage({ plan }) {
         <div className="purchase-left col-7">
           <SubTitle text="Membership Plan" />
           {Memberships && (
-            <div className="membership row no-select">{memberships}</div>
+            <div className="purchase-membership row no-select">
+              {memberships}
+            </div>
           )}
           {/* {SelectPlan && <SubTitle text="Payment Details" />}
           {SelectPlan && <Payment totalCost={TotalCost} currency="cad" />} */}
         </div>
         {SelectPlan && BuyList ? (
           <div className="purchase-right col-auto">
-            <InvoiceTable buyList={BuyList} totalCost={onInvoice} />
+            <InvoiceTable buyList={BuyList} />
             <CheckBox
               text={
                 <p>
@@ -111,9 +144,8 @@ function PurchasePage({ plan }) {
               onCheck={onCheck}
             />
             <SubscribeButton
-              currency={"cad"}
-              membership={BuyList.membershipId}
-              price={TotalCost}
+              membershipId={BuyList.membershipId}
+              priceId={PriceId ?? ""}
               isChecked={IsChecked}
             />
           </div>

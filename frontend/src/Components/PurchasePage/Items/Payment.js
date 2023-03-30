@@ -8,7 +8,7 @@ import CheckoutForm from "./CheckoutForm";
 // Configure the Stripe library with publishable API key
 const publicSampleTestAPIKey = "pk_test_A7jK4iCYHL045qgjjfzAfPxu";
 const stripePromise = loadStripe(
-  process.env.STRIPE_API_KEY || publicSampleTestAPIKey
+  process.env.REACT_APP_STRIPE_API_KEY || publicSampleTestAPIKey
 );
 
 /**

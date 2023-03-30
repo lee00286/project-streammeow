@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useLocation } from "react-router-dom";
 import module from "../../ApiService";
+import calculations from "../calculations";
 import "../Buttons/Buttons.css";
 
 /* Get query */
@@ -9,26 +10,47 @@ const useQuery = () => {
   return useMemo(() => new URLSearchParams(search), [search]);
 };
 
-/* Put string zero in front of the date/time if it's less than 10. */
-const dateZero = (num) => {
-  if (num < 10) return `0${num}`;
-  return `${num}`;
-};
-
-/* Convert date into proper text format. */
-const convertDate = (date) => {
-  let d = new Date(date);
-  let new_date = `${d.getFullYear()}-${dateZero(
-    d.getMonth() + 1
-  )}-${d.getDate()},`;
-  new_date += ` ${dateZero(d.getHours())}:${dateZero(d.getMinutes())}`;
-  return new_date;
-};
-
 /* Convert balance to actual amount. */
 const convertBalance = (balance) => {
-  return (balance / 100).toFixed(2);
+  return calculations.roundNum(balance / 100, 2);
 };
+
+/* Payment details */
+function PaymentDetails({ invoice }) {
+  /* Row for payment details */
+  const invoiceRow = (label, detail) => {
+    return (
+      <div className="invoice-row row">
+        <div className="invoice-label col-5">{label}</div>
+        <div className="invoice-detail col-5">{detail}</div>
+      </div>
+    );
+  };
+
+  if (!invoice) return <div></div>;
+
+  return (
+    <div className="invoice-bottom">
+      {invoiceRow("Invoice Number", invoice.invoiceNum)}
+      {invoiceRow(
+        "Payment Date",
+        calculations.convertDate(invoice.payment.datePaid)
+      )}
+      {invoiceRow("Currency", invoice.currency)}
+      {invoiceRow("Payment Total", invoice.payment.amountPaid)}
+      {invoiceRow("Balance", convertBalance(invoice.payment.balance))}
+      <div className="invoice-button no-select">
+        <a
+          href={invoice.invoicePDF}
+          download={`Invoice-${invoice.invoiceNum}`}
+          className="button rounded-1 color-button"
+        >
+          Download Invoice
+        </a>
+      </div>
+    </div>
+  );
+}
 
 /**
  * Payment confirmation page.
@@ -43,7 +65,6 @@ function ConfirmPage() {
     module
       .getSession(query.get("session_id"))
       .then((res) => {
-        console.log(res.data);
         if (res.data.error) console.log(res.data.error);
         else return res.data;
       })
@@ -57,16 +78,6 @@ function ConfirmPage() {
           .catch((e) => console.log(e));
       });
   }, []);
-
-  /* Row for payment details */
-  const invoiceRow = (label, detail) => {
-    return (
-      <div className="invoice-row row">
-        <div className="invoice-label col-5">{label}</div>
-        <div className="invoice-detail col-5">{detail}</div>
-      </div>
-    );
-  };
 
   return (
     <div className="invoice page">
@@ -84,22 +95,7 @@ function ConfirmPage() {
           <div className="horizontal-line">
             <span>PAYMENT DETAILS</span>
           </div>
-          <div className="invoice-bottom">
-            {invoiceRow("Invoice Number", Invoice.invoiceNum)}
-            {invoiceRow("Payment Date", convertDate(Invoice.payment.datePaid))}
-            {invoiceRow("Currency", Invoice.currency)}
-            {invoiceRow("Payment Total", Invoice.payment.amountPaid)}
-            {invoiceRow("Balance", convertBalance(Invoice.payment.balance))}
-            <div className="invoice-button no-select">
-              <a
-                href={Invoice.invoicePDF}
-                download={`Invoice-${Invoice.invoiceNum}`}
-                className="button rounded-1 color-button"
-              >
-                Download Invoice
-              </a>
-            </div>
-          </div>
+          <PaymentDetails invoice={Invoice} />
         </div>
       )}
     </div>
