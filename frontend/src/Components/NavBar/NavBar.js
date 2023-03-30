@@ -73,6 +73,11 @@ function NavBar({ userId }) {
       .catch((e) => console.log(e));
   };
 
+  // Navigate to mypage (user page)
+  const onMyPage = () => {
+    navigate("/mypage");
+  };
+
   // Navigate to user streaming page
   const onStartLive = () => {
     if (UserId === "") return;
@@ -129,6 +134,9 @@ function NavBar({ userId }) {
         onMouseLeave={() => setUserHover(false)}
         className={`nav-submenu col ${UserHover ? "" : "hidden"}`}
       >
+        <div className="submenu-button" onClick={onMyPage}>
+          My Page
+        </div>
         <div className="submenu-button" onClick={onStartLive}>
           Start Live
         </div>

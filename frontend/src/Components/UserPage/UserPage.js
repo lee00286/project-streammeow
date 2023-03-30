@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from "react";
 import module from "../../ApiService";
+import calculations from "../calculations";
 // Components
 import PageTitle from "../Texts/PageTitle";
 import SubTitle from "../Texts/SubTitle";
+import ColorButton from "../Buttons/ColorButton";
 // Style
 import "./UserPage.css";
+
+let menuList = ["User Information", "Purchase History"];
 
 /**
  * User History Tab Component that displays user's purchase history.
@@ -34,6 +38,10 @@ function UserHistoryTab() {
  */
 function UserInfoTab() {
   const [UserInfo, setUserInfo] = useState(null);
+  const [IsModify, setIsModify] = useState(false);
+  // Modify
+  const [ModifyName, setModifyName] = useState(null);
+  const [ModifyEmail, setModifyEmail] = useState(null);
 
   // Get user information
   useEffect(() => {
@@ -42,17 +50,121 @@ function UserInfoTab() {
       if (res.error) return console.log(res.error);
       if (!res.data.user) return console.log("Failed to load user data");
       setUserInfo(res.data.user);
-      console.log(res.data.user);
     });
-  }, []);
+  }, [IsModify]);
 
-  if (UserInfo) {
+  // Set up initial data for editing user information
+  useEffect(() => {
+    if (!UserInfo) return;
+    // Set up initial data for user
+    if (UserInfo.name) setModifyName(UserInfo.name);
+    if (UserInfo.email) setModifyEmail(UserInfo.email);
+  }, [IsModify]);
+
+  const onInfoEdit = () => {
+    // Start modifying user information
+    setIsModify(true);
+  };
+
+  const onModifyUser = () => {
+    if (!UserInfo) return;
+    // Variables to modify
+    const variables = {
+      name: ModifyName,
+      email: ModifyEmail,
+    };
+    // Modify user information
+    module
+      .updateUser(UserInfo.id, variables)
+      .then((res) => {
+        if (res.error) return console.log(res.error);
+        // Remove modifying forms
+        setIsModify(false);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
+
+  const onChangePassword = () => {};
+
+  if (UserInfo && IsModify) {
     return (
       <div className="user-tab user-info col-auto col">
-        <SubTitle text="User Information" />
-        <div>
-          <div>Email: {UserInfo.email}</div>
+        <div className="info-header row">
+          <SubTitle text="User Information" />
         </div>
+        <div className="info-list info-modify col">
+          <p className="info-title">Name</p>
+          <input
+            value={ModifyName ?? ""}
+            onChange={(e) => setModifyName(e.target.value)}
+          />
+          <p className="info-title">Email</p>
+          <input
+            value={ModifyEmail ?? ""}
+            onChange={(e) => setModifyEmail(e.target.value)}
+          />
+          <p className="info-title">Date Registered</p>
+          <p className="info-detail">
+            {UserInfo.createdAt
+              ? calculations.convertDate(UserInfo.createdAt)
+              : "N/A"}
+          </p>
+          <div className="user-modify-buttons row">
+            <ColorButton
+              text="Modify"
+              textColor="#fff"
+              buttonColor="var(--yellow4)"
+              buttonFunction={onModifyUser}
+            />
+            <ColorButton
+              text="Cancel"
+              textColor="var(--yellow4)"
+              border="1px solid var(--yellow4)"
+              buttonFunction={() => setIsModify(false)}
+            />
+          </div>
+        </div>
+        <SubTitle text="Password" />
+        <ColorButton
+          text="Change Password"
+          border="1px solid var(--yellow4)"
+          buttonColor="#fff"
+          textColor="var(--yellow4)"
+          buttonFunction={onChangePassword}
+        />
+      </div>
+    );
+  }
+
+  if (UserInfo && !IsModify) {
+    return (
+      <div className="user-tab user-info col-auto col">
+        <div className="info-header row">
+          <SubTitle text="User Information" />
+          <button onClick={onInfoEdit}>Edit</button>
+        </div>
+        <div className="info-list col">
+          <p className="info-title">Name</p>
+          <p className="info-detail">{UserInfo.name ?? "N/A"}</p>
+          <p className="info-title">Email</p>
+          <p className="info-detail">{UserInfo.email ?? "N/A"}</p>
+          <p className="info-title">Date Registered</p>
+          <p className="info-detail">
+            {UserInfo.createdAt
+              ? calculations.convertDate(UserInfo.createdAt)
+              : "N/A"}
+          </p>
+        </div>
+        <SubTitle text="Password" />
+        <ColorButton
+          text="Change Password"
+          border="1px solid var(--yellow4)"
+          buttonColor="#fff"
+          textColor="var(--yellow4)"
+          buttonFunction={onChangePassword}
+        />
       </div>
     );
   }
@@ -70,20 +182,24 @@ function SideBar({ onClickMenu }) {
     onClickMenu(menu);
   };
 
+  // List of menu items in the sidebar
+  const menuItems = menuList.map((menu, index) => {
+    return (
+      <div
+        key={index}
+        className={`sidebar-menu ${
+          ClickedPage === index ? "clicked-menu" : ""
+        }`}
+        onClick={() => onMenu(index)}
+      >
+        {menu}
+      </div>
+    );
+  });
+
   return (
     <div className="user-sidebar col-2">
-      <div
-        className={`sidebar-menu ${ClickedPage === 0 ? "clicked-menu" : ""}`}
-        onClick={() => onMenu(0)}
-      >
-        Menu 1
-      </div>
-      <div
-        className={`sidebar-menu ${ClickedPage === 1 ? "clicked-menu" : ""}`}
-        onClick={() => onMenu(1)}
-      >
-        Menu 2
-      </div>
+      {menuList && menuList.length > 0 ? menuItems : <div></div>}
     </div>
   );
 }

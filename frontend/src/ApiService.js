@@ -187,9 +187,9 @@ module.getUserById = (userId) => {
  * @param {string} userId: id of the user
  * @param {Object} variables: attributes to update
  */
-module.updateUser = (userId) => {
+module.updateUser = (userId, variables) => {
   // Get a userId using userId
-  return axios.patch(`/api/users/${userId}`);
+  return axios.patch(`/api/users/${userId}`, variables);
 };
 
 /**
