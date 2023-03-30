@@ -120,19 +120,18 @@ function NavBar({ userId }) {
         </div>
       )}
       {UserId && (
-        <div className="nav-user-menu row col-1">
-          <img
-            src="/icons/user.png"
-            onMouseEnter={() => setUserHover(true)}
-            onMouseLeave={() => setUserHover(false)}
-            className="user-icon"
-          />
+        <div
+          onMouseEnter={() => setUserHover(true)}
+          onMouseLeave={() => setUserHover(false)}
+          className="nav-user-menu row col-1"
+        >
+          <img src="/icons/user.png" className="user-icon" />
         </div>
       )}
       <div
         onMouseEnter={() => setUserHover(true)}
         onMouseLeave={() => setUserHover(false)}
-        className={`nav-submenu col ${UserHover ? "" : "hidden"}`}
+        className={`nav-submenu row ${UserHover ? "" : "hidden"}`}
       >
         <div className="submenu-button" onClick={onMyPage}>
           My Page

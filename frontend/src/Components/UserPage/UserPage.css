@@ -13,11 +13,12 @@
   padding: 10px 15px;
   border-radius: 10px;
   background-color: var(--yellow2);
+  font-weight: 500;
   cursor: pointer;
 }
 
 .sidebar-menu:hover {
-  background-color: var(--yellow1);
+  background-color: var(--yellow3);
 }
 
 .sidebar-menu.clicked-menu {

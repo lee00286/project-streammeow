@@ -8,7 +8,33 @@ import ColorButton from "../Buttons/ColorButton";
 // Style
 import "./UserPage.css";
 
-let menuList = ["User Information", "Purchase History"];
+let menuList = ["User Information", "Purchase History", "Creator's Menu"];
+
+/**
+ * Creator's Tab Component that displays user's history as a creator.
+ * @returns Creator's Tab Component
+ */
+function CreatorsTab() {
+  const [Creator, setCreator] = useState(null);
+
+  if (Creator) {
+    return (
+      <div className="user-tab creator-history col-auto col">
+        <SubTitle text="Creator's Menu" />
+        <div>
+          <div>Creator History</div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="user-tab col-auto col">
+      <SubTitle text="Creator's Menu" />
+      <div className="flex-center">Empty</div>
+    </div>
+  );
+}
 
 /**
  * User History Tab Component that displays user's purchase history.
@@ -28,7 +54,12 @@ function UserHistoryTab() {
     );
   }
 
-  return <div className="user-tab user-history col-auto col">Empty tab</div>;
+  return (
+    <div className="user-tab col-auto col">
+      <SubTitle text="User History" />
+      <div className="flex-center">Empty</div>
+    </div>
+  );
 }
 
 /**
@@ -86,7 +117,9 @@ function UserInfoTab() {
       });
   };
 
-  const onChangePassword = () => {};
+  const onChangePassword = () => {
+    // TODO: Change password
+  };
 
   if (UserInfo && IsModify) {
     return (
@@ -169,7 +202,7 @@ function UserInfoTab() {
     );
   }
 
-  return <div className="user-tab user-info col-auto col">Empty tab</div>;
+  return <div className="user-tab col-auto flex-center">Empty tab</div>;
 }
 
 function SideBar({ onClickMenu }) {
@@ -215,8 +248,14 @@ function UserPage() {
         break;
       case 1:
         setCurrentMenu(<UserHistoryTab />);
+        break;
+      case 2:
+        setCurrentMenu(<CreatorsTab />);
+        break;
       default:
-        setCurrentMenu(<div>Empty Tab</div>);
+        setCurrentMenu(
+          <div className="user-tab col-auto flex-center">Empty tab</div>
+        );
     }
   }, [ClickedPage]);
 
@@ -230,7 +269,9 @@ function UserPage() {
       <PageTitle text="My Page" />
       <div className="user-tabs row">
         <SideBar onClickMenu={onClickMenu} />
-        {CurrentMenu ?? <div>Empty Tab</div>}
+        {CurrentMenu ?? (
+          <div className="user-tab col-auto flex-center">Empty tab</div>
+        )}
       </div>
     </div>
   );
