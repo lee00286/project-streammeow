@@ -9,6 +9,10 @@
   --hovergray1: #f5f5f5;
   --icongreen: #4bb543;
   --iconred: #d11a2a;
+  --icon-size: 72px;
+  --icon-size-small: 48px;
+  --video-size: 250px;
+  --video-size-small: 80px;
 }
 
 body {

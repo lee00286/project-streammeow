@@ -247,6 +247,11 @@ export const creditList = [
         siteName: "Flaticon",
         link: "https://www.flaticon.com/free-icons/password",
       },
+      {
+        name: "Live-news icons created by Good Ware - Flaticon",
+        siteName: "Flaticon",
+        link: "https://www.flaticon.com/free-icons/live-news",
+      },
     ],
   },
 ];
