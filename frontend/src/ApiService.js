@@ -155,6 +155,7 @@ module.UserRegister = (email, password) => {
  * @param {string} password: password of the user
  */
 module.UserLogin = (email, password) => {
+  console.log(password);
   return axios.post("/api/users/login", { email, password });
 };
 
@@ -179,6 +180,16 @@ module.getUserId = () => {
 module.getUserById = (userId) => {
   // Get a userId using userId
   return axios.get(`/api/users/${userId}`);
+};
+
+/**
+ * Update user information.
+ * @param {string} userId: id of the user
+ * @param {Object} variables: attributes to update
+ */
+module.updateUser = (userId) => {
+  // Get a userId using userId
+  return axios.patch(`/api/users/${userId}`);
 };
 
 /**

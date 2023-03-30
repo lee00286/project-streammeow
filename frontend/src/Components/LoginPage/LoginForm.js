@@ -18,6 +18,14 @@ function LoginForm({ login, register, onLogin, onRegister }) {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
+  const onPassword = (pw) => {
+    setPassword(pw);
+  };
+
+  const onConfirmPassword = (pw) => {
+    setConfirmPassword(pw);
+  };
+
   const onSignUp = (e) => {
     e.preventDefault();
 
@@ -35,7 +43,7 @@ function LoginForm({ login, register, onLogin, onRegister }) {
 
   const onSignIn = (e) => {
     e.preventDefault();
-
+    console.log(password);
     onLogin(email, password);
 
     setEmail("");
@@ -59,17 +67,9 @@ function LoginForm({ login, register, onLogin, onRegister }) {
               required
             />
             <label>PASSWORD</label>
-            <HidePassword
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
+            <HidePassword onPassword={onPassword} />
             {register ? <label>CONFIRM PASSWORD</label> : null}
-            {register ? (
-              <HidePassword
-                value={confirmPassword}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            ) : null}
+            {register ? <HidePassword onPassword={onConfirmPassword} /> : null}
           </div>
           {login ? (
             <button className="login-button" onClick={onSignIn}>

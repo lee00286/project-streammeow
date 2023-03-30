@@ -1,5 +1,14 @@
 "use strict";
 
+const bcrypt = require("bcryptjs");
+
+const generatePassword = (password) => {
+  const saltRounds = 10;
+  const salt = bcrypt.genSaltSync(saltRounds);
+  const hash = bcrypt.hashSync(password, salt);
+  return hash;
+};
+
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
@@ -16,21 +25,21 @@ module.exports = {
       {
         name: "User 1",
         email: "user1@gmail.com",
-        password: "user1",
+        password: generatePassword("user1"),
         createdAt: new Date(),
         updatedAt: new Date(),
       },
       {
         name: "User 2",
         email: "user2@gmail.com",
-        password: "user2",
+        password: generatePassword("user2"),
         createdAt: new Date(),
         updatedAt: new Date(),
       },
       {
         name: "User 3",
         email: "user3@gmail.com",
-        password: "user3",
+        password: generatePassword("user3"),
         createdAt: new Date(),
         updatedAt: new Date(),
       },
