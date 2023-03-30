@@ -163,7 +163,7 @@ module.UserLogin = (email, password) => {
  * User logout.
  */
 module.UserLogout = () => {
-  return axios.get("/api/users/logout");
+  return axios.post("/api/users/logout");
 };
 
 /**

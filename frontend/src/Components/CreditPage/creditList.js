@@ -83,6 +83,11 @@ export const creditList = [
         siteName: "Stackoverflow",
         link: "https://stackoverflow.com/questions/68932621/put-a-warning-if-page-refresh-in-reactjs",
       },
+      {
+        name: "Node req.session.destroy(), req.logout(), and res.clearCookie()",
+        siteName: "Stackoverflow",
+        link: "https://stackoverflow.com/questions/50454992/req-session-destroy-and-passport-logout-arent-destroying-cookie-on-client-side",
+      },
     ],
   },
   {

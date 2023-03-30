@@ -49,8 +49,12 @@ usersRouter.post("/login", isNotAuthenticated, async (req, res) => {
 });
 
 usersRouter.post("/logout", isAuthenticated, async (req, res) => {
+  // Remove data stored in session
   req.session.destroy();
-  return res.status(200).redirect("/");
+  req.session = null;
+  // Remove cookie
+  res.clearCookie();
+  return res.status(200).json({ success: true });
 });
 
 usersRouter.get("/me", async (req, res) => {

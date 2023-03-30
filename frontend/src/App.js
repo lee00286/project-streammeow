@@ -8,7 +8,6 @@ import {
   createRoutesFromChildren,
   matchRoutes,
 } from "react-router-dom";
-// import { Route, Routes } from "react-router-dom";
 import module from "./ApiService";
 // Sentry API
 import * as Sentry from "@sentry/react";
@@ -54,6 +53,7 @@ function App() {
   const [IsCreator, setIsCreator] = useState(false);
 
   useEffect(() => {
+    console.log("App.js");
     // Get user id
     module.getUserId().then((res) => {
       if (res.data.user === undefined) return;
@@ -65,7 +65,7 @@ function App() {
 
   return (
     <div className="App">
-      <NavBar />
+      <NavBar userId={UserId} />
       <SentryRoutes>
         <Route path="/" element={<HomePage />} />
         <Route path="/signin" element={<LoginPage />} />

@@ -13,7 +13,7 @@ const isAuth = false; // Temporary variable that should be replaced after auth i
  * Navigation bar component that directs users to different pages.
  * @returns Navigation bar component
  */
-function NavBar() {
+function NavBar({ userId }) {
   const navigate = useNavigate();
 
   const [UserId, setUserId] = useState("");
@@ -27,7 +27,7 @@ function NavBar() {
       // TODO: Change after creator field is created in User
       setIsCreator(res.data.user.id === 1);
     });
-  }, []);
+  }, [userId]);
 
   // Navigate to home
   const onLogo = () => {
@@ -57,7 +57,18 @@ function NavBar() {
   // Sign out
   const onSignOut = () => {
     // Signout
-    module.UserLogout().catch((e) => console.log(e));
+    module
+      .UserLogout()
+      .then((res) => {
+        if (res.data.success) {
+          setTimeout(function () {
+            alert("Successfully signed out.");
+            setUserId("");
+            navigate("/");
+          }, 500);
+        }
+      })
+      .catch((e) => console.log(e));
   };
 
   // Navigate to user streaming page
