@@ -213,6 +213,10 @@ export const creditList = [
         link: "https://hub.docker.com/_/postgres",
       },
       {
+        name: "Add Postgres with Docker to an existing Node.js project",
+        link: "https://geshan.com.np/blog/2021/12/docker-postgres/",
+      },
+      {
         name: "Docker compose postgres",
         siteName: "GitHub",
         link: "https://github.com/docker/awesome-compose/tree/master/nginx-golang-postgres",
@@ -236,6 +240,16 @@ export const creditList = [
         name: "Use entrypoint to run migrate and seed",
         siteName: "Stackoverflow",
         link: "https://stackoverflow.com/questions/60916919/docker-compose-unable-to-connect-to-mysql-app-builds-before-mysql?fbclid=IwAR2A8W0I6gSE4t8V8pYEWZgKzVAmd5fXqnOJzx5XxLKaJ4qPKzE00swo2-8",
+      },
+      {
+        name: "Docker compose Nginx React example",
+        siteName: "GitHub",
+        link: "https://github.com/docker/awesome-compose/tree/master/react-nginx",
+      },
+      {
+        name: "Docker compose Nginx Node.js example",
+        siteName: "GitHub",
+        link: "https://github.com/docker/awesome-compose/tree/master/nginx-nodejs-redis",
       },
     ],
   },
