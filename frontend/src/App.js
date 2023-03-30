@@ -53,7 +53,6 @@ function App() {
   const [IsCreator, setIsCreator] = useState(false);
 
   useEffect(() => {
-    console.log("App.js");
     // Get user id
     module.getUserId().then((res) => {
       if (res.data.user === undefined) return;

@@ -18,6 +18,7 @@ function NavBar({ userId }) {
 
   const [UserId, setUserId] = useState("");
   const [IsCreator, setIsCreator] = useState(false);
+  const [UserHover, setUserHover] = useState(false);
 
   useEffect(() => {
     // Get user id
@@ -63,6 +64,7 @@ function NavBar({ userId }) {
         if (res.data.success) {
           setTimeout(function () {
             alert("Successfully signed out.");
+            setUserHover(false);
             setUserId("");
             navigate("/");
           }, 500);
@@ -113,22 +115,27 @@ function NavBar({ userId }) {
         </div>
       )}
       {UserId && (
-        <div className="nav-buttons row col-3">
-          <ColorButton
-            buttonColor="#fff"
-            border="1px solid var(--yellow4)"
-            textColor="var(--yellow4)"
-            text="Start Live"
-            buttonFunction={onStartLive}
-          />
-          <ColorButton
-            buttonColor="var(--yellow4)"
-            textColor="#fff"
-            text="Sign Out"
-            buttonFunction={onSignOut}
+        <div className="nav-user-menu row col-1">
+          <img
+            src="/icons/user.png"
+            onMouseEnter={() => setUserHover(true)}
+            onMouseLeave={() => setUserHover(false)}
+            className="user-icon"
           />
         </div>
       )}
+      <div
+        onMouseEnter={() => setUserHover(true)}
+        onMouseLeave={() => setUserHover(false)}
+        className={`nav-submenu col ${UserHover ? "" : "hidden"}`}
+      >
+        <div className="submenu-button" onClick={onStartLive}>
+          Start Live
+        </div>
+        <div className="submenu-button" onClick={onSignOut}>
+          Sign Out
+        </div>
+      </div>
     </div>
   );
 }

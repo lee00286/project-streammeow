@@ -27,6 +27,47 @@
   margin-left: 10px;
 }
 
+.nav-user-menu {
+  justify-content: center;
+  align-items: center;
+  padding: 5px;
+  height: 50px !important;
+  cursor: pointer;
+}
+
+.nav-user-menu:hover {
+  border-radius: 5px;
+  background-color: var(--yellow1);
+}
+
+.user-icon {
+  height: 100% !important;
+}
+
+.nav-submenu {
+  position: fixed;
+  top: 50px;
+  right: 30px;
+  padding: 10px;
+  background-color: var(--yellow2);
+  border: 1px solid #fff;
+}
+
+.submenu-button {
+  padding: 10px 15px;
+  background-color: var(--yellow4);
+  color: #fff;
+  cursor: pointer;
+}
+
+.submenu-button:not(:last-child) {
+  margin-bottom: 5px;
+}
+
+.submenu-button:hover {
+  background-color: var(--yellow3);
+}
+
 /* for mobile */
 @media (max-width: 425px) {
   .navigation {

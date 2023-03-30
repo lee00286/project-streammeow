@@ -311,6 +311,11 @@ export const creditList = [
         siteName: "Flaticon",
         link: "https://www.flaticon.com/free-icons/password",
       },
+      {
+        name: "User Icon",
+        siteName: "Iconfinder",
+        link: "https://www.iconfinder.com/icons/8665306/circle_user_icon",
+      },
     ],
   },
 ];
