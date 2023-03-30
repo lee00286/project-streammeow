@@ -2,7 +2,7 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable("User", {
+    await queryInterface.createTable("Users", {
       id: {
         type: Sequelize.INTEGER,
         allowNull: false,
@@ -20,11 +20,6 @@ module.exports = {
       password: {
         type: Sequelize.STRING,
         allowNull: false,
-      },
-      createdAt: {
-        type: Sequelize.DATE,
-        allowNull: false,
-        defaultValue: Sequelize.NOW,
       },
       createdAt: {
         type: Sequelize.DATE,

@@ -12,6 +12,29 @@ module.exports = {
      *   isBetaMember: false
      * }], {});
      */
+    await queryInterface.bulkInsert("Users", [
+      {
+        name: "User 1",
+        email: "user1@gmail.com",
+        password: "user1",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        name: "User 2",
+        email: "user2@gmail.com",
+        password: "user2",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        name: "User 3",
+        email: "user3@gmail.com",
+        password: "user3",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+    ]);
     return queryInterface.bulkInsert("Memberships", [
       {
         name: "Basic",
