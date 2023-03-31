@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { isValidArgument } from "../error_check.js";
 import { Streamings } from "../models/streamings.js";
+import Sentry from "@sentry/node";
 
 export const streamingsRouter = Router();
 
@@ -28,6 +29,7 @@ streamingsRouter.post("/", async (req, res) => {
   } catch (e) {
     const errorMsg = "Failed to create a streaming.";
     console.log(errorMsg);
+    Sentry.captureException(e);
   }
 });
 
@@ -56,6 +58,7 @@ streamingsRouter.get("/", async (req, res) => {
   } catch (e) {
     const errorMsg = "Failed to retrieve streamings.";
     console.log(errorMsg);
+    Sentry.captureException(e);
   }
 });
 
@@ -77,6 +80,7 @@ streamingsRouter.get("/:streamingId/", async (req, res) => {
   } catch (e) {
     const errorMsg = "Failed to retrieve a streaming.";
     console.log(errorMsg);
+    Sentry.captureException(e);
   }
 });
 
@@ -106,6 +110,7 @@ streamingsRouter.patch("/:streamingId/", async (req, res) => {
   } catch (e) {
     const errorMsg = "Failed to update a streaming.";
     console.log(errorMsg);
+    Sentry.captureException(e);
   }
 });
 
@@ -134,5 +139,6 @@ streamingsRouter.delete("/:streamingId/", async (req, res) => {
   } catch (e) {
     const errorMsg = "Failed to delete a streaming.";
     console.log(errorMsg);
+    Sentry.captureException(e);
   }
 });

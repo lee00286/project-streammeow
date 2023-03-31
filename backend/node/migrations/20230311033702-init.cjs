@@ -2,7 +2,7 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable("User", {
+    await queryInterface.createTable("Users", {
       id: {
         type: Sequelize.INTEGER,
         allowNull: false,
@@ -26,6 +26,18 @@ module.exports = {
         allowNull: false,
         defaultValue: Sequelize.NOW,
       },
+      updatedAt: {
+        type: Sequelize.DATE,
+        allowNull: true,
+      },
+    });
+    await queryInterface.createTable("Creators", {
+      id: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+      },
       createdAt: {
         type: Sequelize.DATE,
         allowNull: false,
@@ -34,6 +46,14 @@ module.exports = {
       updatedAt: {
         type: Sequelize.DATE,
         allowNull: true,
+      },
+      userId: {
+        type: Sequelize.INTEGER,
+        references: {
+          model: "Users",
+          key: "id",
+        },
+        allowNull: false,
       },
     });
     await queryInterface.createTable("Memberships", {
@@ -78,8 +98,16 @@ module.exports = {
         type: Sequelize.DATE,
         allowNull: true,
       },
+      subscribers: {
+        type: Sequelize.ARRAY(Sequelize.INTEGER),
+        allowNull: true,
+      },
       creatorId: {
-        type: Sequelize.STRING,
+        type: Sequelize.INTEGER,
+        references: {
+          model: "Creators",
+          key: "id",
+        },
         allowNull: false,
       },
     });
@@ -117,17 +145,13 @@ module.exports = {
         allowNull: true,
       },
       creatorId: {
-        type: Sequelize.STRING,
+        type: Sequelize.INTEGER,
+        references: {
+          model: "Creators",
+          key: "id",
+        },
         allowNull: false,
       },
-      // creatorId: {
-      //   type: Sequelize.STRING,
-      //   references: {
-      //     model: "Users", // TODO: change to Creator
-      //     key: "id",
-      //   },
-      //   allowNull: false, // TODO: consider what if creator deletes acocunt
-      // },
     });
   },
   async down(queryInterface, Sequelize) {

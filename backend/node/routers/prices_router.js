@@ -2,6 +2,7 @@ import { Router } from "express";
 import { Stripe } from "stripe";
 import dotenv from "dotenv";
 import { isValidArgument, stripeCatchError } from "../error_check.js";
+import Sentry from "@sentry/node";
 
 export const pricesRouter = Router();
 dotenv.config();
@@ -51,6 +52,7 @@ pricesRouter.post("/", async (req, res) => {
   } catch (e) {
     const errorMsg = stripeCatchError(e);
     console.log(errorMsg);
+    Sentry.captureException(e);
   }
 });
 
@@ -66,6 +68,7 @@ pricesRouter.get("/", async (req, res) => {
   } catch (e) {
     const errorMsg = stripeCatchError(e);
     console.log(errorMsg);
+    Sentry.captureException(e);
   }
 });
 
@@ -86,6 +89,7 @@ pricesRouter.get("/:priceId/", async (req, res) => {
   } catch (e) {
     const errorMsg = stripeCatchError(e);
     console.log(errorMsg);
+    Sentry.captureException(e);
   }
 });
 
@@ -109,6 +113,7 @@ pricesRouter.patch("/:priceId/", async (req, res) => {
   } catch (e) {
     const errorMsg = stripeCatchError(e);
     console.log(errorMsg);
+    Sentry.captureException(e);
   }
 });
 
@@ -127,5 +132,6 @@ pricesRouter.delete("/:priceId/", async (req, res) => {
   } catch (e) {
     const errorMsg = stripeCatchError(e);
     console.log(errorMsg);
+    Sentry.captureException(e);
   }
 });
