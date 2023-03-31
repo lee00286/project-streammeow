@@ -38,7 +38,9 @@ module.getAllMemberships = (creatorId) => {
  */
 module.getMembershipById = (membershipId) => {
   // Get a membership using membershipId
-  return axios.get(`/api/memberships/${membershipId}`);
+  return axios
+    .get(`/api/memberships/${membershipId}`)
+    .then((res) => JSON.stringify(res.data));
 };
 
 /**
@@ -48,6 +50,22 @@ module.getMembershipById = (membershipId) => {
  */
 module.updateMembership = (membershipId, variables) => {
   return axios.patch(`/api/memberships/${membershipId}`, variables);
+};
+
+/**
+ * Subscribe the membership.
+ * @param {integer} membershipId: id of the membership
+ */
+module.membershipSubscribe = (membershipId) => {
+  return axios.patch(`/api/memberships/subscribe`, { membershipId });
+};
+
+/**
+ * Unsubscribe the membership.
+ * @param {integer} membershipId: id of the membership
+ */
+module.membershipUnsubscribe = (membershipId) => {
+  return axios.patch(`/api/memberships/unsubscribe`, { membershipId });
 };
 
 /**
@@ -103,9 +121,13 @@ module.deletePrice = (priceId) => {
 /**
  * Create a checkout session.
  * @param {string} priceId: id of the price to checkout
+ * @param {string} membershipId: id of the membership
  */
-module.addCheckoutSession = (priceId) => {
-  return axios.post("/api/payments/checkout-session", { priceId });
+module.addCheckoutSession = (priceId, membershipId) => {
+  return axios.post("/api/payments/checkout-session", {
+    priceId,
+    membershipId,
+  });
 };
 
 /**
@@ -162,7 +184,7 @@ module.UserLogin = (email, password) => {
  * User logout.
  */
 module.UserLogout = () => {
-  return axios.get("/api/users/logout");
+  return axios.post("/api/users/logout");
 };
 
 /**
@@ -170,6 +192,134 @@ module.UserLogout = () => {
  */
 module.getUserId = () => {
   return axios.get("/api/users/me");
+};
+
+/**
+ * Retrieve a user from DB.
+ * @param {string} userId: id of the user
+ */
+module.getUserById = (userId) => {
+  // Get a userId using userId
+  return axios.get(`/api/users/${userId}`);
+};
+
+/**
+ * Update user information.
+ * @param {string} userId: id of the user
+ * @param {Object} variables: attributes to update
+ */
+module.updateUser = (userId, variables) => {
+  // Get a userId using userId
+  return axios.patch(`/api/users/${userId}`, variables);
+};
+
+/**
+ * Subscribe the membership.
+ * @param {integer} membershipId: id of the membership
+ * @param {} date: date of payment
+ */
+module.userSubscribe = (membershipId, date) => {
+  return axios.patch(`/api/users/subscribe`, { membershipId, date });
+};
+
+/**
+ * Unsubscribe the membership.
+ * @param {integer} membershipId: id of the membership
+ */
+module.userUnsubscribe = (membershipId) => {
+  return axios.patch(`/api/users/unsubscribe`, { membershipId });
+};
+
+/**
+ * Create a new creator to DB.
+ */
+module.addCreator = () => {
+  return axios.post("/api/creators/", {});
+};
+
+/**
+ * Retrieve all existing creators from DB.
+ */
+module.getAllCreators = () => {
+  return axios.get("/api/creators");
+};
+
+/**
+ * Retrieve a creator from DB using userId.
+ * @param {string} userId: id of the user
+ */
+module.getCreatorByUserId = (userId) => {
+  // Get a creator using userId
+  return axios.get(`/api/creators/${userId}`);
+};
+
+/**
+ * Update attributes in creator.
+ * @param {string} creatorId: id of the creator
+ * @param {Object} variables: attributes to update
+ */
+module.updateCreator = (creatorId, variables) => {
+  return axios.patch(`/api/creators/${creatorId}`, variables);
+};
+
+/**
+ * Delete a creator from DB.
+ * @param {string} creatorId: id of the creator
+ */
+module.deleteCreator = (creatorId) => {
+  return axios.delete(`/api/creators/${creatorId}`);
+};
+
+/**
+ * Create a new streaming to DB.
+ * @param {string} name: title of the streaming
+ * @param {string} description: description of the streaming
+ * @param {Array} permission: allowed streaming plans to watch the streaming
+ */
+module.addStreaming = (title, description, permission) => {
+  return axios.post("/api/streamings/", {
+    title,
+    description,
+    permission,
+  });
+};
+
+/**
+ * Retrieve all existing streamings from DB.
+ * If creatorId is provided, retrieve all streamings of the creator.
+ * @param {string} creatorId: id of the creator
+ */
+module.getAllStreamings = (creatorId) => {
+  // Get all streamings of the creator
+  if (creatorId) return axios.get(`/api/streamings?creatorId=${creatorId}`);
+  // Get all existing streamings
+  return axios.get("/api/streamings");
+};
+
+/**
+ * Retrieve a streaming from DB.
+ * @param {string} streamingId: id of the streaming
+ */
+module.getStreamingById = (streamingId) => {
+  // Get a streaming using streamingId
+  return axios.get(`/api/streamings/${streamingId}`);
+};
+
+/**
+ * Update attributes in streaming.
+ * @param {string} streamingId: id of the streaming
+ * @param {Object} variables: attributes to update
+ */
+module.updateStreaming = (streamingId, variables) => {
+  return axios.patch(`/api/streamings/${streamingId}`, variables);
+};
+
+/**
+ * Delete a streaming from DB.
+ * @param {string} streamingId: id of the streaming
+ */
+module.deleteStreaming = (streamingId) => {
+  return axios.delete(`/api/streamings/${streamingId}`);
 };
 
 export default module;

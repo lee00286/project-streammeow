@@ -1,6 +1,6 @@
 const { createProxyMiddleware } = require("http-proxy-middleware");
-const HOST = process.env.HOST || "localhost";
-const PORT = process.env.PORT || 5001;
+const HOST = process.env.REACT_APP_HOST || "localhost";
+const PORT = process.env.REACT_APP_PORT || 5001;
 
 module.exports = function (app) {
   app.use(

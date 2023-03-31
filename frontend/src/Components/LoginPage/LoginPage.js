@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import LoginForm from "./LoginForm";
 import "./LoginPage.css";
 import module from "../../ApiService";
@@ -5,11 +6,22 @@ import { useNavigate } from "react-router-dom";
 
 function LoginPage() {
   const navigate = useNavigate();
+
+  useEffect(() => {
+    // Redirect to home if user is already logged in
+    module.getUserId().then((res) => {
+      if (res.data.user === undefined) return;
+      navigate("/");
+    });
+  }, []);
+
   const login = (email, password) => {
     module.UserLogin(email, password).then((res) => {
       if (res.data.user) {
         console.log(res.data.user);
-        navigate("/");
+        // TODO: Replace window.location.assign with navigate
+        // navigate("/");
+        window.location.assign("http://localhost:3000/");
       } else {
         console.log(res.err);
       }
