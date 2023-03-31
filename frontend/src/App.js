@@ -42,6 +42,7 @@ Sentry.init({
         createRoutesFromChildren,
         matchRoutes
       ),
+      tracePropagationTargets: [],
     }),
   ],
   tracesSampleRate: 1.0,

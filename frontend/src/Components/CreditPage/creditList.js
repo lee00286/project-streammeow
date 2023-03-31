@@ -153,6 +153,11 @@ export const creditList = [
         siteName: "Stackoverflow",
         link: "https://stackoverflow.com/questions/31622052/how-to-serve-up-a-json-response-using-go",
       },
+      {
+        name: "Golang with Sentry CORS baggage header problem",
+        siteName: "GitHub",
+        link: "https://github.com/getsentry/sentry-javascript/issues/6077",
+      },
     ],
   },
   {
