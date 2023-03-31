@@ -11,7 +11,7 @@ import { paymentsRouter } from "./routers/payments_router.js";
 import { membershipsRouter } from "./routers/memberships_router.js";
 import { pricesRouter } from "./routers/prices_router.js";
 import { usersRouter } from "./routers/users_router.js";
-import { creatorsRouter } from "./routers/creators_router";
+import { creatorsRouter } from "./routers/creators_router.js";
 import { streamingsRouter } from "./routers/streamings_router.js";
 
 export const app = express();

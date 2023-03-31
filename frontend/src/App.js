@@ -53,12 +53,19 @@ function App() {
   const [IsCreator, setIsCreator] = useState(false);
 
   useEffect(() => {
-    // Get user id
     module.getUserId().then((res) => {
       if (res.data.user === undefined) return;
+      // If the user is authenticated
       setUserId(res.data.user.id);
-      // TODO: Change after creator field is created in User
-      setIsCreator(res.data.user.id === 1);
+      // If the user is creator
+      module
+        .getCreatorByUserId(res.data.user.id)
+        .then((res) => {
+          if (res.error) return console.log(res.error);
+          console.log(res.data);
+          setIsCreator(res.data.creator && res.data.creator.id);
+        })
+        .catch((e) => console.log(e));
     });
   }, []);
 

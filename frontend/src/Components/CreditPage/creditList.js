@@ -183,6 +183,11 @@ export const creditList = [
         siteName: "Stackoverflow",
         link: "https://stackoverflow.com/questions/38757728/using-an-enviroment-variable-for-local-sequelize-configuration",
       },
+      {
+        name: "Association call options",
+        siteName: "Sequelize.org",
+        link: "https://sequelize.org/docs/v6/core-concepts/assocs/",
+      },
     ],
   },
   {

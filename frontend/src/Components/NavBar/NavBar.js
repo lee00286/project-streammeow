@@ -7,8 +7,6 @@ import ColorButton from "../Buttons/ColorButton";
 // Style
 import "./NavBar.css";
 
-const isAuth = false; // Temporary variable that should be replaced after auth implementation
-
 /**
  * Navigation bar component that directs users to different pages.
  * @returns Navigation bar component
@@ -21,12 +19,18 @@ function NavBar({ userId }) {
   const [UserHover, setUserHover] = useState(false);
 
   useEffect(() => {
-    // Get user id
     module.getUserId().then((res) => {
       if (res.data.user === undefined) return;
+      // If the user is authenticated
       setUserId(res.data.user.id);
-      // TODO: Change after creator field is created in User
-      setIsCreator(res.data.user.id === 1);
+      // If the user is creator
+      module
+        .getCreatorByUserId(res.data.user.id)
+        .then((res) => {
+          if (res.error) return console.log(res.error);
+          setIsCreator(res.data.creator && res.data.creator.id);
+        })
+        .catch((e) => console.log(e));
     });
   }, [userId]);
 
@@ -78,6 +82,13 @@ function NavBar({ userId }) {
     navigate("/mypage");
   };
 
+  // Become the creator and navigate to creator's page
+  const onCreator = () => {
+    // TODO: Become the creator
+    // TODO: Change it to creatorId-specific
+    navigate("/creators");
+  };
+
   // Navigate to user streaming page
   const onStartLive = () => {
     if (UserId === "") return;
@@ -102,7 +113,34 @@ function NavBar({ userId }) {
           buttonFunction={onCredit}
         />
       </div>
-      {!UserId && (
+      {UserId ? (
+        <div className="nav-buttons row col-3">
+          {IsCreator ? (
+            <ColorButton
+              buttonColor="#fff"
+              border="1px solid var(--yellow4)"
+              textColor="var(--yellow4)"
+              text="Start Live"
+              buttonFunction={onStartLive}
+            />
+          ) : (
+            <ColorButton
+              buttonColor="#fff"
+              border="1px solid var(--yellow4)"
+              textColor="var(--yellow4)"
+              text="Become a Creator"
+              buttonFunction={onCreator}
+            />
+          )}
+          <div
+            onMouseEnter={() => setUserHover(true)}
+            onMouseLeave={() => setUserHover(false)}
+            className="nav-user-menu row"
+          >
+            <img src="/icons/user.png" className="user-icon" />
+          </div>
+        </div>
+      ) : (
         <div className="nav-buttons row col-3">
           <ColorButton
             buttonColor="#fff"
@@ -123,26 +161,16 @@ function NavBar({ userId }) {
         <div
           onMouseEnter={() => setUserHover(true)}
           onMouseLeave={() => setUserHover(false)}
-          className="nav-user-menu row col-1"
+          className={`nav-submenu row ${UserHover ? "" : "hidden"}`}
         >
-          <img src="/icons/user.png" className="user-icon" />
+          <div className="submenu-button" onClick={onMyPage}>
+            My Page
+          </div>
+          <div className="submenu-button" onClick={onSignOut}>
+            Sign Out
+          </div>
         </div>
       )}
-      <div
-        onMouseEnter={() => setUserHover(true)}
-        onMouseLeave={() => setUserHover(false)}
-        className={`nav-submenu row ${UserHover ? "" : "hidden"}`}
-      >
-        <div className="submenu-button" onClick={onMyPage}>
-          My Page
-        </div>
-        <div className="submenu-button" onClick={onStartLive}>
-          Start Live
-        </div>
-        <div className="submenu-button" onClick={onSignOut}>
-          Sign Out
-        </div>
-      </div>
     </div>
   );
 }

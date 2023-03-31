@@ -30,7 +30,10 @@
 .nav-user-menu {
   justify-content: center;
   align-items: center;
+  margin-left: 10px !important;
+  margin-right: 0 !important;
   padding: 5px;
+  width: 50px !important;
   height: 50px !important;
   cursor: pointer;
 }
