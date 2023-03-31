@@ -91,6 +91,16 @@ export const creditList = [
     ],
   },
   {
+    title: "React API - Nivo",
+    credits: [
+      {
+        name: "Nivo Bar example",
+        siteName: "Nivo Official Document",
+        link: "https://nivo.rocks/bar/",
+      },
+    ],
+  },
+  {
     title: "JavaScript API - Stripe",
     credits: [
       {
