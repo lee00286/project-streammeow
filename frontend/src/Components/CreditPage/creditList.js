@@ -321,6 +321,21 @@ export const creditList = [
         siteName: "Iconfinder",
         link: "https://www.iconfinder.com/icons/8665306/circle_user_icon",
       },
+      {
+        name: "Heart, love, valentine Icon",
+        siteName: "Iconfinder",
+        link: "https://www.iconfinder.com/icons/8679284/heart_love_valentine_icon",
+      },
+      {
+        name: "Dislike, bad icon",
+        siteName: "Iconfinder",
+        link: "https://www.iconfinder.com/icons/8679269/dislike_bad_icon",
+      },
+      {
+        name: "Lock, 2, line icon",
+        siteName: "Iconfinder",
+        link: "https://www.iconfinder.com/icons/8679989/lock_2_line_icon",
+      },
     ],
   },
 ];
