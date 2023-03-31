@@ -155,6 +155,7 @@ module.UserRegister = (email, password) => {
  * @param {string} password: password of the user
  */
 module.UserLogin = (email, password) => {
+  console.log(password);
   return axios.post("/api/users/login", { email, password });
 };
 
@@ -162,7 +163,7 @@ module.UserLogin = (email, password) => {
  * User logout.
  */
 module.UserLogout = () => {
-  return axios.get("/api/users/logout");
+  return axios.post("/api/users/logout");
 };
 
 /**
@@ -179,6 +180,56 @@ module.getUserId = () => {
 module.getUserById = (userId) => {
   // Get a userId using userId
   return axios.get(`/api/users/${userId}`);
+};
+
+/**
+ * Update user information.
+ * @param {string} userId: id of the user
+ * @param {Object} variables: attributes to update
+ */
+module.updateUser = (userId, variables) => {
+  // Get a userId using userId
+  return axios.patch(`/api/users/${userId}`, variables);
+};
+
+/**
+ * Create a new creator to DB.
+ */
+module.addCreator = () => {
+  return axios.post("/api/creators/", {});
+};
+
+/**
+ * Retrieve all existing creators from DB.
+ */
+module.getAllCreators = () => {
+  return axios.get("/api/creators");
+};
+
+/**
+ * Retrieve a creator from DB using userId.
+ * @param {string} userId: id of the user
+ */
+module.getCreatorByUserId = (userId) => {
+  // Get a creator using userId
+  return axios.get(`/api/creators/${userId}`);
+};
+
+/**
+ * Update attributes in creator.
+ * @param {string} creatorId: id of the creator
+ * @param {Object} variables: attributes to update
+ */
+module.updateCreator = (creatorId, variables) => {
+  return axios.patch(`/api/creators/${creatorId}`, variables);
+};
+
+/**
+ * Delete a creator from DB.
+ * @param {string} creatorId: id of the creator
+ */
+module.deleteCreator = (creatorId) => {
+  return axios.delete(`/api/creators/${creatorId}`);
 };
 
 /**

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import module from "../../ApiService";
 // Components
 import PageTitle from "../Texts/PageTitle";
@@ -18,6 +18,7 @@ import "./PurchasePage.css";
  */
 function PurchasePage({ plan }) {
   const { creatorId } = useParams();
+  const location = useLocation();
 
   const [Memberships, setMemberships] = useState([]);
   const [SelectPlan, setSelectPlan] = useState(null);
@@ -43,7 +44,16 @@ function PurchasePage({ plan }) {
 
   /* Update inherited SelectPlan */
   useEffect(() => {
-    if (Memberships && SelectPlan === null && plan) setSelectPlan(plan);
+    if (Memberships && SelectPlan === null) {
+      console.log(location);
+      if (plan) setSelectPlan(plan);
+      else if (location?.state?.membershipId) {
+        const selected = Memberships.find(
+          (m) => m.id === location.state.membershipId
+        );
+        if (selected) setSelectPlan(selected);
+      }
+    }
   }, [Memberships, plan]);
 
   // Set selected membership plan

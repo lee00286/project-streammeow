@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { isValidArgument } from "../error_check.js";
 import { Memberships } from "../models/memberships.js";
+import Sentry from "@sentry/node";
 
 export const membershipsRouter = Router();
 
@@ -35,6 +36,7 @@ membershipsRouter.post("/", async (req, res) => {
   } catch (e) {
     const errorMsg = "Failed to create a membership.";
     console.log(errorMsg);
+    Sentry.captureException(e);
   }
 });
 
@@ -65,6 +67,7 @@ membershipsRouter.get("/", async (req, res) => {
   } catch (e) {
     const errorMsg = "Failed to retrieve memberships.";
     console.log(errorMsg);
+    Sentry.captureException(e);
   }
 });
 
@@ -86,6 +89,7 @@ membershipsRouter.get("/:membershipId/", async (req, res, next) => {
   } catch (e) {
     const errorMsg = "Failed to retrieve a membership.";
     console.log(errorMsg);
+    Sentry.captureException(e);
   }
 });
 
@@ -115,6 +119,7 @@ membershipsRouter.patch("/:membershipId/", async (req, res) => {
   } catch (e) {
     const errorMsg = "Failed to update a membership.";
     console.log(errorMsg);
+    Sentry.captureException(e);
   }
 });
 
@@ -148,5 +153,6 @@ membershipsRouter.delete("/:membershipId/", async (req, res) => {
   } catch (e) {
     const errorMsg = "Failed to delete a membership.";
     console.log(errorMsg);
+    Sentry.captureException(e);
   }
 });

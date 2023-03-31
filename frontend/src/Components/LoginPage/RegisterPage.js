@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import "./LoginPage.css";
 import SigninWith from "./SigninWith";
 import LoginForm from "./LoginForm";
@@ -6,11 +7,20 @@ import { useNavigate } from "react-router-dom";
 
 function RegisterPage() {
   const navigate = useNavigate();
+
+  useEffect(() => {
+    // Redirect to home if user is already logged in
+    module.getUserId().then((res) => {
+      if (res.data.user === undefined) return;
+      navigate("/");
+    });
+  }, []);
+
   const register = (email, password) => {
     module.UserRegister(email, password).then((res) => {
       if (res.data.user) {
         console.log(res.user);
-        navigate("/");
+        navigate("/signin");
       } else {
         console.log(res.err);
       }

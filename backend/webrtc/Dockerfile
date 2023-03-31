@@ -4,8 +4,8 @@ FROM golang:1.17-alpine
 
 # Create app directory
 # WORKDIR /app
-# WORKDIR /
-WORKDIR /go/src/app/examples/broadcast
+WORKDIR /
+# WORKDIR /go/src/app/examples/broadcast
 
 # Install app dependencies
 COPY go.mod ./
@@ -20,12 +20,11 @@ COPY . ./
 
 # RUN go build
 RUN go build -o main .
-# RUN go build -o /docker-gs-ping
 # RUN go build ./...
 
 EXPOSE 8080
-# CMD [ "go", "run", "./examples/broadcast/main.go" ]
-# CMD [ "go", "run", "/go/src/app/examples/broadcast/main.go" ]
+CMD [ "go", "run", "./examples/broadcast/main.go" ]
 # CMD [ "go", "run", "./main.go" ]
-RUN chmod +x main
-CMD ["./main"]
+
+# RUN chmod +x main
+# CMD ["./main"]

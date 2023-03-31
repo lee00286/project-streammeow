@@ -7,27 +7,32 @@ import ColorButton from "../Buttons/ColorButton";
 // Style
 import "./NavBar.css";
 
-const isAuth = false; // Temporary variable that should be replaced after auth implementation
-
 /**
  * Navigation bar component that directs users to different pages.
  * @returns Navigation bar component
  */
-function NavBar() {
+function NavBar({ userId }) {
   const navigate = useNavigate();
 
   const [UserId, setUserId] = useState("");
   const [IsCreator, setIsCreator] = useState(false);
+  const [UserHover, setUserHover] = useState(false);
 
   useEffect(() => {
-    // Get user id
     module.getUserId().then((res) => {
       if (res.data.user === undefined) return;
+      // If the user is authenticated
       setUserId(res.data.user.id);
-      // TODO: Change after creator field is created in User
-      setIsCreator(res.data.user.id === 1);
+      // If the user is creator
+      module
+        .getCreatorByUserId(res.data.user.id)
+        .then((res) => {
+          if (res.error) return console.log(res.error);
+          setIsCreator(res.data.creator && res.data.creator.id);
+        })
+        .catch((e) => console.log(e));
     });
-  }, []);
+  }, [userId]);
 
   // Navigate to home
   const onLogo = () => {
@@ -57,7 +62,31 @@ function NavBar() {
   // Sign out
   const onSignOut = () => {
     // Signout
-    module.UserLogout().catch((e) => console.log(e));
+    module
+      .UserLogout()
+      .then((res) => {
+        if (res.data.success) {
+          setTimeout(function () {
+            alert("Successfully signed out.");
+            setUserHover(false);
+            setUserId("");
+            navigate("/");
+          }, 500);
+        }
+      })
+      .catch((e) => console.log(e));
+  };
+
+  // Navigate to mypage (user page)
+  const onMyPage = () => {
+    navigate("/mypage");
+  };
+
+  // Become the creator and navigate to creator's page
+  const onCreator = () => {
+    // TODO: Become the creator
+    // TODO: Change it to creatorId-specific
+    navigate("/creators");
   };
 
   // Navigate to user streaming page
@@ -84,7 +113,34 @@ function NavBar() {
           buttonFunction={onCredit}
         />
       </div>
-      {!UserId && (
+      {UserId ? (
+        <div className="nav-buttons row col-3">
+          {IsCreator ? (
+            <ColorButton
+              buttonColor="#fff"
+              border="1px solid var(--yellow4)"
+              textColor="var(--yellow4)"
+              text="Start Live"
+              buttonFunction={onStartLive}
+            />
+          ) : (
+            <ColorButton
+              buttonColor="#fff"
+              border="1px solid var(--yellow4)"
+              textColor="var(--yellow4)"
+              text="Become a Creator"
+              buttonFunction={onCreator}
+            />
+          )}
+          <div
+            onMouseEnter={() => setUserHover(true)}
+            onMouseLeave={() => setUserHover(false)}
+            className="nav-user-menu row"
+          >
+            <img src="/icons/user.png" className="user-icon" />
+          </div>
+        </div>
+      ) : (
         <div className="nav-buttons row col-3">
           <ColorButton
             buttonColor="#fff"
@@ -102,20 +158,17 @@ function NavBar() {
         </div>
       )}
       {UserId && (
-        <div className="nav-buttons row col-3">
-          <ColorButton
-            buttonColor="#fff"
-            border="1px solid var(--yellow4)"
-            textColor="var(--yellow4)"
-            text="Start Live"
-            buttonFunction={onStartLive}
-          />
-          <ColorButton
-            buttonColor="var(--yellow4)"
-            textColor="#fff"
-            text="Sign Out"
-            buttonFunction={onSignOut}
-          />
+        <div
+          onMouseEnter={() => setUserHover(true)}
+          onMouseLeave={() => setUserHover(false)}
+          className={`nav-submenu row ${UserHover ? "" : "hidden"}`}
+        >
+          <div className="submenu-button" onClick={onMyPage}>
+            My Page
+          </div>
+          <div className="submenu-button" onClick={onSignOut}>
+            Sign Out
+          </div>
         </div>
       )}
     </div>
