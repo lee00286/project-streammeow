@@ -3,8 +3,16 @@ import { useState } from "react";
 
 import "./LoginPage.css";
 
-function HidePassword() {
+function HidePassword(props) {
   const [isVisible, setVisible] = useState(false);
+  const [Password, setPassword] = useState("");
+
+  const onPassword = (password) => {
+    setPassword(password);
+    if (!props.onPassword) return;
+    props.onPassword(password);
+  };
+
   const toggle = () => {
     setVisible(!isVisible);
   };
@@ -16,6 +24,8 @@ function HidePassword() {
         type={!isVisible ? "password" : "text"}
         label="PASSWORD"
         placeholder="Password"
+        value={Password}
+        onChange={(e) => onPassword(e.target.value)}
         required
       />
       <div className="icon col-2" onClick={toggle}>

@@ -1,7 +1,7 @@
 import { sequelize } from "../datasource.js";
 import { DataTypes } from "sequelize";
-import { User } from "./users.js";
-// import { Creator } from "./users.js"; (IS-A relationship from User?)
+// import { User } from "./users.js";
+import { Creators } from "./creators.js";
 
 export const Streamings = sequelize.define("Streamings", {
   title: {
@@ -30,21 +30,17 @@ export const Streamings = sequelize.define("Streamings", {
     type: DataTypes.DATE,
     allowNull: true,
   },
-  creatorId: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
   // creatorId: {
   //   type: DataTypes.STRING,
-  //   references: {
-  //     model: "Users", // TODO: change to Creator
-  //     key: "id",
-  //   },
-  //   allowNull: false, // TODO: consider what if creator deletes acocunt
+  //   allowNull: false,
   // },
 });
 
-Streamings.belongsTo(User);
-User.hasMany(Streamings);
-// Streamings.belongsTo(Creator);
-// Creator.hasMany(Streamings);
+// Streamings.belongsTo(User);
+// User.hasMany(Streamings);
+Streamings.belongsTo(Creators, {
+  foreignKey: {
+    name: "creatorId",
+  },
+});
+Creators.hasMany(Streamings);

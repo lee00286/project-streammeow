@@ -1,28 +1,13 @@
 import { sequelize } from "../datasource.js";
 import { DataTypes } from "sequelize";
+import { User } from "./users.js";
 
-export const User = sequelize.define("Users", {
+export const Creators = sequelize.define("Creators", {
   id: {
     type: DataTypes.INTEGER,
     allowNull: false,
     autoIncrement: true,
     primaryKey: true,
-  },
-  name: {
-    type: DataTypes.STRING,
-  },
-  email: {
-    type: DataTypes.STRING,
-    allowNull: false,
-    unique: true,
-  },
-  password: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  subscription: {
-    type: DataTypes.ARRAY(DataTypes.STRING),
-    allowNull: false,
   },
   createdAt: {
     type: DataTypes.DATE,
@@ -32,5 +17,12 @@ export const User = sequelize.define("Users", {
   updatedAt: {
     type: DataTypes.DATE,
     allowNull: true,
+  },
+});
+
+// IS-A relationship
+Creators.belongsTo(User, {
+  foreignKey: {
+    name: "userId",
   },
 });

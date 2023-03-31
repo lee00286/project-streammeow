@@ -1,7 +1,8 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import module from "../../ApiService";
 import calculations from "../calculations";
+import ColorButton from "../Buttons/ColorButton";
 import "../Buttons/Buttons.css";
 
 /* Get query */
@@ -53,6 +54,36 @@ function PaymentDetails({ invoice }) {
 }
 
 /**
+ * Payment cancellation component.
+ * @returns Payment cancellation component
+ */
+function ConfirmCancel() {
+  const navigate = useNavigate();
+
+  const onHome = () => {
+    navigate("/");
+  };
+
+  return (
+    <div className="invoice page">
+      <div className="invoice-ticket col">
+        <div className="invoice-top">
+          <img src="/icons/caution.png" className="no-select" />
+          <h2>Payment Cancelled</h2>
+          <p>Your payment has been cancelled.</p>
+          <ColorButton
+            text="Go Home"
+            textColor="#fff"
+            buttonColor="var(--yellow4)"
+            buttonFunction={onHome}
+          />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/**
  * Payment confirmation page.
  * @returns ConfirmPage component
  */
@@ -60,12 +91,17 @@ function ConfirmPage() {
   let query = useQuery();
 
   const [Invoice, setInvoice] = useState(null);
+  const [CancelPayment, setCancelPayment] = useState(false);
 
   useEffect(() => {
+    const cancel = query.get("canceled");
+    if (CancelPayment || cancel === "true") {
+      setCancelPayment(true);
+      return;
+    }
     module
       .getSession(query.get("session_id"))
       .then((res) => {
-        console.log(res.data);
         if (res.data.error) console.log(res.data.error);
         else return res.data;
       })
@@ -75,10 +111,22 @@ function ConfirmPage() {
           .then((res) => {
             if (res.error) return console.log(res.error);
             setInvoice(res.data);
+            return res.data;
+          })
+          .then((invoice) => {
+            module.userSubscribe(
+              query.get("membership"),
+              invoice.payment.datePaid
+            );
+          })
+          .then(() => {
+            module.membershipSubscribe(query.get("membership"));
           })
           .catch((e) => console.log(e));
       });
   }, []);
+
+  if (CancelPayment) return <ConfirmCancel />;
 
   return (
     <div className="invoice page">

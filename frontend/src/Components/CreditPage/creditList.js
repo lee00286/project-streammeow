@@ -83,6 +83,21 @@ export const creditList = [
         siteName: "Stackoverflow",
         link: "https://stackoverflow.com/questions/68932621/put-a-warning-if-page-refresh-in-reactjs",
       },
+      {
+        name: "Node req.session.destroy(), req.logout(), and res.clearCookie()",
+        siteName: "Stackoverflow",
+        link: "https://stackoverflow.com/questions/50454992/req-session-destroy-and-passport-logout-arent-destroying-cookie-on-client-side",
+      },
+    ],
+  },
+  {
+    title: "React API - Nivo",
+    credits: [
+      {
+        name: "Nivo Bar example",
+        siteName: "Nivo Official Document",
+        link: "https://nivo.rocks/bar/",
+      },
     ],
   },
   {
@@ -136,6 +151,26 @@ export const creditList = [
     ],
   },
   {
+    title: "External API - Sentry",
+    credits: [
+      {
+        name: "Documentation for React",
+        siteName: "Sentry Docs",
+        link: "https://docs.sentry.io/platforms/javascript/guides/react/",
+      },
+      {
+        name: "Documentation for React Router Integration",
+        siteName: "Sentry Docs",
+        link: "https://docs.sentry.io/platforms/javascript/guides/react/configuration/integrations/react-router/",
+      },
+      {
+        name: "Documentation for Node",
+        siteName: "Sentry Docs",
+        link: "https://docs.sentry.io/platforms/node/",
+      },
+    ],
+  },
+  {
     title: "Node.js Dependency - Sequelize",
     credits: [
       {
@@ -157,6 +192,16 @@ export const creditList = [
         name: "Use environment variable for local sequelize configuration",
         siteName: "Stackoverflow",
         link: "https://stackoverflow.com/questions/38757728/using-an-enviroment-variable-for-local-sequelize-configuration",
+      },
+      {
+        name: "Association call options",
+        siteName: "Sequelize.org",
+        link: "https://sequelize.org/docs/v6/core-concepts/assocs/",
+      },
+      {
+        name: "Array Functions and Operators",
+        siteName: "Postgresql.org",
+        link: "https://www.postgresql.org/docs/9.1/functions-array.html",
       },
     ],
   },
@@ -188,9 +233,48 @@ export const creditList = [
         link: "https://stackoverflow.com/questions/32105251/bcrypt-invalid-elf-header-with-docker-and-sails-js",
       },
       {
+        name: "Docker postgres image official document",
+        siteName: "Docker Hub",
+        link: "https://hub.docker.com/_/postgres",
+      },
+      {
+        name: "Add Postgres with Docker to an existing Node.js project",
+        link: "https://geshan.com.np/blog/2021/12/docker-postgres/",
+      },
+      {
         name: "Docker compose postgres",
         siteName: "GitHub",
         link: "https://github.com/docker/awesome-compose/tree/master/nginx-golang-postgres",
+      },
+      {
+        name: "pg_hba.conf entry",
+        siteName: "Stackoverflow",
+        link: "https://dba.stackexchange.com/questions/83984/connect-to-postgresql-server-fatal-no-pg-hba-conf-entry-for-host",
+      },
+      {
+        name: "PGUSER",
+        siteName: "Stackoverflow",
+        link: "https://stackoverflow.com/questions/60193781/postgres-with-docker-compose-gives-fatal-role-root-does-not-exist-error",
+      },
+      {
+        name: "PGDATA",
+        siteName: "Stackoverflow",
+        link: "https://stackoverflow.com/questions/62697071/docker-compose-postgres-upgrade-initdb-error-directory-var-lib-postgresql-da",
+      },
+      {
+        name: "Use entrypoint to run migrate and seed",
+        siteName: "Stackoverflow",
+        link: "https://stackoverflow.com/questions/60916919/docker-compose-unable-to-connect-to-mysql-app-builds-before-mysql?fbclid=IwAR2A8W0I6gSE4t8V8pYEWZgKzVAmd5fXqnOJzx5XxLKaJ4qPKzE00swo2-8",
+      },
+      {
+        name: "Docker compose Nginx React example",
+        siteName: "GitHub",
+        link: "https://github.com/docker/awesome-compose/tree/master/react-nginx",
+      },
+      {
+        name: "Docker compose Nginx Node.js example",
+        siteName: "GitHub",
+        link: "https://github.com/docker/awesome-compose/tree/master/nginx-nodejs-redis",
       },
     ],
   },
@@ -216,6 +300,11 @@ export const creditList = [
         name: "Complete Icon",
         siteName: "Iconfinder",
         link: "https://www.iconfinder.com/icons/3643781/check_checklist_complete_done_mark_icon",
+      },
+      {
+        name: "Caution Icon",
+        siteName: "Iconfinder",
+        link: "https://www.iconfinder.com/icons/3643776/caution_exclamation_mark_round_sign_icon",
       },
       {
         name: "Settings Icon",
@@ -246,6 +335,11 @@ export const creditList = [
         name: "Password icons created by th studio - Flaticon",
         siteName: "Flaticon",
         link: "https://www.flaticon.com/free-icons/password",
+      },
+      {
+        name: "User Icon",
+        siteName: "Iconfinder",
+        link: "https://www.iconfinder.com/icons/8665306/circle_user_icon",
       },
     ],
   },
