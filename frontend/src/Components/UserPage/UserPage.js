@@ -131,6 +131,7 @@ function UserHistoryTab() {
       })
       .then((subscription) => {
         const subscriptionList = [];
+        if (!subscription || subscription === []) return;
         for (let i = 0; i < subscription.length; i++) {
           const splittedText = subscription[i].split("+");
           subscriptionList.push({

@@ -84,7 +84,7 @@ function App() {
         <Route path="/credits" element={<CreditPage />} />
         <Route path="/becomecreator" element={<NewCreator />} />
         {/* <Route path="/creators/:creatorId" element={<CreatorPage />} /> */}
-        <Route path="/memberships/:creatorId" element={<CreatorPage />} />
+        <Route path="/creators/:creatorId" element={<CreatorPage />} />
         <Route path="/purchase/:creatorId" element={<PurchasePage />} />
         <Route path="/purchase/confirm" element={<ConfirmPage />} />
         <Route path="/streaming" element={<StreamingListPage />} />

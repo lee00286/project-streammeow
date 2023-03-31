@@ -36,7 +36,7 @@ function StreamerInfo() {
 
   // Navigate to creator's membership page
   const onMembership = () => {
-    navigate(`/memberships/${creatorId}`);
+    navigate(`/purchase/${creatorId}`);
   };
 
   // TODO: Replace streamer info to the information in { streamer }
