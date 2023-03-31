@@ -135,7 +135,11 @@ function NavBar({ userId }) {
             onMouseLeave={() => setUserHover(false)}
             className="nav-user-menu row"
           >
-            <img src="/icons/user.png" className="user-icon" />
+            <img
+              src={`/api/users/${UserId}/picture`}
+              alt="/icons/user.png"
+              className="user-icon"
+            />
           </div>
         </div>
       ) : (

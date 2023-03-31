@@ -25,6 +25,9 @@ import PurchasePage from "./Components/PurchasePage/PurchasePage";
 import ConfirmPage from "./Components/PurchasePage/ConfirmPage";
 import LoginPage from "./Components/LoginPage/LoginPage";
 import RegisterPage from "./Components/LoginPage/RegisterPage";
+import AllCreators from "./Components/HomePage/AllCreators";
+import AllStreams from "./Components/HomePage/AllStreams";
+import AllPosted from "./Components/HomePage/AllPosted";
 import UserPage from "./Components/UserPage/UserPage";
 // Style
 import "./App.css";
@@ -85,6 +88,9 @@ function App() {
         <Route path="/purchase/:creatorId" element={<PurchasePage />} />
         <Route path="/purchase/confirm" element={<ConfirmPage />} />
         <Route path="/streaming" element={<StreamingListPage />} />
+        <Route path="/allcreators" element={<AllCreators />} />
+        <Route path="/allstreams" element={<AllStreams />} />
+        <Route path="/allposted" element={<AllPosted />} />
         {/* TODO */}
         {/* <Route path="/streaming/replay" element={<StreamingListPage />} /> */}
         <Route
