@@ -20,6 +20,9 @@ export const User = sequelize.define("Users", {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  picture: {
+    type: DataTypes.JSON,
+  },
   createdAt: {
     type: DataTypes.DATE,
     allowNull: false,
