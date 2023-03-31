@@ -78,8 +78,10 @@ function ConfirmPage() {
           .catch((e) => console.log(e));
       })
       .then(() => {
-        // console.log(query.get("membership"));
-        module.subscribe(query.get("membership"));
+        module.userSubscribe(query.get("membership"));
+      })
+      .then(() => {
+        module.membershipSubscribe(query.get("membership"));
       });
   }, []);
 

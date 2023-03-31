@@ -22,7 +22,6 @@ usersRouter.post("/signup", isNotAuthenticated, async (req, res) => {
     const user = await User.create({
       email: email,
       password: password,
-      subscription: [],
     });
     return res.status(200).json({ user });
   } catch (e) {
@@ -137,16 +136,16 @@ usersRouter.patch("/subscribe", isAuthenticated, async (req, res) => {
     return res.status(422).json({ error: "Invalid arguments." });
   membershipId = parseInt(membershipId);
   try {
-    // Get a membership
+    // Get a user
     let user = await User.findByPk(userId);
     // If user doesn't exist
     if (!user)
       return res
         .status(404)
         .json({ error: `User(id=${userId}) doesn't exist.` });
-    // Remove membership from subscription array
+    // Add membership to subscription array
     let subscription = user.subscription;
-    if (subscription === [-1]) subscription = [];
+    if (subscription === []) subscription = [];
     subscription.push(membershipId);
     // Update a membership
     user = await User.update(

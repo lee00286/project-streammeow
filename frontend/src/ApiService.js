@@ -51,6 +51,22 @@ module.updateMembership = (membershipId, variables) => {
 };
 
 /**
+ * Subscribe the membership.
+ * @param {integer} membershipId: id of the membership
+ */
+module.membershipSubscribe = (membershipId) => {
+  return axios.patch(`/api/memberships/subscribe`, { membershipId });
+};
+
+/**
+ * Unsubscribe the membership.
+ * @param {integer} membershipId: id of the membership
+ */
+module.membershipUnsubscribe = (membershipId) => {
+  return axios.patch(`/api/memberships/unsubscribe`, { membershipId });
+};
+
+/**
  * Delete a membership from DB.
  * @param {string} membershipId: id of the membership
  */
@@ -199,7 +215,7 @@ module.updateUser = (userId, variables) => {
  * Subscribe the membership.
  * @param {integer} membershipId: id of the membership
  */
-module.subscribe = (membershipId) => {
+module.userSubscribe = (membershipId) => {
   return axios.patch(`/api/users/subscribe`, { membershipId });
 };
 
@@ -207,7 +223,7 @@ module.subscribe = (membershipId) => {
  * Unsubscribe the membership.
  * @param {integer} membershipId: id of the membership
  */
-module.unsubscribe = (membershipId) => {
+module.userUnsubscribe = (membershipId) => {
   return axios.patch(`/api/users/unsubscribe`, { membershipId });
 };
 
