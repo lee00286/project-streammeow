@@ -31,7 +31,6 @@ function CreatorsTab({ creator }) {
       .then((res) => {
         if (res.error) return console.log(res.error);
         const memberships = res.data.memberships;
-        console.log(memberships);
         let data = [];
         // Set up membership data
         for (let i = 0; i < memberships.length; i++) {
@@ -153,17 +152,14 @@ function UserHistoryTab() {
           //   };
           //   subscriptionList.push(variables);
           // }).catch((e) => console.log(e));
-          // console.log(detail);
         }
         setSubscription(subscriptionList);
-        console.log(subscriptionList);
       });
   }, []);
 
   const subscriptions =
     Subscription && Subscription.length > 0 ? (
       Subscription.map((subscription, index) => {
-        console.log(subscription);
         return (
           <div key={`subscribing-${index}`} className="history-subscript row">
             <div>{calculations.convertDate(parseInt(subscription.date))}</div>
@@ -241,9 +237,7 @@ function UserInfoTab() {
         // Remove modifying forms
         setIsModify(false);
       })
-      .catch((e) => {
-        console.log(e);
-      });
+      .catch((e) => console.log(e));
   };
 
   const onChangePassword = () => {

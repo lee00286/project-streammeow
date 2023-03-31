@@ -88,6 +88,11 @@ export const creditList = [
         siteName: "Stackoverflow",
         link: "https://stackoverflow.com/questions/50454992/req-session-destroy-and-passport-logout-arent-destroying-cookie-on-client-side",
       },
+      {
+        name: "Screen Capture API",
+        siteName: "MDN Web Docs",
+        link: "https://developer.mozilla.org/en-US/docs/Web/API/Screen_Capture_API/Using_Screen_Capture",
+      },
     ],
   },
   {
