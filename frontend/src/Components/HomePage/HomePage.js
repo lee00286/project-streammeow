@@ -21,7 +21,7 @@ function HomePage() {
 
   // Navigate to videos
   const moreVideos = () => {
-    navigate("/allvideos");
+    navigate("/allposted");
   };
 
   return (

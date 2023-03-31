@@ -37,6 +37,7 @@
     font-weight: bold;
     text-align: end;
     margin-right: 10px;
+    cursor: pointer;
 }
 
 .creator-container{
@@ -190,4 +191,50 @@
 
 .posted-container {
     width: 100%;
+}
+
+.all-creators{
+    width: 100%;
+}
+
+.creators-box{
+    width: 100%;
+    padding-left: 10px;
+}
+
+.creator-box{
+    width: 100%;
+    height: auto;
+    padding: 10px;
+    align-items: center;
+    text-align: start;
+    border-bottom: 1px;
+    border-bottom-style: solid;
+    border-bottom-color: var(--yellow2);
+}
+
+.all-streams {
+    width: 100%;
+}
+
+.videos-box{
+    width: 100%;
+    padding-left: 10px;
+}
+
+.video-box{
+    width: 100%;
+    height: auto;
+    padding: 10px;
+    text-align: start;
+}
+
+.info-box{
+    padding-left: 15px;
+    text-align: start;
+}
+
+.author-box{
+    padding-top: 10px;
+    align-items: center;
 }
