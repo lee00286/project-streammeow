@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { isValidArgument } from "../error_check.js";
 import { Memberships } from "../models/memberships.js";
+import { isAuthenticated } from "../middleware/auth.js";
 import Sentry from "@sentry/node";
 
 export const membershipsRouter = Router();
@@ -8,7 +9,7 @@ export const membershipsRouter = Router();
 /**
  * Create a membership in DB.
  * */
-membershipsRouter.post("/", async (req, res) => {
+membershipsRouter.post("/", isAuthenticated, async (req, res) => {
   const reqBody = req.body;
   // Check validity of arguments
   if (

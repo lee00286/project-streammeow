@@ -302,6 +302,11 @@ export const creditList = [
         link: "https://www.iconfinder.com/icons/3643781/check_checklist_complete_done_mark_icon",
       },
       {
+        name: "Caution Icon",
+        siteName: "Iconfinder",
+        link: "https://www.iconfinder.com/icons/3643776/caution_exclamation_mark_round_sign_icon",
+      },
+      {
         name: "Settings Icon",
         siteName: "Iconfinder",
         link: "https://www.iconfinder.com/icons/1564529/mechanism_options_settings_configuration_setting_icon",
