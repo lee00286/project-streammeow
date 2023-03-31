@@ -44,6 +44,16 @@ module.exports = {
         updatedAt: new Date(),
       },
     ]);
+    // const users = await queryInterface.sequelize.query(
+    //   `SELECT id from COURSES;`
+    // );
+    await queryInterface.bulkInsert("Creators", [
+      {
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        userId: 1,
+      },
+    ]);
     return queryInterface.bulkInsert("Memberships", [
       {
         name: "Basic",
@@ -53,7 +63,7 @@ module.exports = {
         price: 2.99,
         createdAt: new Date(),
         updatedAt: new Date(),
-        creatorId: "1",
+        creatorId: 1,
       },
       {
         name: "Standard",
@@ -63,7 +73,7 @@ module.exports = {
         price: 5.99,
         createdAt: new Date(),
         updatedAt: new Date(),
-        creatorId: "1",
+        creatorId: 1,
       },
     ]);
   },

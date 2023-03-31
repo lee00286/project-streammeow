@@ -193,6 +193,46 @@ module.updateUser = (userId, variables) => {
 };
 
 /**
+ * Create a new creator to DB.
+ */
+module.addCreator = () => {
+  return axios.post("/api/creators/", {});
+};
+
+/**
+ * Retrieve all existing creators from DB.
+ */
+module.getAllCreators = () => {
+  return axios.get("/api/creators");
+};
+
+/**
+ * Retrieve a creator from DB.
+ * @param {string} creatorId: id of the creator
+ */
+module.getCreatorById = (creatorId) => {
+  // Get a creator using creatorId
+  return axios.get(`/api/creators/${creatorId}`);
+};
+
+/**
+ * Update attributes in creator.
+ * @param {string} creatorId: id of the creator
+ * @param {Object} variables: attributes to update
+ */
+module.updateCreator = (creatorId, variables) => {
+  return axios.patch(`/api/creators/${creatorId}`, variables);
+};
+
+/**
+ * Delete a creator from DB.
+ * @param {string} creatorId: id of the creator
+ */
+module.deleteCreator = (creatorId) => {
+  return axios.delete(`/api/creators/${creatorId}`);
+};
+
+/**
  * Create a new streaming to DB.
  * @param {string} name: title of the streaming
  * @param {string} description: description of the streaming
