@@ -1,6 +1,5 @@
 import { sequelize } from "../datasource.js";
 import { DataTypes } from "sequelize";
-import { User } from "./users.js";
 import { Creators } from "./creators.js";
 
 export const Memberships = sequelize.define("Memberships", {

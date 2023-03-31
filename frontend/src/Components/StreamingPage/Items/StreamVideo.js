@@ -16,6 +16,7 @@ const config = {
 /**
  * Stream video component, which uses Pion WebRTC.
  * @param {boolean} isCreator: if streaming is accessed by the creator
+ * @param {boolean} isScreenCapture: if video is screen capture
  * @param {boolean} hasStartVideo: if video is started
  * @param {boolean} hasStartSession: if streaming is started
  * @param {string} gsd: Golang base64 session description
@@ -23,6 +24,7 @@ const config = {
  */
 function StreamVideo({
   isCreator = false,
+  isScreenCapture = false,
   hasStartVideo = false,
   hasStartSession = false,
   gsd = "",
@@ -68,8 +70,8 @@ function StreamVideo({
         // console.log(sessionDescription);
         // Send local session description to get golang session description
         const response = await axios.post(
-          // `http://${STREAMING_HOST}:${STREAMING_PORT}/sdp`,
-          `http://localhost:${STREAMING_PORT}/sdp`,
+          `http://${STREAMING_HOST}:${STREAMING_PORT}/sdp`,
+          // `http://localhost:${STREAMING_PORT}/sdp`,
           sessionDescription,
           {
             headers: {
@@ -96,8 +98,11 @@ function StreamVideo({
   const createCreatorSession = (pc) => {
     if (pc === null || !isCreator) return;
     onIceCandidate(pc);
-    navigator.mediaDevices
-      .getUserMedia({ video: true, audio: false })
+    let startVideo = navigator.mediaDevices;
+    const selectMedia = isScreenCapture
+      ? startVideo.getDisplayMedia({ video: true, audio: false })
+      : startVideo.getUserMedia({ video: true, audio: false });
+    selectMedia
       .then((stream) => {
         stream.getTracks().forEach((track) => pc.addTrack(track, stream));
         videoRef.current.srcObject = stream;
@@ -116,7 +121,7 @@ function StreamVideo({
     pc.createOffer()
       .then((d) => pc.setLocalDescription(d))
       .catch(onLog);
-    pc.ontrack = function (event) {
+    pc.ontrack = (event) => {
       videoRef.current.srcObject = event.streams[0];
       setControls(true);
     };

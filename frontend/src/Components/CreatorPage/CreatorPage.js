@@ -1,46 +1,83 @@
-import React, { useState, useEffect } from "react";
+"use strict";
+
+import React, { useState, useEffect, StrictMode } from "react";
 import { useNavigate } from "react-router-dom";
 
 import module from "../../ApiService";
 import PageTitle from "../Texts/PageTitle";
 import SubTitle from "../Texts/SubTitle";
 import Membership from "../Membership/Membership";
+import Post from "../Posts/Post";
 import "./CreatorPage.css";
 
-// TODO: cleanup
-// const TEMP_MEMBERSHIP_DATA = [
-//   {
-//     id: 0,
-//     name: "Basic",
-//     price: "2.49",
-//     description: "Every little bit helps! Thank you for your support!",
-//     benefits: [
-//       "Access to all videos",
-//       "Access to all posts",
-//       "Comment on all posts",
-//     ],
-//   },
-//   {
-//     id: 1,
-//     name: "Standard",
-//     price: "4.99",
-//     description:
-//       "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley.",
-//     benefits: ["Everything in the previous tiers"],
-//   },
-//   {
-//     id: 2,
-//     name: "Maneki-neko",
-//     price: "7.77",
-//     description:
-//       "Thank you so so much for your generosity!! You can use exclusive emotes in streams!",
-//     benefits: [
-//       "Access exclusive emotes during streams",
-//       "Direct message the creator",
-//       "Everything in the previous tiers",
-//     ],
-//   },
-// ];
+// placeholder post data till API is decided
+const posts = [
+  {
+    id: "1",
+    // whether this post can be seen by anyone or requires a membership
+    isPublic: true,
+    // whether the user can view this post or not
+    viewable: true,
+    // author and title are always visible
+    // who wrote the post
+    author: {
+      id: "1",
+      name: "Creator",
+      // todo add profile picture
+    },
+    title: "My first post!",
+    // if the user can view the post, the properties description, likes, dislikes, comments are present
+    description:
+      "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley.",
+    likes: 10,
+    dislikes: 2,
+    // todo decide comments data
+    comments: {
+      total: 0,
+      data: [], // todo
+    },
+  },
+  // basic membership only post, but user can view because he has basic member
+  {
+    id: "2",
+    isPublic: false,
+    // to keep things simple, creators can only specify the cheapest membership
+    // that can view the post
+    required: {
+      id: "1",
+      name: "Basic",
+    },
+    viewable: true,
+    // author: {
+    //   id: "1",
+    //   name: "Creator",
+    // },
+    title: "A members only post",
+    description:
+      "Hello everyone! I just wanted to say thank you for supporting me through these tough times.",
+    likes: 5,
+    dislikes: 10,
+    comments: {
+      total: 100,
+      data: [],
+    },
+  },
+  // standard membership only post. user can't view since only Basic member
+  {
+    id: "3",
+    isPublic: false,
+    required: {
+      id: "2",
+      name: "Standard",
+    },
+    viewable: false,
+    author: {
+      id: "1",
+      name: "Creator",
+    },
+    title: "Something special for my Standard+ members",
+  },
+];
 
 // TODO: replace with actual id when database is setup
 const creatorId = 1;
@@ -79,21 +116,46 @@ export default function CreatorPage() {
     navigate(`/purchase/${creatorId}`, { state: { membershipId: id } });
   };
 
+  const postComponents = posts.map((post) => {
+    const options = {
+      preview: true,
+      isPublic: post.isPublic,
+      locked: !post.viewable,
+      author: post.author,
+      title: post.title,
+    };
+    // show content if the user can view it
+    if (post.viewable) {
+      options.description = post.description;
+      options.likes = post.likes;
+      options.dislikes = post.dislikes;
+      options.comments = post.comments;
+    } else {
+      options.lockedReason = `You need to be at least a ${post.required.name} member to view this post.`;
+    }
+
+    return <Post key={`post-${post.id}`} {...options} />;
+  });
+
   return (
-    <div className="page center">
-      <PageTitle text="Creator" />
-      <SubTitle text="Memberships" />
-      <div className="memberships-container">
-        {memberships.map((membership) => {
-          return (
-            <Membership
-              key={membership.id}
-              {...membership}
-              onSelectMembership={goToPurchase}
-            />
-          );
-        })}
+    <StrictMode>
+      <div className="page center">
+        <PageTitle text="Creator" />
+        <SubTitle text="Memberships" />
+        <div className="memberships-container">
+          {memberships.map((membership) => {
+            return (
+              <Membership
+                key={`membership-${membership.id}`}
+                {...membership}
+                onSelectMembership={goToPurchase}
+              />
+            );
+          })}
+        </div>
+        <SubTitle text="Posts" />
+        <div className="posts-container">{postComponents}</div>
       </div>
-    </div>
+    </StrictMode>
   );
 }

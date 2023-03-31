@@ -77,3 +77,22 @@
 .hidden {
   visibility: hidden;
 }
+
+.shadow {
+  box-shadow: -3px 3px 5px var(--gray1);
+}
+
+.icon-like {
+  background-image: url("../public/icons/like.svg");
+  background-repeat: no-repeat;
+}
+
+.icon-dislike {
+  background-image: url("../public/icons/dislike.svg");
+  background-repeat: no-repeat;
+}
+
+.icon-lock {
+  background-image: url("../public/icons/lock.svg");
+  background-repeat: no-repeat;
+}

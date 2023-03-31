@@ -84,9 +84,7 @@ function NavBar({ userId }) {
 
   // Become the creator and navigate to creator's page
   const onCreator = () => {
-    // TODO: Become the creator
-    // TODO: Change it to creatorId-specific
-    navigate("/creators");
+    navigate("/becomecreator");
   };
 
   // Navigate to user streaming page

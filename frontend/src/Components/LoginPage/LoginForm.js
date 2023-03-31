@@ -43,7 +43,6 @@ function LoginForm({ login, register, onLogin, onRegister }) {
 
   const onSignIn = (e) => {
     e.preventDefault();
-    console.log(password);
     onLogin(email, password);
 
     setEmail("");

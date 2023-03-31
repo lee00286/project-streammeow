@@ -66,6 +66,30 @@
   text-decoration: underline;
 }
 
+/* Subscription Detail */
+.purchase-detail {
+  top: 0;
+  left: 0;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+}
+
+.backdrop {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.25);
+}
+
+.backdrop::before {
+  content: "";
+}
+
+.purchase-detail .membership {
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.3);
+}
+
 /* Invoice Table */
 .table-header {
   padding: 0 20px 15px 20px;
@@ -133,6 +157,10 @@
 
 .invoice-top p span {
   font-weight: bold;
+}
+
+.invoice-top button {
+  margin-top: 25px;
 }
 
 .invoice .horizontal-line {

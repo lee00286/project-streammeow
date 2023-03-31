@@ -16,6 +16,7 @@ import { BrowserTracing } from "@sentry/tracing";
 import NavBar from "./Components/NavBar/NavBar";
 import HomePage from "./Components/HomePage/HomePage";
 import CreditPage from "./Components/CreditPage/CreditPage";
+import NewCreator from "./Components/UserPage/NewCreator";
 import CreatorPage from "./Components/CreatorPage/CreatorPage";
 import StreamingListPage from "./Components/StreamingPage/StreamingListPage";
 import ReadyPage from "./Components/StreamingPage/ReadyPage";
@@ -44,6 +45,7 @@ Sentry.init({
         createRoutesFromChildren,
         matchRoutes
       ),
+      tracePropagationTargets: [],
     }),
   ],
   tracesSampleRate: 1.0,
@@ -53,7 +55,7 @@ const SentryRoutes = Sentry.withSentryReactRouterV6Routing(Routes);
 
 function App() {
   const [UserId, setUserId] = useState("");
-  const [IsCreator, setIsCreator] = useState(false);
+  const [CreatorId, setCreatorId] = useState(null);
 
   useEffect(() => {
     module.getUserId().then((res) => {
@@ -66,7 +68,7 @@ function App() {
         .then((res) => {
           if (res.error) return console.log(res.error);
           console.log(res.data);
-          setIsCreator(res.data.creator && res.data.creator.id);
+          if (res.data.creator?.id) setCreatorId(res.data.creator.id);
         })
         .catch((e) => console.log(e));
     });
@@ -80,7 +82,11 @@ function App() {
         <Route path="/signin" element={<LoginPage />} />
         <Route path="/signup" element={<RegisterPage />} />
         <Route path="/credits" element={<CreditPage />} />
-        <Route path="/creators" element={<CreatorPage />} />
+        <Route path="/becomecreator" element={<NewCreator />} />
+        {/* <Route path="/creators/:creatorId" element={<CreatorPage />} /> */}
+        <Route path="/memberships/:creatorId" element={<CreatorPage />} />
+        <Route path="/purchase/:creatorId" element={<PurchasePage />} />
+        <Route path="/purchase/confirm" element={<ConfirmPage />} />
         <Route path="/streaming" element={<StreamingListPage />} />
         <Route path="/allcreators" element={<AllCreators />} />
         <Route path="/allstreams" element={<AllStreams />} />
@@ -91,7 +97,7 @@ function App() {
           path="/streaming/:creatorId"
           element={
             UserId !== "" ? (
-              IsCreator ? (
+              CreatorId ? (
                 <ReadyPage />
               ) : (
                 <StreamingPage />
@@ -101,8 +107,6 @@ function App() {
             )
           }
         />
-        <Route path="/purchase/:creatorId" element={<PurchasePage />} />
-        <Route path="/purchase/confirm" element={<ConfirmPage />} />
         <Route path="/mypage" element={<UserPage />} />
       </SentryRoutes>
     </div>
