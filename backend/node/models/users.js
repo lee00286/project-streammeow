@@ -20,6 +20,10 @@ export const User = sequelize.define("Users", {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  subscription: {
+    type: DataTypes.ARRAY(DataTypes.STRING),
+    allowNull: false,
+  },
   createdAt: {
     type: DataTypes.DATE,
     allowNull: false,

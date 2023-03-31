@@ -42,6 +42,7 @@ Sentry.init({
         createRoutesFromChildren,
         matchRoutes
       ),
+      tracePropagationTargets: [],
     }),
   ],
   tracesSampleRate: 1.0,
@@ -51,7 +52,7 @@ const SentryRoutes = Sentry.withSentryReactRouterV6Routing(Routes);
 
 function App() {
   const [UserId, setUserId] = useState("");
-  const [IsCreator, setIsCreator] = useState(false);
+  const [CreatorId, setCreatorId] = useState(null);
 
   useEffect(() => {
     module.getUserId().then((res) => {
@@ -64,7 +65,7 @@ function App() {
         .then((res) => {
           if (res.error) return console.log(res.error);
           console.log(res.data);
-          setIsCreator(res.data.creator && res.data.creator.id);
+          if (res.data.creator?.id) setCreatorId(res.data.creator.id);
         })
         .catch((e) => console.log(e));
     });
@@ -79,7 +80,10 @@ function App() {
         <Route path="/signup" element={<RegisterPage />} />
         <Route path="/credits" element={<CreditPage />} />
         <Route path="/becomecreator" element={<NewCreator />} />
-        <Route path="/creators" element={<CreatorPage />} />
+        {/* <Route path="/creators/:creatorId" element={<CreatorPage />} /> */}
+        <Route path="/memberships/:creatorId" element={<CreatorPage />} />
+        <Route path="/purchase/:creatorId" element={<PurchasePage />} />
+        <Route path="/purchase/confirm" element={<ConfirmPage />} />
         <Route path="/streaming" element={<StreamingListPage />} />
         {/* TODO */}
         {/* <Route path="/streaming/replay" element={<StreamingListPage />} /> */}
@@ -87,7 +91,7 @@ function App() {
           path="/streaming/:creatorId"
           element={
             UserId !== "" ? (
-              IsCreator ? (
+              CreatorId ? (
                 <ReadyPage />
               ) : (
                 <StreamingPage />
@@ -97,8 +101,6 @@ function App() {
             )
           }
         />
-        <Route path="/purchase/:creatorId" element={<PurchasePage />} />
-        <Route path="/purchase/confirm" element={<ConfirmPage />} />
         <Route path="/mypage" element={<UserPage />} />
       </SentryRoutes>
     </div>

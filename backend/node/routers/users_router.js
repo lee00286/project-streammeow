@@ -93,8 +93,10 @@ usersRouter.get("/:userId/", isAuthenticated, async (req, res) => {
 /**
  * Update user information.
  * */
-usersRouter.patch("/:userId/", isAuthenticated, async (req, res) => {
+usersRouter.patch("/:userId/", isAuthenticated, async (req, res, next) => {
   const userId = req.params.userId;
+  if (userId === "subscribe" || userId === "unsubscribe") next();
+
   const variables = req.body;
   // Check validity of arguments
   if (
@@ -107,6 +109,99 @@ usersRouter.patch("/:userId/", isAuthenticated, async (req, res) => {
     const user = await User.update(variables, {
       where: { id: userId },
     });
+    // If user doesn't exist
+    if (!user)
+      return res
+        .status(404)
+        .json({ error: `User(id=${userId}) doesn't exist.` });
+    return res.status(200).json({ user });
+  } catch (e) {
+    const errorMsg = "Failed to update user information.";
+    console.log(errorMsg);
+    Sentry.captureException(e);
+  }
+});
+
+/**
+ * Update user subscription information.
+ * */
+usersRouter.patch("/subscribe", isAuthenticated, async (req, res) => {
+  const userId = req.session.userId;
+  let membershipId = req.body.membershipId;
+  // Check validity of arguments
+  if (
+    !isValidArgument(userId, "number") ||
+    !isValidArgument(membershipId, "string") ||
+    !isValidArgument(req.body.date, "number")
+  )
+    return res.status(422).json({ error: "Invalid arguments." });
+  membershipId = `${membershipId}+${req.body.date}`;
+  try {
+    // Get a user
+    let user = await User.findByPk(userId);
+    // If user doesn't exist
+    if (!user)
+      return res
+        .status(404)
+        .json({ error: `User(id=${userId}) doesn't exist.` });
+    // Add membership to subscription array
+    let subscription = user.subscription;
+    if (!subscription) subscription = [];
+    subscription.push(membershipId);
+    // Update a membership
+    user = await User.update(
+      { subscription },
+      {
+        where: { id: userId },
+      }
+    );
+    // If user doesn't exist
+    if (!user)
+      return res
+        .status(404)
+        .json({ error: `User(id=${userId}) doesn't exist.` });
+    return res.status(200).json({ user });
+  } catch (e) {
+    const errorMsg = "Failed to update user information.";
+    console.log(errorMsg);
+    Sentry.captureException(e);
+  }
+});
+
+/**
+ * Update user subscription information.
+ * */
+usersRouter.patch("/unsubscribe", isAuthenticated, async (req, res) => {
+  const userId = req.session.userId;
+  let membershipId = req.body.membershipId;
+  // Check validity of arguments
+  if (
+    !isValidArgument(userId, "number") ||
+    !isValidArgument(membershipId, "string")
+  )
+    return res.status(422).json({ error: "Invalid arguments." });
+  membershipId = parseInt(membershipId);
+  try {
+    // Get a membership
+    let user = await User.findByPk(userId);
+    // If user doesn't exist
+    if (!user)
+      return res
+        .status(404)
+        .json({ error: `User(id=${userId}) doesn't exist.` });
+    // Remove membership from subscription array
+    const subscription = user.subscription;
+    const index = subscription.indexOf(membershipId);
+    if (index > -1) {
+      subscription.splice(index, 1);
+    }
+    // Update a membership
+    user = await User.update(
+      { subscription },
+      {
+        where: { id: userId },
+      }
+    );
     // If user doesn't exist
     if (!user)
       return res
