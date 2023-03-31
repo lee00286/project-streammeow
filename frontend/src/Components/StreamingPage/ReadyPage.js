@@ -151,7 +151,7 @@ function ReadyPage() {
       if (res.error) return console.log(res.error);
       setMembershipList(res.data.memberships);
     });
-  }, []);
+  }, [creatorId]);
 
   // Save streaming title
   const onTitle = (title) => {

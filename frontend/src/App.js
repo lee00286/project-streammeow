@@ -52,7 +52,7 @@ const SentryRoutes = Sentry.withSentryReactRouterV6Routing(Routes);
 
 function App() {
   const [UserId, setUserId] = useState("");
-  const [IsCreator, setIsCreator] = useState(false);
+  const [CreatorId, setCreatorId] = useState(null);
 
   useEffect(() => {
     module.getUserId().then((res) => {
@@ -65,7 +65,7 @@ function App() {
         .then((res) => {
           if (res.error) return console.log(res.error);
           console.log(res.data);
-          setIsCreator(res.data.creator && res.data.creator.id);
+          if (res.data.creator?.id) setCreatorId(res.data.creator.id);
         })
         .catch((e) => console.log(e));
     });
@@ -91,7 +91,7 @@ function App() {
           path="/streaming/:creatorId"
           element={
             UserId !== "" ? (
-              IsCreator ? (
+              CreatorId ? (
                 <ReadyPage />
               ) : (
                 <StreamingPage />

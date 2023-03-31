@@ -30,11 +30,11 @@ func HTTPSDPServer() chan string {
 		// fmt.Fprint(w, "done")
 		// sdpChan <- string(body)
 		// w.WriteHeader(http.StatusOK)
-		// w.Write(body)
 		
 		fmt.Fprintf(w, "done")
 		sdpChan <- string(body)
-		// TODO: Find a way to write the respons without stopping the server
+		// w.Write(body)
+		// TODO: Find a way to write the response without stopping the server
 	})
 
 	go func() {

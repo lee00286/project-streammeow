@@ -121,7 +121,7 @@ function StreamVideo({
     pc.createOffer()
       .then((d) => pc.setLocalDescription(d))
       .catch(onLog);
-    pc.ontrack = function (event) {
+    pc.ontrack = (event) => {
       videoRef.current.srcObject = event.streams[0];
       setControls(true);
     };
