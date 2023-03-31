@@ -17,6 +17,21 @@ let menuList = ["User Information", "Purchase History", "Creator's Menu"];
 function CreatorsTab() {
   const [Creator, setCreator] = useState(null);
 
+  useEffect(() => {
+    module.getUserId().then((res) => {
+      // If the user is not authenticated
+      if (res.data.user?.id) return;
+      // If the user is creator
+      module
+        .getCreatorByUserId(res.data.user.id)
+        .then((res) => {
+          if (res.error) return console.log(res.error);
+          setCreator(res.data.creator);
+        })
+        .catch((e) => console.log(e));
+    });
+  }, []);
+
   if (Creator) {
     return (
       <div className="user-tab creator-history col-auto col">
@@ -202,7 +217,7 @@ function UserInfoTab() {
     );
   }
 
-  return <div className="user-tab col-auto flex-center">Empty tab</div>;
+  return <div className="user-tab col-auto flex-center">Empty</div>;
 }
 
 function SideBar({ onClickMenu }) {

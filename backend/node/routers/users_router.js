@@ -23,7 +23,6 @@ usersRouter.post("/signup", isNotAuthenticated, async (req, res) => {
       email: email,
       password: password,
     });
-    req.session.userId = user.id;
     return res.status(200).json({ user });
   } catch (e) {
     const errorMsg = "Failed to create a user.";

@@ -155,7 +155,6 @@ module.UserRegister = (email, password) => {
  * @param {string} password: password of the user
  */
 module.UserLogin = (email, password) => {
-  console.log(password);
   return axios.post("/api/users/login", { email, password });
 };
 
