@@ -22,7 +22,7 @@ module.exports = {
         allowNull: false,
       },
       subscription: {
-        type: Sequelize.ARRAY(Sequelize.INTEGER),
+        type: Sequelize.ARRAY(Sequelize.STRING),
         allowNull: true,
       },
       createdAt: {

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import module from "../../ApiService";
 import calculations from "../calculations";
 import { ResponsiveBar } from "@nivo/bar";
@@ -17,6 +18,8 @@ let menuList = ["User Information", "Purchase History", "Creator's Menu"];
  * @returns Creator's Tab Component
  */
 function CreatorsTab({ creator }) {
+  const navigate = useNavigate();
+
   const [Creator, setCreator] = useState(null);
   const [NivoData, setNivoData] = useState([]);
 
@@ -85,10 +88,22 @@ function CreatorsTab({ creator }) {
     );
   }
 
+  // Become the creator and navigate to creator's page
+  const onCreator = () => {
+    navigate("/becomecreator");
+  };
+
   return (
     <div className="user-tab col-auto col">
       <SubTitle text="Creator's Menu" />
-      <div className="flex-center">Empty</div>
+      <div className="flex-center">
+        <ColorButton
+          buttonColor="var(--yellow4)"
+          textColor="#fff"
+          text="Become a Creator"
+          buttonFunction={onCreator}
+        />
+      </div>
     </div>
   );
 }
@@ -99,24 +114,71 @@ function CreatorsTab({ creator }) {
  */
 function UserHistoryTab() {
   const [UserHistory, setUserHistory] = useState(null);
+  const [Subscription, setSubscription] = useState([]);
 
   // Get user information
   useEffect(() => {
+    if (Subscription.length > 0) return;
     // Get userId
-    module.getUserId().then((res) => {
-      if (res.error) return console.log(res.error);
-      if (!res.data.user) return console.log("Failed to load user data");
-      setUserHistory(res.data.user);
-    });
+    module
+      .getUserId()
+      .then((res) => {
+        if (res.error) return console.log(res.error);
+        if (!res.data.user) return console.log("Failed to load user data");
+        setUserHistory(res.data.user);
+        // Subscription
+        if (!res.data?.user?.subscription) return;
+        return res.data.user.subscription;
+      })
+      .then((subscription) => {
+        const subscriptionList = [];
+        for (let i = 0; i < subscription.length; i++) {
+          const splittedText = subscription[i].split("+");
+          subscriptionList.push({
+            membershipId: splittedText[0],
+            date: splittedText[1],
+          });
+          // // Get membership detail
+          // const detail = module.getMembershipById(splittedText[0]).then((res) => {
+          //   if (res.error) return console.log(res.error);
+          //   return res;
+          // }).then((data) => {
+          //   if (!data?.name || !data.description || !data.price) return;
+          //   const variables = {
+          //     membershipId: splittedText[0],
+          //     date: splittedText[1],
+          //     name: data.name,
+          //     description: data.description,
+          //     price: data.price,
+          //   };
+          //   subscriptionList.push(variables);
+          // }).catch((e) => console.log(e));
+          // console.log(detail);
+        }
+        setSubscription(subscriptionList);
+        console.log(subscriptionList);
+      });
   }, []);
+
+  const subscriptions =
+    Subscription && Subscription.length > 0 ? (
+      Subscription.map((subscription, index) => {
+        console.log(subscription);
+        return (
+          <div key={`subscribing-${index}`} className="history-subscript row">
+            <div>{calculations.convertDate(parseInt(subscription.date))}</div>
+          </div>
+        );
+      })
+    ) : (
+      <div></div>
+    );
 
   if (UserHistory) {
     return (
       <div className="user-tab user-history col-auto col">
-        <SubTitle text="User History" />
-        <div>
-          <div>Purchase History</div>
-        </div>
+        <SubTitle text="Subscriptions" />
+        <div>{subscriptions}</div>
       </div>
     );
   }

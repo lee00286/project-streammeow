@@ -111,14 +111,18 @@ function ConfirmPage() {
           .then((res) => {
             if (res.error) return console.log(res.error);
             setInvoice(res.data);
+            return res.data;
+          })
+          .then((invoice) => {
+            module.userSubscribe(
+              query.get("membership"),
+              invoice.payment.datePaid
+            );
+          })
+          .then(() => {
+            module.membershipSubscribe(query.get("membership"));
           })
           .catch((e) => console.log(e));
-      })
-      .then(() => {
-        module.userSubscribe(query.get("membership"));
-      })
-      .then(() => {
-        module.membershipSubscribe(query.get("membership"));
       });
   }, []);
 

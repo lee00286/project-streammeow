@@ -87,8 +87,17 @@
 }
 
 .nivo-graph {
-  /* max-height: 800px; */
   height: 500px;
+}
+
+.history-subscript {
+  justify-content: space-between;
+  margin-bottom: 10px !important;
+  padding: 5px 10px;
+  border-radius: 5px;
+  border: 1px solid var(--gray1);
+  width: 100%;
+  user-select: none;
 }
 
 /* New Creator */

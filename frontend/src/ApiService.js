@@ -38,7 +38,9 @@ module.getAllMemberships = (creatorId) => {
  */
 module.getMembershipById = (membershipId) => {
   // Get a membership using membershipId
-  return axios.get(`/api/memberships/${membershipId}`);
+  return axios
+    .get(`/api/memberships/${membershipId}`)
+    .then((res) => JSON.stringify(res.data));
 };
 
 /**
@@ -214,9 +216,10 @@ module.updateUser = (userId, variables) => {
 /**
  * Subscribe the membership.
  * @param {integer} membershipId: id of the membership
+ * @param {} date: date of payment
  */
-module.userSubscribe = (membershipId) => {
-  return axios.patch(`/api/users/subscribe`, { membershipId });
+module.userSubscribe = (membershipId, date) => {
+  return axios.patch(`/api/users/subscribe`, { membershipId, date });
 };
 
 /**

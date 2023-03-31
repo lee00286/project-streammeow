@@ -21,7 +21,7 @@ export const User = sequelize.define("Users", {
     allowNull: false,
   },
   subscription: {
-    type: DataTypes.ARRAY(DataTypes.INTEGER),
+    type: DataTypes.ARRAY(DataTypes.STRING),
     allowNull: false,
   },
   createdAt: {

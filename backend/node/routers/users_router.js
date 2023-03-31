@@ -131,10 +131,11 @@ usersRouter.patch("/subscribe", isAuthenticated, async (req, res) => {
   // Check validity of arguments
   if (
     !isValidArgument(userId, "number") ||
-    !isValidArgument(membershipId, "string")
+    !isValidArgument(membershipId, "string") ||
+    !isValidArgument(req.body.date, "number")
   )
     return res.status(422).json({ error: "Invalid arguments." });
-  membershipId = parseInt(membershipId);
+  membershipId = `${membershipId}+${req.body.date}`;
   try {
     // Get a user
     let user = await User.findByPk(userId);
@@ -145,7 +146,7 @@ usersRouter.patch("/subscribe", isAuthenticated, async (req, res) => {
         .json({ error: `User(id=${userId}) doesn't exist.` });
     // Add membership to subscription array
     let subscription = user.subscription;
-    if (subscription === []) subscription = [];
+    if (!subscription) subscription = [];
     subscription.push(membershipId);
     // Update a membership
     user = await User.update(
