@@ -1,15 +1,137 @@
 import React, { useEffect, useState } from "react";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import module from "../../ApiService";
 // Components
 import PageTitle from "../Texts/PageTitle";
 import SubTitle from "../Texts/SubTitle";
-import Subscription from "./Items/Subscription";
 import InvoiceTable from "./Items/InvoiceTable";
 import CheckBox from "../Texts/CheckBox";
 import SubscribeButton from "./Items/SubscribeButton";
 // Style
 import "./PurchasePage.css";
+import "../Membership/Membership.css";
+
+/**
+ * Subscription Detail Component that displays membership details.
+ * @param {string} props.name: name of the membership
+ * @param {string} props.description: description of the membership
+ * @param {double} props.price: price of the membership
+ * @param {Array} props.benefits: benefits of the membership
+ * @param {string} props.currency: currency of the membershipp price
+ * @returns Subscription Detail Component
+ */
+function SubscriptionDetail(props) {
+  const [Membership, setMembership] = useState(null);
+
+  useEffect(() => {
+    if (!props) return;
+    const membership = {
+      name: props.name,
+      description: props.description,
+      price: props.price,
+      benefits: props.benefits,
+      currency: props.currency,
+    };
+    setMembership(membership);
+  }, [props]);
+
+  const allBenefits = Membership?.benefits ? (
+    Membership.benefits.map((benefit, index) => {
+      return (
+        <li key={`purchase-membership-${index}`}>
+          <p>{benefit}</p>
+        </li>
+      );
+    })
+  ) : (
+    <div></div>
+  );
+
+  return (
+    <div className="membership rounded">
+      <div className="membership-name">
+        <h3>{Membership?.name ?? ""}</h3>
+      </div>
+      <div className="membership-content">
+        <div className="price row">
+          <div className="currency">$</div>
+          <p className="price-num">{Membership?.price ?? ""}</p>
+          <p>/ month</p>
+        </div>
+        <div className="membership-description">
+          <p>{Membership?.description ?? ""}</p>
+        </div>
+        <div className="membership-benefits">
+          <ul>{allBenefits}</ul>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/**
+ * Subscription component that displays membership.
+ * @param {Object} membership: membership object
+ * @param {boolean} isSelected: if the membership plan is selected
+ * @param {Function} onSelect: function to operate if the membership is selected
+ * @returns Subscription component
+ */
+function Subscription({ membership, isSelected, onSelect }) {
+  const [MembershipPrice, setMembershipPrice] = useState(null);
+  const [IsDetail, setIsDetail] = useState(false);
+
+  useEffect(() => {
+    // If plan is selected, send information
+    if (isSelected) onSelectPlan();
+  }, [isSelected]);
+
+  /* Set price of the membership */
+  useEffect(() => {
+    // console.log(membership);
+    if (!membership?.price) return;
+    const price = parseFloat(membership.price);
+    setMembershipPrice(price);
+  }, [membership]);
+
+  /* Select membership plan */
+  const onSelectPlan = () => {
+    if (onSelect) onSelect(membership.id, membership.priceId, MembershipPrice);
+  };
+
+  /* Show membership detail modal */
+  const onDetail = (e) => {
+    e.stopPropagation();
+    setIsDetail(!IsDetail);
+  };
+
+  return (
+    <div
+      onClick={onSelectPlan}
+      className={`membership-box ${isSelected ? "selected-plan" : ""}`}
+    >
+      <p className="title">{membership.name}</p>
+      <div className="price row">
+        <div className="currency">$</div>
+        <p className="price-num">{MembershipPrice}</p>
+        <p>/ month</p>
+      </div>
+      <button onClick={onDetail}>See Details</button>
+      <div
+        className={`purchase-detail flex-center ${IsDetail ? "" : "hidden"}`}
+        onClick={onDetail}
+      >
+        <div className="backdrop"></div>
+        <SubscriptionDetail
+          name={membership.name}
+          description={membership.description}
+          price={membership.price}
+          benefits={membership.benefits}
+          currency={membership.currency}
+        />
+      </div>
+    </div>
+  );
+}
 
 /**
  * Purchase page component.
@@ -18,6 +140,7 @@ import "./PurchasePage.css";
  */
 function PurchasePage({ plan }) {
   const { creatorId } = useParams();
+  const navigate = useNavigate();
   const location = useLocation();
 
   const [Memberships, setMemberships] = useState([]);
@@ -25,6 +148,23 @@ function PurchasePage({ plan }) {
   const [BuyList, setBuyList] = useState(null);
   const [PriceId, setPriceId] = useState(null);
   const [IsChecked, setIsChecked] = useState(false);
+
+  /* Navigate to creator's page if current user is creator */
+  useEffect(() => {
+    if (!creatorId) return;
+    module.getUserId().then((res) => {
+      if (res.data.user === undefined) return;
+      // If the user is creator
+      module
+        .getCreatorByUserId(res.data.user.id)
+        .then((res) => {
+          if (res.error) return console.log(res.error);
+          if (res.data.creator && `${res.data.creator.id}` === creatorId)
+            navigate("/");
+        })
+        .catch((e) => console.log(e));
+    });
+  }, [creatorId]);
 
   /* Get memberships of the creator */
   useEffect(() => {
@@ -45,7 +185,6 @@ function PurchasePage({ plan }) {
   /* Update inherited SelectPlan */
   useEffect(() => {
     if (Memberships && SelectPlan === null) {
-      console.log(location);
       if (plan) setSelectPlan(plan);
       else if (location?.state?.membershipId) {
         const selected = Memberships.find(

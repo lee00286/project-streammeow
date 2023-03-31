@@ -83,6 +83,26 @@ export const creditList = [
         siteName: "Stackoverflow",
         link: "https://stackoverflow.com/questions/68932621/put-a-warning-if-page-refresh-in-reactjs",
       },
+      {
+        name: "Node req.session.destroy(), req.logout(), and res.clearCookie()",
+        siteName: "Stackoverflow",
+        link: "https://stackoverflow.com/questions/50454992/req-session-destroy-and-passport-logout-arent-destroying-cookie-on-client-side",
+      },
+      {
+        name: "Screen Capture API",
+        siteName: "MDN Web Docs",
+        link: "https://developer.mozilla.org/en-US/docs/Web/API/Screen_Capture_API/Using_Screen_Capture",
+      },
+    ],
+  },
+  {
+    title: "React API - Nivo",
+    credits: [
+      {
+        name: "Nivo Bar example",
+        siteName: "Nivo Official Document",
+        link: "https://nivo.rocks/bar/",
+      },
     ],
   },
   {
@@ -133,6 +153,11 @@ export const creditList = [
         siteName: "Stackoverflow",
         link: "https://stackoverflow.com/questions/31622052/how-to-serve-up-a-json-response-using-go",
       },
+      {
+        name: "Golang with Sentry CORS baggage header problem",
+        siteName: "GitHub",
+        link: "https://github.com/getsentry/sentry-javascript/issues/6077",
+      },
     ],
   },
   {
@@ -177,6 +202,16 @@ export const creditList = [
         name: "Use environment variable for local sequelize configuration",
         siteName: "Stackoverflow",
         link: "https://stackoverflow.com/questions/38757728/using-an-enviroment-variable-for-local-sequelize-configuration",
+      },
+      {
+        name: "Association call options",
+        siteName: "Sequelize.org",
+        link: "https://sequelize.org/docs/v6/core-concepts/assocs/",
+      },
+      {
+        name: "Array Functions and Operators",
+        siteName: "Postgresql.org",
+        link: "https://www.postgresql.org/docs/9.1/functions-array.html",
       },
     ],
   },
@@ -277,6 +312,11 @@ export const creditList = [
         link: "https://www.iconfinder.com/icons/3643781/check_checklist_complete_done_mark_icon",
       },
       {
+        name: "Caution Icon",
+        siteName: "Iconfinder",
+        link: "https://www.iconfinder.com/icons/3643776/caution_exclamation_mark_round_sign_icon",
+      },
+      {
         name: "Settings Icon",
         siteName: "Iconfinder",
         link: "https://www.iconfinder.com/icons/1564529/mechanism_options_settings_configuration_setting_icon",
@@ -305,6 +345,31 @@ export const creditList = [
         name: "Password icons created by th studio - Flaticon",
         siteName: "Flaticon",
         link: "https://www.flaticon.com/free-icons/password",
+      },
+      {
+        name: "Live-news icons created by Good Ware - Flaticon",
+        siteName: "Flaticon",
+        link: "https://www.flaticon.com/free-icons/live-news",
+      },
+      {
+        name: "User Icon",
+        siteName: "Iconfinder",
+        link: "https://www.iconfinder.com/icons/8665306/circle_user_icon",
+      },
+      {
+        name: "Heart, love, valentine Icon",
+        siteName: "Iconfinder",
+        link: "https://www.iconfinder.com/icons/8679284/heart_love_valentine_icon",
+      },
+      {
+        name: "Dislike, bad icon",
+        siteName: "Iconfinder",
+        link: "https://www.iconfinder.com/icons/8679269/dislike_bad_icon",
+      },
+      {
+        name: "Lock, 2, line icon",
+        siteName: "Iconfinder",
+        link: "https://www.iconfinder.com/icons/8679989/lock_2_line_icon",
       },
     ],
   },

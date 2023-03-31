@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { isValidArgument } from "../error_check.js";
 import { Streamings } from "../models/streamings.js";
+import { isAuthenticated } from "../middleware/auth.js";
 import Sentry from "@sentry/node";
 
 export const streamingsRouter = Router();
@@ -8,7 +9,7 @@ export const streamingsRouter = Router();
 /**
  * Create a streaming in DB.
  * */
-streamingsRouter.post("/", async (req, res) => {
+streamingsRouter.post("/", isAuthenticated, async (req, res) => {
   // Check validity of arguments
   if (
     !isValidArgument(req.body.title, "string") ||
@@ -36,7 +37,7 @@ streamingsRouter.post("/", async (req, res) => {
 /**
  * Retrieve all streamings from DB.
  * */
-streamingsRouter.get("/", async (req, res) => {
+streamingsRouter.get("/", isAuthenticated, async (req, res) => {
   try {
     const { creatorId } = req.query;
     const options = {};
@@ -65,7 +66,7 @@ streamingsRouter.get("/", async (req, res) => {
 /**
  * Retrieve one streaming using streamingId.
  * */
-streamingsRouter.get("/:streamingId/", async (req, res) => {
+streamingsRouter.get("/:streamingId/", isAuthenticated, async (req, res) => {
   const streamingId = req.params.streamingId;
   // Check validity of streamingId
   if (!isValidArgument(streamingId, "string"))
@@ -87,7 +88,7 @@ streamingsRouter.get("/:streamingId/", async (req, res) => {
 /**
  * Update attributes of a streaming.
  * */
-streamingsRouter.patch("/:streamingId/", async (req, res) => {
+streamingsRouter.patch("/:streamingId/", isAuthenticated, async (req, res) => {
   const streamingId = req.params.streamingId;
   const variables = req.body;
   // Check validity of arguments
@@ -117,7 +118,7 @@ streamingsRouter.patch("/:streamingId/", async (req, res) => {
 /**
  * Delete a streaming.
  * */
-streamingsRouter.delete("/:streamingId/", async (req, res) => {
+streamingsRouter.delete("/:streamingId/", isAuthenticated, async (req, res) => {
   const streamingId = req.params.streamingId;
   // Check validity of streamingId
   if (!isValidArgument(streamingId, "string"))

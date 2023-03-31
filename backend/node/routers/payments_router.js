@@ -2,6 +2,7 @@ import express, { Router } from "express";
 import { Stripe } from "stripe";
 import dotenv from "dotenv";
 import { isValidArgument, stripeCatchError } from "../error_check.js";
+import { isAuthenticated } from "../middleware/auth.js";
 import Sentry from "@sentry/node";
 
 export const paymentsRouter = Router();
@@ -70,7 +71,7 @@ const summarizeInvoice = (invoice) => {
  * Create a PaymentIntent.
  * One PaymentIntent is created for each order or customer session.
  * */
-paymentsRouter.post("/payment-intent", async (req, res) => {
+paymentsRouter.post("/payment-intent", isAuthenticated, async (req, res) => {
   const reqBody = req.body;
   // Check validity of argument
   if (
@@ -97,7 +98,7 @@ paymentsRouter.post("/payment-intent", async (req, res) => {
 /**
  * Checkout current session.
  */
-paymentsRouter.post("/checkout-session", async (req, res) => {
+paymentsRouter.post("/checkout-session", isAuthenticated, async (req, res) => {
   const priceId = req.body.priceId;
   // Check validity of argument
   if (!isValidArgument(priceId, "string"))
@@ -113,11 +114,8 @@ paymentsRouter.post("/checkout-session", async (req, res) => {
           quantity: 1,
         },
       ],
-      // metadata: { user_id: req.body.userId },
-      // subscription_data: {
-      //   metadata: { user_id: current_user.id },
-      // },
-      success_url: `http://${CLIENT_HOST}/purchase/confirm?success=true&session_id={CHECKOUT_SESSION_ID}`,
+      metadata: { membership_id: req.body.membershipId },
+      success_url: `http://${CLIENT_HOST}/purchase/confirm?success=true&session_id={CHECKOUT_SESSION_ID}&membership=${req.body.membershipId}`,
       cancel_url: `http://${CLIENT_HOST}/purchase/confirm?canceled=true`,
     });
     return res.status(200).json({ url: session.url });
@@ -131,7 +129,7 @@ paymentsRouter.post("/checkout-session", async (req, res) => {
 /**
  * Get a session by sessionId.
  */
-paymentsRouter.get("/session/:sessionId", async (req, res) => {
+paymentsRouter.get("/session/:sessionId", isAuthenticated, async (req, res) => {
   const { sessionId } = req.params;
   // Check validity of sessionId
   if (!isValidArgument(sessionId, "string"))
@@ -145,25 +143,29 @@ paymentsRouter.get("/session/:sessionId", async (req, res) => {
  * Create a customer portal session.
  * Customers can manage their subscriptions and billing details.
  */
-paymentsRouter.post("/create-portal-session", async (req, res) => {
-  // For demonstration purposes, we're using the Checkout session to retrieve the customer ID.
-  // Typically this is stored alongside the authenticated user in your database.
-  const { session_id } = req.body;
-  // Check validity of sessionId
-  if (!isValidArgument(session_id, "string"))
-    return res.status(422).json({ error: "Invalid sessionId." });
-  const checkoutSession = await stripe.checkout.sessions.retrieve(session_id);
+paymentsRouter.post(
+  "/create-portal-session",
+  isAuthenticated,
+  async (req, res) => {
+    // For demonstration purposes, we're using the Checkout session to retrieve the customer ID.
+    // Typically this is stored alongside the authenticated user in your database.
+    const { session_id } = req.body;
+    // Check validity of sessionId
+    if (!isValidArgument(session_id, "string"))
+      return res.status(422).json({ error: "Invalid sessionId." });
+    const checkoutSession = await stripe.checkout.sessions.retrieve(session_id);
 
-  // URL where the customer will be redirected after the payment
-  const returnUrl = `http://${CLIENT_HOST}:${CLIENT_PORT}/purchase/confirm`;
+    // URL where the customer will be redirected after the payment
+    const returnUrl = `http://${CLIENT_HOST}:${CLIENT_PORT}/purchase/confirm`;
 
-  const portalSession = await stripe.billingPortal.sessions.create({
-    customer: checkoutSession.customer,
-    return_url: returnUrl,
-  });
+    const portalSession = await stripe.billingPortal.sessions.create({
+      customer: checkoutSession.customer,
+      return_url: returnUrl,
+    });
 
-  res.redirect(303, portalSession.url);
-});
+    res.redirect(303, portalSession.url);
+  }
+);
 
 /**
  * Receives requests from Stripe.
@@ -236,7 +238,7 @@ paymentsRouter.post(
 /**
  * Summarize the payment method details and get invoice.
  */
-paymentsRouter.post("/summarize", async (req, res) => {
+paymentsRouter.post("/summarize", isAuthenticated, async (req, res) => {
   const invoiceId = req.body.invoiceId;
   // Check validity of invoiceId
   if (!isValidArgument(invoiceId, "string"))

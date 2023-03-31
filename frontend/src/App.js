@@ -8,7 +8,6 @@ import {
   createRoutesFromChildren,
   matchRoutes,
 } from "react-router-dom";
-// import { Route, Routes } from "react-router-dom";
 import module from "./ApiService";
 // Sentry API
 import * as Sentry from "@sentry/react";
@@ -17,6 +16,7 @@ import { BrowserTracing } from "@sentry/tracing";
 import NavBar from "./Components/NavBar/NavBar";
 import HomePage from "./Components/HomePage/HomePage";
 import CreditPage from "./Components/CreditPage/CreditPage";
+import NewCreator from "./Components/UserPage/NewCreator";
 import CreatorPage from "./Components/CreatorPage/CreatorPage";
 import StreamingListPage from "./Components/StreamingPage/StreamingListPage";
 import ReadyPage from "./Components/StreamingPage/ReadyPage";
@@ -25,6 +25,10 @@ import PurchasePage from "./Components/PurchasePage/PurchasePage";
 import ConfirmPage from "./Components/PurchasePage/ConfirmPage";
 import LoginPage from "./Components/LoginPage/LoginPage";
 import RegisterPage from "./Components/LoginPage/RegisterPage";
+import AllCreators from "./Components/HomePage/AllCreators";
+import AllStreams from "./Components/HomePage/AllStreams";
+import AllPosted from "./Components/HomePage/AllPosted";
+import UserPage from "./Components/UserPage/UserPage";
 // Style
 import "./App.css";
 import "./Components/cols.css";
@@ -41,6 +45,7 @@ Sentry.init({
         createRoutesFromChildren,
         matchRoutes
       ),
+      tracePropagationTargets: [],
     }),
   ],
   tracesSampleRate: 1.0,
@@ -50,35 +55,49 @@ const SentryRoutes = Sentry.withSentryReactRouterV6Routing(Routes);
 
 function App() {
   const [UserId, setUserId] = useState("");
-  const [IsCreator, setIsCreator] = useState(false);
+  const [CreatorId, setCreatorId] = useState(null);
 
   useEffect(() => {
-    // Get user id
     module.getUserId().then((res) => {
       if (res.data.user === undefined) return;
+      // If the user is authenticated
       setUserId(res.data.user.id);
-      // TODO: Change after creator field is created in User
-      setIsCreator(res.data.user.id === 1);
+      // If the user is creator
+      module
+        .getCreatorByUserId(res.data.user.id)
+        .then((res) => {
+          if (res.error) return console.log(res.error);
+          console.log(res.data);
+          if (res.data.creator?.id) setCreatorId(res.data.creator.id);
+        })
+        .catch((e) => console.log(e));
     });
   }, []);
 
   return (
     <div className="App">
-      <NavBar />
+      <NavBar userId={UserId} />
       <SentryRoutes>
         <Route path="/" element={<HomePage />} />
         <Route path="/signin" element={<LoginPage />} />
         <Route path="/signup" element={<RegisterPage />} />
         <Route path="/credits" element={<CreditPage />} />
-        <Route path="/creators" element={<CreatorPage />} />
+        <Route path="/becomecreator" element={<NewCreator />} />
+        {/* <Route path="/creators/:creatorId" element={<CreatorPage />} /> */}
+        <Route path="/creators/:creatorId" element={<CreatorPage />} />
+        <Route path="/purchase/:creatorId" element={<PurchasePage />} />
+        <Route path="/purchase/confirm" element={<ConfirmPage />} />
         <Route path="/streaming" element={<StreamingListPage />} />
+        <Route path="/allcreators" element={<AllCreators />} />
+        <Route path="/allstreams" element={<AllStreams />} />
+        <Route path="/allposted" element={<AllPosted />} />
         {/* TODO */}
         {/* <Route path="/streaming/replay" element={<StreamingListPage />} /> */}
         <Route
           path="/streaming/:creatorId"
           element={
             UserId !== "" ? (
-              IsCreator ? (
+              CreatorId ? (
                 <ReadyPage />
               ) : (
                 <StreamingPage />
@@ -88,8 +107,7 @@ function App() {
             )
           }
         />
-        <Route path="/purchase/:creatorId" element={<PurchasePage />} />
-        <Route path="/purchase/confirm" element={<ConfirmPage />} />
+        <Route path="/mypage" element={<UserPage />} />
       </SentryRoutes>
     </div>
   );

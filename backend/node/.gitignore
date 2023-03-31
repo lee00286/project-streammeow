@@ -5,6 +5,7 @@ Thumbs.db
 # node.js
 node_modules
 uploads
+user_picture
 *.sqlite
 
 # dotenv environment variable files

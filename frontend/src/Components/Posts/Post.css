@@ -1,0 +1,77 @@
+.post {
+  margin: 0;
+  /* TODO: card appearance */
+  background-color: var(--yellow1);
+  width: 100%;
+  /* TODO refactor into a preview class */
+  min-height: 400px;
+  padding: 15px;
+  text-align: left;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.post * {
+  margin: 0;
+}
+
+.post-header {
+  margin-bottom: 2em;
+  width: 100%;
+}
+
+.post-content {
+  width: 100%;
+}
+
+/* TODO: deal with very long description overlapping */
+.post-footer {
+  display: block;
+  position: absolute;
+  bottom: 15px;
+  width: 94%;
+  font-size: 1.25em;
+}
+
+.post-footer-left {
+  float: left;
+}
+
+.post-footer-right {
+  float: right;
+  display: flex;
+  column-gap: 10px;
+  align-items: center;
+}
+
+.post-title {
+  font-weight: bold;
+  font-size: 2em;
+}
+
+.post-button {
+  border: none;
+  border-radius: 50%;
+  background: none;
+  height: 2em;
+  width: 2em;
+}
+
+.post-button:hover {
+  background-color: var(--yellow2);
+}
+
+.post-locked-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin: auto;
+}
+
+.lock {
+  height: 6em;
+  width: 6em;
+}

@@ -1,4 +1,5 @@
 import React from "react";
+import "./texts.css";
 
 /**
  * Page subtitle component for the page.

@@ -38,7 +38,9 @@ module.getAllMemberships = (creatorId) => {
  */
 module.getMembershipById = (membershipId) => {
   // Get a membership using membershipId
-  return axios.get(`/api/memberships/${membershipId}`);
+  return axios
+    .get(`/api/memberships/${membershipId}`)
+    .then((res) => JSON.stringify(res.data));
 };
 
 /**
@@ -48,6 +50,22 @@ module.getMembershipById = (membershipId) => {
  */
 module.updateMembership = (membershipId, variables) => {
   return axios.patch(`/api/memberships/${membershipId}`, variables);
+};
+
+/**
+ * Subscribe the membership.
+ * @param {integer} membershipId: id of the membership
+ */
+module.membershipSubscribe = (membershipId) => {
+  return axios.patch(`/api/memberships/subscribe`, { membershipId });
+};
+
+/**
+ * Unsubscribe the membership.
+ * @param {integer} membershipId: id of the membership
+ */
+module.membershipUnsubscribe = (membershipId) => {
+  return axios.patch(`/api/memberships/unsubscribe`, { membershipId });
 };
 
 /**
@@ -103,9 +121,13 @@ module.deletePrice = (priceId) => {
 /**
  * Create a checkout session.
  * @param {string} priceId: id of the price to checkout
+ * @param {string} membershipId: id of the membership
  */
-module.addCheckoutSession = (priceId) => {
-  return axios.post("/api/payments/checkout-session", { priceId });
+module.addCheckoutSession = (priceId, membershipId) => {
+  return axios.post("/api/payments/checkout-session", {
+    priceId,
+    membershipId,
+  });
 };
 
 /**
@@ -162,7 +184,7 @@ module.UserLogin = (email, password) => {
  * User logout.
  */
 module.UserLogout = () => {
-  return axios.get("/api/users/logout");
+  return axios.post("/api/users/logout");
 };
 
 /**
@@ -179,6 +201,79 @@ module.getUserId = () => {
 module.getUserById = (userId) => {
   // Get a userId using userId
   return axios.get(`/api/users/${userId}`);
+};
+
+module.getUserPicture = (userId) => {
+  return axios.get(`/api/users/${userId}/picture`);
+};
+
+/**
+ * Update user information.
+ * @param {string} userId: id of the user
+ * @param {Object} variables: attributes to update
+ */
+module.updateUser = (userId, variables) => {
+  // Get a userId using userId
+  return axios.patch(`/api/users/${userId}`, variables);
+};
+
+/**
+ * Subscribe the membership.
+ * @param {integer} membershipId: id of the membership
+ * @param {} date: date of payment
+ */
+module.userSubscribe = (membershipId, date) => {
+  return axios.patch(`/api/users/subscribe`, { membershipId, date });
+};
+
+/**
+ * Unsubscribe the membership.
+ * @param {integer} membershipId: id of the membership
+ */
+module.userUnsubscribe = (membershipId) => {
+  return axios.patch(`/api/users/unsubscribe`, { membershipId });
+};
+
+/**
+ * Create a new creator to DB.
+ */
+module.addCreator = () => {
+  return axios.post("/api/creators/", {});
+};
+
+/**
+ * Retrieve all existing creators from DB.
+ */
+module.getAllCreators = () => {
+  return axios.get("/api/creators");
+};
+
+/**
+ * Retrieve a creator from DB using userId.
+ * @param {string} userId: id of the user
+ */
+module.getCreatorByUserId = (userId) => {
+  // Get a creator using userId
+  return axios.get(`/api/creators/${userId}`);
+};
+
+/**
+ * Update attributes in creator.
+ * @param {string} creatorId: id of the creator
+ * @param {Object} variables: attributes to update
+ */
+module.updateCreator = (creatorId, formData) => {
+  return axios.patch(`/api/creators/${creatorId}`, formData, {
+    headers: { "Content-Type": "multipart/form-data" },
+  });
+};
+
+/**
+ * Delete a creator from DB.
+ * @param {string} creatorId: id of the creator
+ */
+module.deleteCreator = (creatorId) => {
+  return axios.delete(`/api/creators/${creatorId}`);
 };
 
 /**

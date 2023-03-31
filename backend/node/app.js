@@ -11,6 +11,7 @@ import { paymentsRouter } from "./routers/payments_router.js";
 import { membershipsRouter } from "./routers/memberships_router.js";
 import { pricesRouter } from "./routers/prices_router.js";
 import { usersRouter } from "./routers/users_router.js";
+import { creatorsRouter } from "./routers/creators_router.js";
 import { streamingsRouter } from "./routers/streamings_router.js";
 
 export const app = express();
@@ -70,6 +71,7 @@ app.use("/api/payments", paymentsRouter);
 app.use("/api/memberships", membershipsRouter);
 app.use("/api/prices", pricesRouter);
 app.use("/api/users", usersRouter);
+app.use("/api/creators", creatorsRouter);
 app.use("/api/streamings", streamingsRouter);
 
 const HOST = process.env.HOST || "localhost";
