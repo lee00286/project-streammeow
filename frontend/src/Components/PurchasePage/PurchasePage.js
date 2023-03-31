@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import module from "../../ApiService";
 // Components
 import PageTitle from "../Texts/PageTitle";
@@ -24,8 +24,6 @@ function SubscriptionDetail(props) {
   const [Membership, setMembership] = useState(null);
 
   useEffect(() => {
-    console.log(props);
-    console.log("??");
     if (!props) return;
     const membership = {
       name: props.name,
@@ -142,6 +140,7 @@ function Subscription({ membership, isSelected, onSelect }) {
  */
 function PurchasePage({ plan }) {
   const { creatorId } = useParams();
+  const navigate = useNavigate();
   const location = useLocation();
 
   const [Memberships, setMemberships] = useState([]);
@@ -149,6 +148,23 @@ function PurchasePage({ plan }) {
   const [BuyList, setBuyList] = useState(null);
   const [PriceId, setPriceId] = useState(null);
   const [IsChecked, setIsChecked] = useState(false);
+
+  /* Navigate to creator's page if current user is creator */
+  useEffect(() => {
+    if (!creatorId) return;
+    module.getUserId().then((res) => {
+      if (res.data.user === undefined) return;
+      // If the user is creator
+      module
+        .getCreatorByUserId(res.data.user.id)
+        .then((res) => {
+          if (res.error) return console.log(res.error);
+          if (res.data.creator && `${res.data.creator.id}` === creatorId)
+            navigate("/");
+        })
+        .catch((e) => console.log(e));
+    });
+  }, [creatorId]);
 
   /* Get memberships of the creator */
   useEffect(() => {

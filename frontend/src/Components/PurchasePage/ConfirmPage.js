@@ -76,6 +76,10 @@ function ConfirmPage() {
             setInvoice(res.data);
           })
           .catch((e) => console.log(e));
+      })
+      .then(() => {
+        // console.log(query.get("membership"));
+        module.subscribe(query.get("membership"));
       });
   }, []);
 

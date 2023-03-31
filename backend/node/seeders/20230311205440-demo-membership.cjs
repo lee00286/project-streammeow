@@ -26,6 +26,7 @@ module.exports = {
         name: "User 1",
         email: "user1@gmail.com",
         password: generatePassword("user1"),
+        subscription: [-1],
         createdAt: new Date(),
         updatedAt: new Date(),
       },
@@ -33,6 +34,7 @@ module.exports = {
         name: "User 2",
         email: "user2@gmail.com",
         password: generatePassword("user2"),
+        subscription: [-1],
         createdAt: new Date(),
         updatedAt: new Date(),
       },
@@ -40,18 +42,19 @@ module.exports = {
         name: "User 3",
         email: "user3@gmail.com",
         password: generatePassword("user3"),
+        subscription: [-1],
         createdAt: new Date(),
         updatedAt: new Date(),
       },
     ]);
-    // const users = await queryInterface.sequelize.query(
-    //   `SELECT id from COURSES;`
-    // );
+    const users = await queryInterface.sequelize.query(
+      `SELECT id from "Users";`
+    );
     await queryInterface.bulkInsert("Creators", [
       {
         createdAt: new Date(),
         updatedAt: new Date(),
-        userId: 1,
+        userId: users[0][0].id,
       },
     ]);
     return queryInterface.bulkInsert("Memberships", [

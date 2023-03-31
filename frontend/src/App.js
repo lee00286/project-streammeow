@@ -79,7 +79,10 @@ function App() {
         <Route path="/signup" element={<RegisterPage />} />
         <Route path="/credits" element={<CreditPage />} />
         <Route path="/becomecreator" element={<NewCreator />} />
-        <Route path="/creators" element={<CreatorPage />} />
+        {/* <Route path="/creators/:creatorId" element={<CreatorPage />} /> */}
+        <Route path="/memberships/:creatorId" element={<CreatorPage />} />
+        <Route path="/purchase/:creatorId" element={<PurchasePage />} />
+        <Route path="/purchase/confirm" element={<ConfirmPage />} />
         <Route path="/streaming" element={<StreamingListPage />} />
         {/* TODO */}
         {/* <Route path="/streaming/replay" element={<StreamingListPage />} /> */}
@@ -97,8 +100,6 @@ function App() {
             )
           }
         />
-        <Route path="/purchase/:creatorId" element={<PurchasePage />} />
-        <Route path="/purchase/confirm" element={<ConfirmPage />} />
         <Route path="/mypage" element={<UserPage />} />
       </SentryRoutes>
     </div>

@@ -103,9 +103,13 @@ module.deletePrice = (priceId) => {
 /**
  * Create a checkout session.
  * @param {string} priceId: id of the price to checkout
+ * @param {string} membershipId: id of the membership
  */
-module.addCheckoutSession = (priceId) => {
-  return axios.post("/api/payments/checkout-session", { priceId });
+module.addCheckoutSession = (priceId, membershipId) => {
+  return axios.post("/api/payments/checkout-session", {
+    priceId,
+    membershipId,
+  });
 };
 
 /**
@@ -189,6 +193,22 @@ module.getUserById = (userId) => {
 module.updateUser = (userId, variables) => {
   // Get a userId using userId
   return axios.patch(`/api/users/${userId}`, variables);
+};
+
+/**
+ * Subscribe the membership.
+ * @param {integer} membershipId: id of the membership
+ */
+module.subscribe = (membershipId) => {
+  return axios.patch(`/api/users/subscribe`, { membershipId });
+};
+
+/**
+ * Unsubscribe the membership.
+ * @param {integer} membershipId: id of the membership
+ */
+module.unsubscribe = (membershipId) => {
+  return axios.patch(`/api/users/unsubscribe`, { membershipId });
 };
 
 /**

@@ -73,7 +73,7 @@ function SubscribeButton(props) {
 
     // Create a checkout-session using priceId
     module
-      .addCheckoutSession(PriceId)
+      .addCheckoutSession(PriceId, props.membershipId)
       .then((res) => {
         if (res.error) return console.log(res.error);
         // Payment (replace with my own payment page)

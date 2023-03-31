@@ -188,6 +188,11 @@ export const creditList = [
         siteName: "Sequelize.org",
         link: "https://sequelize.org/docs/v6/core-concepts/assocs/",
       },
+      {
+        name: "Array Functions and Operators",
+        siteName: "Postgresql.org",
+        link: "https://www.postgresql.org/docs/9.1/functions-array.html",
+      },
     ],
   },
   {

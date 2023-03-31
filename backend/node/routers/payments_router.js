@@ -113,11 +113,8 @@ paymentsRouter.post("/checkout-session", async (req, res) => {
           quantity: 1,
         },
       ],
-      // metadata: { user_id: req.body.userId },
-      // subscription_data: {
-      //   metadata: { user_id: current_user.id },
-      // },
-      success_url: `http://${CLIENT_HOST}/purchase/confirm?success=true&session_id={CHECKOUT_SESSION_ID}`,
+      metadata: { membership_id: req.body.membershipId },
+      success_url: `http://${CLIENT_HOST}/purchase/confirm?success=true&session_id={CHECKOUT_SESSION_ID}&membership=${req.body.membershipId}`,
       cancel_url: `http://${CLIENT_HOST}/purchase/confirm?canceled=true`,
     });
     return res.status(200).json({ url: session.url });
