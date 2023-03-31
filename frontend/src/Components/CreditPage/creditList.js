@@ -83,6 +83,11 @@ export const creditList = [
         siteName: "Stackoverflow",
         link: "https://stackoverflow.com/questions/68932621/put-a-warning-if-page-refresh-in-reactjs",
       },
+      {
+        name: "Node req.session.destroy(), req.logout(), and res.clearCookie()",
+        siteName: "Stackoverflow",
+        link: "https://stackoverflow.com/questions/50454992/req-session-destroy-and-passport-logout-arent-destroying-cookie-on-client-side",
+      },
     ],
   },
   {
@@ -177,6 +182,11 @@ export const creditList = [
         name: "Use environment variable for local sequelize configuration",
         siteName: "Stackoverflow",
         link: "https://stackoverflow.com/questions/38757728/using-an-enviroment-variable-for-local-sequelize-configuration",
+      },
+      {
+        name: "Association call options",
+        siteName: "Sequelize.org",
+        link: "https://sequelize.org/docs/v6/core-concepts/assocs/",
       },
     ],
   },
@@ -305,6 +315,11 @@ export const creditList = [
         name: "Password icons created by th studio - Flaticon",
         siteName: "Flaticon",
         link: "https://www.flaticon.com/free-icons/password",
+      },
+      {
+        name: "User Icon",
+        siteName: "Iconfinder",
+        link: "https://www.iconfinder.com/icons/8665306/circle_user_icon",
       },
     ],
   },

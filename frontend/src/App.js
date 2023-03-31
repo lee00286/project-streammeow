@@ -8,7 +8,6 @@ import {
   createRoutesFromChildren,
   matchRoutes,
 } from "react-router-dom";
-// import { Route, Routes } from "react-router-dom";
 import module from "./ApiService";
 // Sentry API
 import * as Sentry from "@sentry/react";
@@ -17,6 +16,7 @@ import { BrowserTracing } from "@sentry/tracing";
 import NavBar from "./Components/NavBar/NavBar";
 import HomePage from "./Components/HomePage/HomePage";
 import CreditPage from "./Components/CreditPage/CreditPage";
+import NewCreator from "./Components/UserPage/NewCreator";
 import CreatorPage from "./Components/CreatorPage/CreatorPage";
 import StreamingListPage from "./Components/StreamingPage/StreamingListPage";
 import ReadyPage from "./Components/StreamingPage/ReadyPage";
@@ -25,6 +25,7 @@ import PurchasePage from "./Components/PurchasePage/PurchasePage";
 import ConfirmPage from "./Components/PurchasePage/ConfirmPage";
 import LoginPage from "./Components/LoginPage/LoginPage";
 import RegisterPage from "./Components/LoginPage/RegisterPage";
+import UserPage from "./Components/UserPage/UserPage";
 // Style
 import "./App.css";
 import "./Components/cols.css";
@@ -53,23 +54,31 @@ function App() {
   const [IsCreator, setIsCreator] = useState(false);
 
   useEffect(() => {
-    // Get user id
     module.getUserId().then((res) => {
       if (res.data.user === undefined) return;
+      // If the user is authenticated
       setUserId(res.data.user.id);
-      // TODO: Change after creator field is created in User
-      setIsCreator(res.data.user.id === 1);
+      // If the user is creator
+      module
+        .getCreatorByUserId(res.data.user.id)
+        .then((res) => {
+          if (res.error) return console.log(res.error);
+          console.log(res.data);
+          setIsCreator(res.data.creator && res.data.creator.id);
+        })
+        .catch((e) => console.log(e));
     });
   }, []);
 
   return (
     <div className="App">
-      <NavBar />
+      <NavBar userId={UserId} />
       <SentryRoutes>
         <Route path="/" element={<HomePage />} />
         <Route path="/signin" element={<LoginPage />} />
         <Route path="/signup" element={<RegisterPage />} />
         <Route path="/credits" element={<CreditPage />} />
+        <Route path="/becomecreator" element={<NewCreator />} />
         <Route path="/creators" element={<CreatorPage />} />
         <Route path="/streaming" element={<StreamingListPage />} />
         {/* TODO */}
@@ -90,6 +99,7 @@ function App() {
         />
         <Route path="/purchase/:creatorId" element={<PurchasePage />} />
         <Route path="/purchase/confirm" element={<ConfirmPage />} />
+        <Route path="/mypage" element={<UserPage />} />
       </SentryRoutes>
     </div>
   );

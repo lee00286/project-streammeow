@@ -1,7 +1,7 @@
 import { sequelize } from "../datasource.js";
 import { DataTypes } from "sequelize";
-// import { User } from "./users.js";
-// import { Creator } from "./users.js"; (IS-A relationship from User?)
+import { User } from "./users.js";
+import { Creators } from "./creators.js";
 
 export const Memberships = sequelize.define("Memberships", {
   name: {
@@ -39,30 +39,15 @@ export const Memberships = sequelize.define("Memberships", {
     type: DataTypes.DATE,
     allowNull: true,
   },
-  // TODO: change this to foreign key after implementing User model
-  creatorId: {
-    type: DataTypes.STRING,
-    allowNull: false,
+  subscribers: {
+    type: DataTypes.ARRAY(DataTypes.INTEGER),
+    allowNull: true,
   },
-  // creatorId: {
-  //   type: DataTypes.STRING,
-  //   references: {
-  //     model: "Creator",
-  //     key: "id",
-  //   },
-  //   allowNull: false, // TODO: consider what if creator deletes acocunt
-  // },
-  // subscribers: {
-  //   type: DataTypes.ARRAY(DataTypes.STRING),
-  //   references: {
-  //     model: "User",
-  //     key: "id",
-  //   },
-  //   allowNull: true,
-  // },
 });
 
-// Memberships.belongsTo(User);
-// User.hasMany(Memberships);
-// Memberships.belongsTo(Creator);
-// Creator.hasMany(Memberships);
+Memberships.belongsTo(Creators, {
+  foreignKey: {
+    name: "creatorId",
+  },
+});
+Creators.hasMany(Memberships);
