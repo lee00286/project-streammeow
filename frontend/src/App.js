@@ -16,6 +16,7 @@ import { BrowserTracing } from "@sentry/tracing";
 import NavBar from "./Components/NavBar/NavBar";
 import HomePage from "./Components/HomePage/HomePage";
 import CreditPage from "./Components/CreditPage/CreditPage";
+import NewCreator from "./Components/UserPage/NewCreator";
 import CreatorPage from "./Components/CreatorPage/CreatorPage";
 import StreamingListPage from "./Components/StreamingPage/StreamingListPage";
 import ReadyPage from "./Components/StreamingPage/ReadyPage";
@@ -77,6 +78,7 @@ function App() {
         <Route path="/signin" element={<LoginPage />} />
         <Route path="/signup" element={<RegisterPage />} />
         <Route path="/credits" element={<CreditPage />} />
+        <Route path="/becomecreator" element={<NewCreator />} />
         <Route path="/creators" element={<CreatorPage />} />
         <Route path="/streaming" element={<StreamingListPage />} />
         {/* TODO */}
