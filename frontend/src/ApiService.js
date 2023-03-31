@@ -182,6 +182,10 @@ module.getUserById = (userId) => {
   return axios.get(`/api/users/${userId}`);
 };
 
+module.getUserPicture = (userId) => {
+  return axios.get(`/api/users/${userId}/picture`);
+};
+
 /**
  * Update user information.
  * @param {string} userId: id of the user
@@ -220,8 +224,10 @@ module.getCreatorByUserId = (userId) => {
  * @param {string} creatorId: id of the creator
  * @param {Object} variables: attributes to update
  */
-module.updateCreator = (creatorId, variables) => {
-  return axios.patch(`/api/creators/${creatorId}`, variables);
+module.updateCreator = (creatorId, formData) => {
+  return axios.patch(`/api/creators/${creatorId}`, formData, {
+    headers: { "Content-Type": "multipart/form-data" },
+  });
 };
 
 /**

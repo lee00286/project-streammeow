@@ -4,9 +4,13 @@ import { User } from "../models/users.js";
 import { isAuthenticated, isNotAuthenticated } from "../middleware/auth.js";
 import bcrypt from "bcryptjs";
 import Sentry from "@sentry/node";
+import multer from "multer";
+import path from "path";
+import fs from "fs";
 
 export const usersRouter = Router();
 export const user_bcrypt = bcrypt;
+const upload = multer({ dest: "user_picture/" });
 
 usersRouter.post("/signup", isNotAuthenticated, async (req, res) => {
   const saltRounds = 10;
@@ -91,32 +95,60 @@ usersRouter.get("/:userId/", isAuthenticated, async (req, res) => {
   }
 });
 
+usersRouter.get("/:userId/picture", async (req, res) => {
+  let userId = req.params.userId;
+  const user = await User.findByPk(userId);
+  if (user.picture) {
+    res.setHeader("Content-Type", user.picture.mimetype);
+    res.sendFile(user.picture.path, { root: path.resolve() });
+  } else {
+    res
+      .status(404)
+      .json({ error: req.params.userId + "User picture not found" });
+  }
+});
+
 /**
  * Update user information.
  * */
-usersRouter.patch("/:userId/", isAuthenticated, async (req, res) => {
-  const userId = req.params.userId;
-  const variables = req.body;
-  // Check validity of arguments
-  if (
-    !isValidArgument(userId, "string") ||
-    !isValidArgument(variables, "object")
-  )
-    return res.status(422).json({ error: "Invalid arguments." });
-  try {
-    // Update a membership
-    const user = await User.update(variables, {
-      where: { id: userId },
-    });
-    // If user doesn't exist
-    if (!user)
-      return res
-        .status(404)
-        .json({ error: `User(id=${userId}) doesn't exist.` });
-    return res.status(200).json({ user });
-  } catch (e) {
-    const errorMsg = "Failed to update user information.";
-    console.log(errorMsg);
-    Sentry.captureException(e);
+usersRouter.patch(
+  "/:userId/",
+  upload.single("picture"),
+  isAuthenticated,
+  async (req, res) => {
+    const userId = req.params.userId;
+    const variables = req.body;
+    const image = req.file;
+    // Check validity of arguments
+    if (
+      !isValidArgument(userId, "string") ||
+      !isValidArgument(variables, "object") ||
+      !isValidArgument(image, "object")
+    )
+      return res.status(422).json({ error: "Invalid arguments." });
+    try {
+      // Update a membership
+      const user = await User.update(variables, {
+        where: { id: userId },
+      });
+      if (image) {
+        const user = await User.update(
+          { picture: image },
+          {
+            where: { id: userId },
+          }
+        );
+      }
+      // If user doesn't exist
+      if (!user)
+        return res
+          .status(404)
+          .json({ error: `User(id=${userId}) doesn't exist.` });
+      return res.status(200).json({ user });
+    } catch (e) {
+      const errorMsg = "Failed to update user information.";
+      console.log(errorMsg);
+      Sentry.captureException(e);
+    }
   }
-});
+);
