@@ -43,6 +43,13 @@ module.exports = {
         createdAt: new Date(),
         updatedAt: new Date(),
       },
+      {
+        name: "User 4",
+        email: "user4@gmail.com",
+        password: generatePassword("user4"),
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
     ]);
     const users = await queryInterface.sequelize.query(
       `SELECT id from "Users";`
@@ -52,6 +59,13 @@ module.exports = {
         createdAt: new Date(),
         updatedAt: new Date(),
         userId: users[0][0].id,
+      },
+    ]);
+    await queryInterface.bulkInsert("Creators", [
+      {
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        userId: users[0][1].id,
       },
     ]);
     return queryInterface.bulkInsert("Memberships", [
@@ -74,6 +88,16 @@ module.exports = {
         createdAt: new Date(),
         updatedAt: new Date(),
         creatorId: 1,
+      },
+      {
+        name: "Master",
+        description: "Master membership",
+        benefits: ["Benefit 1", "Benefit 2", "Benefit 3"],
+        currency: "cad",
+        price: 7.99,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        creatorId: 2,
       },
     ]);
   },

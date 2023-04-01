@@ -31,7 +31,6 @@ function CreatorsTab({ creator }) {
       .then((res) => {
         if (res.error) return console.log(res.error);
         const memberships = res.data.memberships;
-        console.log(memberships);
         let data = [];
         // Set up membership data
         for (let i = 0; i < memberships.length; i++) {
@@ -132,6 +131,7 @@ function UserHistoryTab() {
       })
       .then((subscription) => {
         const subscriptionList = [];
+        if (!subscription || subscription === []) return;
         for (let i = 0; i < subscription.length; i++) {
           const splittedText = subscription[i].split("+");
           subscriptionList.push({
@@ -153,17 +153,14 @@ function UserHistoryTab() {
           //   };
           //   subscriptionList.push(variables);
           // }).catch((e) => console.log(e));
-          // console.log(detail);
         }
         setSubscription(subscriptionList);
-        console.log(subscriptionList);
       });
   }, []);
 
   const subscriptions =
     Subscription && Subscription.length > 0 ? (
       Subscription.map((subscription, index) => {
-        console.log(subscription);
         return (
           <div key={`subscribing-${index}`} className="history-subscript row">
             <div>{calculations.convertDate(parseInt(subscription.date))}</div>
@@ -202,6 +199,7 @@ function UserInfoTab() {
   // Modify
   const [ModifyName, setModifyName] = useState(null);
   const [ModifyEmail, setModifyEmail] = useState(null);
+  const [ModifyPicture, setModifyPicture] = useState(null);
 
   // Get user information
   useEffect(() => {
@@ -210,6 +208,11 @@ function UserInfoTab() {
       if (res.error) return console.log(res.error);
       if (!res.data.user) return console.log("Failed to load user data");
       setUserInfo(res.data.user);
+      module.getUserPicture(res.data.user.id).then((res) => {
+        if (res.error) return console.log(res.error);
+        if (!res.data) return console.log("Failed to load user picture");
+        setModifyPicture(res.data);
+      });
     });
   }, [IsModify]);
 
@@ -229,21 +232,20 @@ function UserInfoTab() {
   const onModifyUser = () => {
     if (!UserInfo) return;
     // Variables to modify
-    const variables = {
-      name: ModifyName,
-      email: ModifyEmail,
-    };
+    const formData = new FormData();
+    formData.append("name", ModifyName);
+    formData.append("email", ModifyEmail);
+    formData.append("picture", ModifyPicture);
+    console.log(formData);
     // Modify user information
     module
-      .updateUser(UserInfo.id, variables)
+      .updateUser(UserInfo.id, formData)
       .then((res) => {
         if (res.error) return console.log(res.error);
         // Remove modifying forms
         setIsModify(false);
       })
-      .catch((e) => {
-        console.log(e);
-      });
+      .catch((e) => console.log(e));
   };
 
   const onChangePassword = () => {
@@ -266,6 +268,12 @@ function UserInfoTab() {
           <input
             value={ModifyEmail ?? ""}
             onChange={(e) => setModifyEmail(e.target.value)}
+          />
+          <p className="info-title">Picture</p>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={(e) => setModifyPicture(e.target.files[0])}
           />
           <p className="info-title">Date Registered</p>
           <p className="info-detail">
@@ -312,6 +320,12 @@ function UserInfoTab() {
           <p className="info-detail">{UserInfo.name ?? "N/A"}</p>
           <p className="info-title">Email</p>
           <p className="info-detail">{UserInfo.email ?? "N/A"}</p>
+          <p className="info-title">Picture</p>
+          <img
+            className="info-detail"
+            src={`api/users/${UserInfo.id}/picture`}
+            alt="N/A"
+          />
           <p className="info-title">Date Registered</p>
           <p className="info-detail">
             {UserInfo.createdAt

@@ -96,6 +96,7 @@ function ReadyPage() {
   const [Permission, setPermission] = useState([]);
   const [MembershipList, setMembershipList] = useState(["Everyone"]);
   // Video Streaming
+  const [ScreenCapture, setScreenCapture] = useState(false);
   const [GSD, setGSD] = useState("");
   const [SendGSD, setSendGSD] = useState("");
   const [StartVideo, setStartVideo] = useState(false);
@@ -150,7 +151,7 @@ function ReadyPage() {
       if (res.error) return console.log(res.error);
       setMembershipList(res.data.memberships);
     });
-  }, []);
+  }, [creatorId]);
 
   // Save streaming title
   const onTitle = (title) => {
@@ -183,6 +184,12 @@ function ReadyPage() {
     setStartVideo(true);
   };
 
+  // Start screen capturing
+  const onStartScreenCapture = () => {
+    setStartVideo(true);
+    setScreenCapture(true);
+  };
+
   // Start streaming
   const onStartStreaming = () => {
     // Save streaming information to database
@@ -201,6 +208,7 @@ function ReadyPage() {
       <div className="stream-top row">
         <StreamVideo
           isCreator={true}
+          isScreenCapture={ScreenCapture}
           hasStartVideo={StartVideo}
           hasStartSession={StartSession}
           gsd={SendGSD}
@@ -219,6 +227,13 @@ function ReadyPage() {
           textColor="var(--yellow4)"
           buttonColor="#fff"
           buttonFunction={onStartVideo}
+          border="1px solid var(--yellow4)"
+        />
+        <ColorButton
+          text="Start Screen Capture"
+          textColor="var(--yellow4)"
+          buttonColor="#fff"
+          buttonFunction={onStartScreenCapture}
           border="1px solid var(--yellow4)"
         />
         <ColorButton

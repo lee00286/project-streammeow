@@ -15,6 +15,7 @@ function NavBar({ userId }) {
   const navigate = useNavigate();
 
   const [UserId, setUserId] = useState("");
+  const [CreatorId, setCreatorId] = useState("");
   const [IsCreator, setIsCreator] = useState(false);
   const [UserHover, setUserHover] = useState(false);
 
@@ -29,6 +30,7 @@ function NavBar({ userId }) {
         .then((res) => {
           if (res.error) return console.log(res.error);
           setIsCreator(res.data.creator && res.data.creator.id);
+          if (res.data.creator) setCreatorId(res.data.creator.id);
         })
         .catch((e) => console.log(e));
     });
@@ -80,6 +82,10 @@ function NavBar({ userId }) {
   // Navigate to mypage (user page)
   const onMyPage = () => {
     navigate("/mypage");
+  };
+
+  const onCreatorPage = () => {
+    navigate(`/creators/${CreatorId}`);
   };
 
   // Become the creator and navigate to creator's page
@@ -135,7 +141,11 @@ function NavBar({ userId }) {
             onMouseLeave={() => setUserHover(false)}
             className="nav-user-menu row"
           >
-            <img src="/icons/user.png" className="user-icon" />
+            <img
+              src={`/api/users/${UserId}/picture`}
+              alt="/icons/user.png"
+              className="user-icon"
+            />
           </div>
         </div>
       ) : (
@@ -164,6 +174,11 @@ function NavBar({ userId }) {
           <div className="submenu-button" onClick={onMyPage}>
             My Page
           </div>
+          {IsCreator && CreatorId && (
+            <div className="submenu-button" onClick={onCreatorPage}>
+              Creator's Page
+            </div>
+          )}
           <div className="submenu-button" onClick={onSignOut}>
             Sign Out
           </div>

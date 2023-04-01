@@ -11,7 +11,8 @@ import (
 
 	"github.com/pion/rtcp"
 	"github.com/pion/webrtc/v3"
-	"webrtc/examples/signal"
+	// "webrtc/examples/signal"
+	"github.com/pion/webrtc/v3/examples/internal/signal"
 )
 
 const (
