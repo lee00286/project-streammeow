@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import "./LoginPage.css";
 import SigninWith from "./SigninWith";
 import LoginForm from "./LoginForm";
@@ -7,7 +8,14 @@ import { useState } from "react";
 
 function RegisterPage() {
   const navigate = useNavigate();
-  const [alert, setAlert] = useState("");
+
+  useEffect(() => {
+    // Redirect to home if user is already logged in
+    module.getUserId().then((res) => {
+      if (res.data.user === undefined) return;
+      navigate("/");
+    });
+  }, []);
 
   const register = (email, password) => {
     if (!email || !password) {
@@ -18,7 +26,7 @@ function RegisterPage() {
     module.UserRegister(email, password).then((res) => {
       if (res.data.user) {
         console.log(res.user);
-        navigate("/");
+        navigate("/signin");
       } else {
         console.log(res.err);
       }

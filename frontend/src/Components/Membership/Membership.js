@@ -11,7 +11,7 @@ import "./Membership.css";
  * @param {string} price membership price, for example "2.99"
  * @param {string} description membership description
  * @param {string[]} benefits list of membership benefits
- * @param {function} onSelect callback when the Select button is pressed
+ * @param {function} onSelectMembership callback when the Select button is pressed
  * @returns
  */
 export default function Membership({
@@ -20,8 +20,12 @@ export default function Membership({
   price,
   description,
   benefits,
-  onSelect,
+  onSelectMembership,
 }) {
+  const onSelect = () => {
+    if (onSelectMembership) onSelectMembership(membershipId);
+  };
+
   return (
     <div className="membership rounded">
       <MembershipName name={name} />

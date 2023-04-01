@@ -59,6 +59,45 @@ export const creditList = [
         siteName: "Stackoverflow",
         link: "https://stackoverflow.com/questions/71679442/show-hide-multiple-password-in-react-js",
       },
+      {
+        name: "Set srcObject in React",
+        siteName: "Stackoverflow",
+        link: "https://stackoverflow.com/questions/57095478/html5-getusermedia-cannot-set-property-srcobject-of-null",
+      },
+      {
+        name: "Convert curl command to node axios",
+        link: "https://curlconverter.com/node-axios/",
+      },
+      {
+        name: "Use environment variables in React",
+        siteName: "Stackoverflow",
+        link: "https://stackoverflow.com/questions/48378337/create-react-app-not-picking-up-env-files",
+      },
+      {
+        name: "React Select dependency",
+        siteName: "React Select",
+        link: "https://react-select.com/home",
+      },
+      {
+        name: "React beforeunload event",
+        siteName: "Stackoverflow",
+        link: "https://stackoverflow.com/questions/68932621/put-a-warning-if-page-refresh-in-reactjs",
+      },
+      {
+        name: "Node req.session.destroy(), req.logout(), and res.clearCookie()",
+        siteName: "Stackoverflow",
+        link: "https://stackoverflow.com/questions/50454992/req-session-destroy-and-passport-logout-arent-destroying-cookie-on-client-side",
+      },
+    ],
+  },
+  {
+    title: "React API - Nivo",
+    credits: [
+      {
+        name: "Nivo Bar example",
+        siteName: "Nivo Official Document",
+        link: "https://nivo.rocks/bar/",
+      },
     ],
   },
   {
@@ -92,6 +131,46 @@ export const creditList = [
     ],
   },
   {
+    title: "External API - Pion WebRTC",
+    credits: [
+      {
+        name: "Pion WebRTC application - WebRTC with Broadcast example",
+        siteName: "GitHub",
+        link: "https://github.com/pion/webrtc/tree/master/examples/broadcast",
+      },
+      {
+        name: "Go HTTP Handler CORS",
+        siteName: "GitHub",
+        link: "https://github.com/pion/webrtc/issues/1149",
+      },
+      {
+        name: "Go HTTP Handler JSON response",
+        siteName: "Stackoverflow",
+        link: "https://stackoverflow.com/questions/31622052/how-to-serve-up-a-json-response-using-go",
+      },
+    ],
+  },
+  {
+    title: "External API - Sentry",
+    credits: [
+      {
+        name: "Documentation for React",
+        siteName: "Sentry Docs",
+        link: "https://docs.sentry.io/platforms/javascript/guides/react/",
+      },
+      {
+        name: "Documentation for React Router Integration",
+        siteName: "Sentry Docs",
+        link: "https://docs.sentry.io/platforms/javascript/guides/react/configuration/integrations/react-router/",
+      },
+      {
+        name: "Documentation for Node",
+        siteName: "Sentry Docs",
+        link: "https://docs.sentry.io/platforms/node/",
+      },
+    ],
+  },
+  {
     title: "Node.js Dependency - Sequelize",
     credits: [
       {
@@ -113,6 +192,89 @@ export const creditList = [
         name: "Use environment variable for local sequelize configuration",
         siteName: "Stackoverflow",
         link: "https://stackoverflow.com/questions/38757728/using-an-enviroment-variable-for-local-sequelize-configuration",
+      },
+      {
+        name: "Association call options",
+        siteName: "Sequelize.org",
+        link: "https://sequelize.org/docs/v6/core-concepts/assocs/",
+      },
+      {
+        name: "Array Functions and Operators",
+        siteName: "Postgresql.org",
+        link: "https://www.postgresql.org/docs/9.1/functions-array.html",
+      },
+    ],
+  },
+  {
+    title: "Docker",
+    credits: [
+      {
+        name: "Dockerizing a React App",
+        link: "https://mherman.org/blog/dockerizing-a-react-app/",
+      },
+      {
+        name: "Dockerizing a Node.js web app",
+        siteName: "Node.js Docs",
+        link: "https://nodejs.org/en/docs/guides/nodejs-docker-webapp/",
+      },
+      {
+        name: "Create a Dockerfile for Go image",
+        siteName: "Docker Docs",
+        link: "https://docs.docker.com/language/golang/build-images/#create-a-dockerfile-for-the-application",
+      },
+      {
+        name: "Define services in a Compose file",
+        siteName: "Docker Docs",
+        link: "https://docs.docker.com/compose/gettingstarted/#step-3-define-services-in-a-compose-file",
+      },
+      {
+        name: "Docker bcrypt error",
+        siteName: "Stackoverflow",
+        link: "https://stackoverflow.com/questions/32105251/bcrypt-invalid-elf-header-with-docker-and-sails-js",
+      },
+      {
+        name: "Docker postgres image official document",
+        siteName: "Docker Hub",
+        link: "https://hub.docker.com/_/postgres",
+      },
+      {
+        name: "Add Postgres with Docker to an existing Node.js project",
+        link: "https://geshan.com.np/blog/2021/12/docker-postgres/",
+      },
+      {
+        name: "Docker compose postgres",
+        siteName: "GitHub",
+        link: "https://github.com/docker/awesome-compose/tree/master/nginx-golang-postgres",
+      },
+      {
+        name: "pg_hba.conf entry",
+        siteName: "Stackoverflow",
+        link: "https://dba.stackexchange.com/questions/83984/connect-to-postgresql-server-fatal-no-pg-hba-conf-entry-for-host",
+      },
+      {
+        name: "PGUSER",
+        siteName: "Stackoverflow",
+        link: "https://stackoverflow.com/questions/60193781/postgres-with-docker-compose-gives-fatal-role-root-does-not-exist-error",
+      },
+      {
+        name: "PGDATA",
+        siteName: "Stackoverflow",
+        link: "https://stackoverflow.com/questions/62697071/docker-compose-postgres-upgrade-initdb-error-directory-var-lib-postgresql-da",
+      },
+      {
+        name: "Use entrypoint to run migrate and seed",
+        siteName: "Stackoverflow",
+        link: "https://stackoverflow.com/questions/60916919/docker-compose-unable-to-connect-to-mysql-app-builds-before-mysql?fbclid=IwAR2A8W0I6gSE4t8V8pYEWZgKzVAmd5fXqnOJzx5XxLKaJ4qPKzE00swo2-8",
+      },
+      {
+        name: "Docker compose Nginx React example",
+        siteName: "GitHub",
+        link: "https://github.com/docker/awesome-compose/tree/master/react-nginx",
+      },
+      {
+        name: "Docker compose Nginx Node.js example",
+        siteName: "GitHub",
+        link: "https://github.com/docker/awesome-compose/tree/master/nginx-nodejs-redis",
       },
     ],
   },
@@ -138,6 +300,11 @@ export const creditList = [
         name: "Complete Icon",
         siteName: "Iconfinder",
         link: "https://www.iconfinder.com/icons/3643781/check_checklist_complete_done_mark_icon",
+      },
+      {
+        name: "Caution Icon",
+        siteName: "Iconfinder",
+        link: "https://www.iconfinder.com/icons/3643776/caution_exclamation_mark_round_sign_icon",
       },
       {
         name: "Settings Icon",
@@ -168,6 +335,11 @@ export const creditList = [
         name: "Password icons created by th studio - Flaticon",
         siteName: "Flaticon",
         link: "https://www.flaticon.com/free-icons/password",
+      },
+      {
+        name: "User Icon",
+        siteName: "Iconfinder",
+        link: "https://www.iconfinder.com/icons/8665306/circle_user_icon",
       },
     ],
   },
