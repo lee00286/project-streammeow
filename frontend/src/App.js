@@ -29,6 +29,7 @@ import AllCreators from "./Components/HomePage/AllCreators";
 import AllStreams from "./Components/HomePage/AllStreams";
 import AllPosted from "./Components/HomePage/AllPosted";
 import UserPage from "./Components/UserPage/UserPage";
+import CallbackPage from "./Components/LoginPage/CallbackPage";
 // Style
 import "./App.css";
 import "./Components/cols.css";
@@ -91,6 +92,7 @@ function App() {
         <Route path="/allcreators" element={<AllCreators />} />
         <Route path="/allstreams" element={<AllStreams />} />
         <Route path="/allposted" element={<AllPosted />} />
+        <Route path="/callback" element={<CallbackPage />} />
         {/* TODO */}
         {/* <Route path="/streaming/replay" element={<StreamingListPage />} /> */}
         <Route

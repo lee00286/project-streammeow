@@ -11,8 +11,6 @@ import { paymentsRouter } from "./routers/payments_router.js";
 import { membershipsRouter } from "./routers/memberships_router.js";
 import { pricesRouter } from "./routers/prices_router.js";
 import { usersRouter } from "./routers/users_router.js";
-import session from "express-session";
-import { auth } from "express-openid-connect";
 import { creatorsRouter } from "./routers/creators_router.js";
 import { streamingsRouter } from "./routers/streamings_router.js";
 
@@ -23,10 +21,15 @@ dotenv.config();
 
 // CORS for a list of allowed origins (specify for safety)
 const CLIENT_HOST = process.env.CLIENT_HOST || "http://localhost:3000";
-const allowedOrigins = [CLIENT_HOST, "https://checkout.stripe.com"];
+const allowedOrigins = [
+  CLIENT_HOST,
+  "https://checkout.stripe.com",
+  "https://dev-xz5orhy8rzrhzt80.us.auth0.com",
+];
 // const allowedOrigins = ["*"];
 const options = {
   origin: allowedOrigins,
+  credentials: true,
 };
 app.use(cors(options));
 
@@ -58,23 +61,6 @@ try {
   console.error("Unable to connect to the database:", error);
   Sentry.captureException(error);
 }
-
-const config = {
-  authRequired: false,
-  auth0Logout: true,
-  secret: "a long, randomly-generated string stored in env",
-  baseURL: "http://localhost:3000",
-  clientID: "akOnLy6JPjTfjgIchOofLqNBdkpQwuIh",
-  issuerBaseURL: "https://dev-xz5orhy8rzrhzt80.us.auth0.com",
-};
-
-// auth router attaches /login, /logout, and /callback routes to the baseURL
-app.use(auth(config));
-
-// req.isAuthenticated is provided from the auth router
-app.get("/", (req, res) => {
-  res.send(req.oidc.isAuthenticated() ? "Logged in" : "Logged out");
-});
 
 app.get("/api/test", (req, res) => {
   res.status(200).json({ message: "Hello World!" });

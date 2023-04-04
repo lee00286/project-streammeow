@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth0 } from "@auth0/auth0-react";
 import module from "../../ApiService";
 // Components
 import MenuButton from "../Buttons/MenuButton";
@@ -13,6 +14,7 @@ import "./NavBar.css";
  */
 function NavBar({ userId }) {
   const navigate = useNavigate();
+  const { logout, user, isAuthenticated, isLoading } = useAuth0();
 
   const [UserId, setUserId] = useState("");
   const [CreatorId, setCreatorId] = useState("");
@@ -77,6 +79,13 @@ function NavBar({ userId }) {
         }
       })
       .catch((e) => console.log(e));
+
+    // Signout from Auth0
+    logout({
+      logoutParams: {
+        returnTo: window.location.origin,
+      },
+    });
   };
 
   // Navigate to mypage (user page)
@@ -117,7 +126,7 @@ function NavBar({ userId }) {
           buttonFunction={onCredit}
         />
       </div>
-      {UserId ? (
+      {UserId || isAuthenticated ? (
         <div className="nav-buttons row col-3">
           {IsCreator ? (
             <ColorButton

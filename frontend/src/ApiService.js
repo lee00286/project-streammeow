@@ -181,6 +181,14 @@ module.UserLogin = (email, password) => {
 };
 
 /**
+ * Auth0 login.
+ * @returns
+ */
+module.Auth0Login = (name, email, picture) => {
+  return axios.post("/api/users/auth0", { name, email, picture });
+};
+
+/**
  * User logout.
  */
 module.UserLogout = () => {
