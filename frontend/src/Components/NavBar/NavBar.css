@@ -43,6 +43,11 @@
   background-color: var(--yellow1);
 }
 
+.nav-user-menu img {
+  border-radius: 100px;
+  object-fit: cover;
+}
+
 .user-icon {
   height: 100% !important;
 }

@@ -39,8 +39,6 @@ function StreamerInfo() {
     navigate(`/purchase/${creatorId}`);
   };
 
-  // TODO: Replace streamer info to the information in { streamer }
-  //       It should include: creatorId, profileImg, name, etc.
   return (
     <div className="streamer-container row">
       <div className="streamer-info row">

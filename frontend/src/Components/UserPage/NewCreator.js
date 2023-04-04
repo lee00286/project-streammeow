@@ -1,5 +1,5 @@
 import React from "react";
-// import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import module from "../../ApiService";
 // Components
 import PageTitle from "../Texts/PageTitle";
@@ -8,16 +8,14 @@ import ColorButton from "../Buttons/ColorButton";
 import "./UserPage.css";
 
 function NewCreator() {
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const onNewCreator = () => {
     module
       .addCreator()
       .then((res) => {
         if (res.error) return console.log(res.error);
-        // TODO: Replace window.location.assign with navigate
-        // navigate("/");
-        window.location.assign("http://localhost:3000/");
+        navigate(0);
       })
       .catch((e) => console.log(e));
   };

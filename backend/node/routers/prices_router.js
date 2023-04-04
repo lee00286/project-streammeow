@@ -40,7 +40,6 @@ pricesRouter.post("/", isAuthenticated, async (req, res) => {
   const taxPrice = calculateTax(reqBody.price, 12.5);
   try {
     // Create a price
-    // TODO: For recurring, think about year interval as well
     const price = await stripe.prices.create({
       product_data: {
         name: reqBody.membershipName,
