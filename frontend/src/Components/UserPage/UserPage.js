@@ -236,7 +236,6 @@ function UserInfoTab() {
     formData.append("name", ModifyName);
     formData.append("email", ModifyEmail);
     formData.append("picture", ModifyPicture);
-    console.log(formData);
     // Modify user information
     module
       .updateUser(UserInfo.id, formData)

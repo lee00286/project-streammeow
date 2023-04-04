@@ -19,7 +19,6 @@ function RegisterPage() {
   const register = (email, password) => {
     module.UserRegister(email, password).then((res) => {
       if (res.data.user) {
-        console.log(res.user);
         navigate("/signin");
       } else {
         console.log(res.err);
