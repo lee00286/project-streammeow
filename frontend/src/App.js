@@ -67,7 +67,6 @@ function App() {
         .getCreatorByUserId(res.data.user.id)
         .then((res) => {
           if (res.error) return console.log(res.error);
-          console.log(res.data);
           if (res.data.creator?.id) setCreatorId(res.data.creator.id);
         })
         .catch((e) => console.log(e));

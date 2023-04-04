@@ -208,11 +208,6 @@ function UserInfoTab() {
       if (res.error) return console.log(res.error);
       if (!res.data.user) return console.log("Failed to load user data");
       setUserInfo(res.data.user);
-      module.getUserPicture(res.data.user.id).then((res) => {
-        if (res.error) return console.log(res.error);
-        if (!res.data) return console.log("Failed to load user picture");
-        setModifyPicture(res.data);
-      });
     });
   }, [IsModify]);
 
@@ -222,6 +217,11 @@ function UserInfoTab() {
     // Set up initial data for user
     if (UserInfo.name) setModifyName(UserInfo.name);
     if (UserInfo.email) setModifyEmail(UserInfo.email);
+    module.getUserPicture(UserInfo.id).then((res) => {
+      if (res.error) return console.log(res.error);
+      if (!res.data) return console.log("Failed to load user picture");
+      setModifyPicture(res.data);
+    });
   }, [IsModify]);
 
   const onInfoEdit = () => {
@@ -236,7 +236,6 @@ function UserInfoTab() {
     formData.append("name", ModifyName);
     formData.append("email", ModifyEmail);
     formData.append("picture", ModifyPicture);
-    console.log(formData);
     // Modify user information
     module
       .updateUser(UserInfo.id, formData)

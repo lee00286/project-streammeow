@@ -18,10 +18,7 @@ function LoginPage() {
   const login = (email, password) => {
     module.UserLogin(email, password).then((res) => {
       if (res.data.user) {
-        console.log(res.data.user);
-        // TODO: Replace window.location.assign with navigate
-        // navigate("/");
-        window.location.assign("http://localhost:3000/");
+        navigate(0);
       } else {
         console.log(res.err);
       }

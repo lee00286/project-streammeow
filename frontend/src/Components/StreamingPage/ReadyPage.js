@@ -135,7 +135,6 @@ function ReadyPage() {
               isEnded: true,
             });
             if (update.error) return console.log(update.error);
-            console.log(update);
           }
         }
       })
@@ -196,7 +195,6 @@ function ReadyPage() {
     const response = module
       .addStreaming(Title, Description, Permission)
       .catch((e) => console.log(e));
-    console.log(response);
     if (response.error) return console.log(response.error);
     // Start streaming session
     setStartSession(true);

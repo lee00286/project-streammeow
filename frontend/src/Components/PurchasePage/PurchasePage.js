@@ -87,7 +87,6 @@ function Subscription({ membership, isSelected, onSelect }) {
 
   /* Set price of the membership */
   useEffect(() => {
-    // console.log(membership);
     if (!membership?.price) return;
     const price = parseFloat(membership.price);
     setMembershipPrice(price);

@@ -112,7 +112,6 @@ export default function CreatorPage() {
   const navigate = useNavigate();
 
   const goToPurchase = (id) => {
-    console.log(id);
     navigate(`/purchase/${creatorId}`, { state: { membershipId: id } });
   };
 

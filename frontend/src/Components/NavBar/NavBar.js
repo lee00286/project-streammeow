@@ -143,7 +143,7 @@ function NavBar({ userId }) {
           >
             <img
               src={`/api/users/${UserId}/picture`}
-              alt="/icons/user.png"
+              // alt="/icons/user.png"
               className="user-icon"
             />
           </div>

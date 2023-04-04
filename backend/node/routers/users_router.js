@@ -101,9 +101,8 @@ usersRouter.get("/:userId/picture", async (req, res) => {
     res.setHeader("Content-Type", user.picture.mimetype);
     res.sendFile(user.picture.path, { root: path.resolve() });
   } else {
-    res
-      .status(404)
-      .json({ error: req.params.userId + "User picture not found" });
+    res.setHeader("Content-Type", user.picture.mimetype);
+    res.sendFile("/icons/user.png", { root: path.resolve() });
   }
 });
 
@@ -122,8 +121,8 @@ usersRouter.patch(
     // Check validity of arguments
     if (
       !isValidArgument(userId, "string") ||
-      !isValidArgument(variables, "object") ||
-      !isValidArgument(image, "object")
+      (variables && !isValidArgument(variables, "object")) ||
+      (image && !isValidArgument(image, "object"))
     )
       return res.status(422).json({ error: "Invalid arguments." });
     try {
