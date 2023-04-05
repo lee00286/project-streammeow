@@ -8,8 +8,7 @@
   flex-direction: column;
   position: relative;
   padding-bottom: 20px;
-  min-width: 175px;
-  max-width: 250px;
+  width: 200px;
   background: white;
   border: 2px;
   border-style: solid;

@@ -1,16 +1,22 @@
-.memberships-container {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 20px;
+.creator-page {
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 100%;
 }
 
 .posts-container {
-  display: flex;
-  flex-direction: column;
   justify-content: center;
-  align-items: center;
-  gap: 50px;
+  align-items: flex-start;
+  padding-right: 30px;
+  width: 100%;
+  gap: 30px;
   max-width: 600px;
-  margin: auto;
+}
+
+.memberships-container {
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: flex-start;
+  width: 100%;
+  gap: 20px;
 }

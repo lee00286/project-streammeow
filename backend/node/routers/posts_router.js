@@ -54,7 +54,11 @@ postsRouter.get("/", isAuthenticated, async (req, res) => {
       if (!isValidArgument(creatorId, "string"))
         return res.status(422).json({ error: "Invalid creatorId." });
       // If permission given
-      if (permission !== null && isValidArgument(permission, "string")) {
+      if (
+        permission !== null &&
+        isValidArgument(permission, "string") &&
+        permission !== "-1"
+      ) {
         options.where = {
           creatorId: creatorId,
           [Op.or]: [
@@ -105,7 +109,7 @@ postsRouter.get("/:postId/", isAuthenticated, async (req, res) => {
  * */
 postsRouter.patch("/:postId/", isAuthenticated, async (req, res, next) => {
   const postId = req.params.postId;
-  if (membershipId === "like") next();
+  if (postId === "like") next();
   const variables = req.body;
   // Check validity of arguments
   if (
