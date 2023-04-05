@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
+  Navigate,
   Route,
   Routes,
   useLocation,
@@ -15,19 +15,19 @@ import { BrowserTracing } from "@sentry/tracing";
 // Components
 import NavBar from "./Components/NavBar/NavBar";
 import HomePage from "./Components/HomePage/HomePage";
-import CreditPage from "./Components/CreditPage/CreditPage";
-import NewCreator from "./Components/UserPage/NewCreator";
-import CreatorPage from "./Components/CreatorPage/CreatorPage";
-import StreamingListPage from "./Components/StreamingPage/StreamingListPage";
-import ReadyPage from "./Components/StreamingPage/ReadyPage";
-import StreamingPage from "./Components/StreamingPage/StreamingPage";
-import PurchasePage from "./Components/PurchasePage/PurchasePage";
-import ConfirmPage from "./Components/PurchasePage/ConfirmPage";
 import LoginPage from "./Components/LoginPage/LoginPage";
 import RegisterPage from "./Components/LoginPage/RegisterPage";
+import CreditPage from "./Components/CreditPage/CreditPage";
 import AllCreators from "./Components/HomePage/AllCreators";
 import AllStreams from "./Components/HomePage/AllStreams";
 import AllPosted from "./Components/HomePage/AllPosted";
+import NewCreator from "./Components/UserPage/NewCreator";
+import CreatorPage from "./Components/CreatorPage/CreatorPage";
+import ReadyPage from "./Components/StreamingPage/ReadyPage";
+import StreamingPage from "./Components/StreamingPage/StreamingPage";
+import StreamingListPage from "./Components/StreamingPage/StreamingListPage";
+import PurchasePage from "./Components/PurchasePage/PurchasePage";
+import ConfirmPage from "./Components/PurchasePage/ConfirmPage";
 import UserPage from "./Components/UserPage/UserPage";
 // Style
 import "./App.css";
@@ -53,13 +53,25 @@ Sentry.init({
 
 const SentryRoutes = Sentry.withSentryReactRouterV6Routing(Routes);
 
+function Loading() {
+  return <div>Loading...</div>;
+}
+
 function App() {
-  const [UserId, setUserId] = useState("");
+  // Determine whether the page is loading or not
+  const [IsLoading, setIsLoading] = useState(true);
+  // User authentication information
+  const [UserId, setUserId] = useState(null);
   const [CreatorId, setCreatorId] = useState(null);
 
   useEffect(() => {
     module.getUserId().then((res) => {
-      if (res.data.user === undefined) return;
+      // If the user is not authenticated
+      if (res.data.user === undefined) {
+        setUserId(null);
+        setIsLoading(false);
+        return;
+      }
       // If the user is authenticated
       setUserId(res.data.user.id);
       // If the user is creator
@@ -68,45 +80,101 @@ function App() {
         .then((res) => {
           if (res.error) return console.log(res.error);
           if (res.data.creator?.id) setCreatorId(res.data.creator.id);
+          else setCreatorId(null);
+          setIsLoading(false);
         })
         .catch((e) => console.log(e));
     });
   }, []);
 
+  // Check if the user is at required auth level
+  const auth = (isNone, isUser, isCreator, childOne, childTwo = null) => {
+    // If User, return childOne, if Creator, return childTwo
+    if (childTwo !== null) {
+      if (UserId && !CreatorId) return childOne;
+      if (UserId && CreatorId) return childTwo;
+      return <Navigate to="/" />;
+    }
+
+    // User should not be authenticated
+    if (isNone && !UserId) {
+      return childOne;
+    }
+
+    // User should be authenticated
+    if (isUser && UserId) {
+      if (isCreator === null) return childOne;
+      if (!isCreator && !CreatorId) return childOne;
+      if (isCreator && CreatorId) return childOne;
+    }
+
+    // If the user is not at required auth permission
+    return <Navigate to="/" />;
+  };
+
   return (
     <div className="App">
-      <NavBar userId={UserId} />
+      <NavBar userId={UserId} creatorId={CreatorId} />
       <SentryRoutes>
         <Route path="/" element={<HomePage />} />
-        <Route path="/signin" element={<LoginPage />} />
-        <Route path="/signup" element={<RegisterPage />} />
+        <Route
+          path="/signin"
+          element={
+            IsLoading ? <Loading /> : auth(true, false, null, <LoginPage />)
+          }
+        />
+        <Route
+          path="/signup"
+          element={
+            IsLoading ? <Loading /> : auth(true, false, null, <RegisterPage />)
+          }
+        />
         <Route path="/credits" element={<CreditPage />} />
-        <Route path="/becomecreator" element={<NewCreator />} />
-        {/* <Route path="/creators/:creatorId" element={<CreatorPage />} /> */}
-        <Route path="/creators/:creatorId" element={<CreatorPage />} />
-        <Route path="/purchase/:creatorId" element={<PurchasePage />} />
-        <Route path="/purchase/confirm" element={<ConfirmPage />} />
-        <Route path="/streaming" element={<StreamingListPage />} />
         <Route path="/allcreators" element={<AllCreators />} />
         <Route path="/allstreams" element={<AllStreams />} />
         <Route path="/allposted" element={<AllPosted />} />
-        {/* TODO */}
+        <Route
+          path="/becomecreator"
+          element={
+            IsLoading ? <Loading /> : auth(false, true, false, <NewCreator />)
+          }
+        />
+        <Route
+          path="/creators/:creatorId"
+          element={
+            IsLoading ? <Loading /> : auth(false, true, null, <CreatorPage />)
+          }
+        />
+        <Route
+          path="/purchase/:creatorId"
+          element={
+            IsLoading ? <Loading /> : auth(null, true, null, <PurchasePage />)
+          }
+        />
+        <Route
+          path="/purchase/confirm"
+          element={
+            IsLoading ? <Loading /> : auth(null, true, null, <ConfirmPage />)
+          }
+        />
+        <Route path="/streaming" element={<StreamingListPage />} />
         {/* <Route path="/streaming/replay" element={<StreamingListPage />} /> */}
         <Route
           path="/streaming/:creatorId"
           element={
-            UserId !== "" ? (
-              CreatorId ? (
-                <ReadyPage />
-              ) : (
-                <StreamingPage />
-              )
+            IsLoading ? (
+              <Loading />
             ) : (
-              <div></div>
+              auth(null, null, null, <StreamingPage />, <ReadyPage />)
             )
           }
         />
-        <Route path="/mypage" element={<UserPage />} />
+        <Route
+          path="/mypage"
+          element={
+            IsLoading ? <Loading /> : auth(null, true, null, <UserPage />)
+          }
+        />
       </SentryRoutes>
     </div>
   );

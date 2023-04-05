@@ -9,9 +9,11 @@ import "./NavBar.css";
 
 /**
  * Navigation bar component that directs users to different pages.
+ * @param {number} userId: id of the user
+ * @param {number} creatorId: id of the streamer
  * @returns Navigation bar component
  */
-function NavBar({ userId }) {
+function NavBar({ userId, creatorId }) {
   const navigate = useNavigate();
 
   const [UserId, setUserId] = useState("");
@@ -20,21 +22,10 @@ function NavBar({ userId }) {
   const [UserHover, setUserHover] = useState(false);
 
   useEffect(() => {
-    module.getUserId().then((res) => {
-      if (res.data.user === undefined) return;
-      // If the user is authenticated
-      setUserId(res.data.user.id);
-      // If the user is creator
-      module
-        .getCreatorByUserId(res.data.user.id)
-        .then((res) => {
-          if (res.error) return console.log(res.error);
-          setIsCreator(res.data.creator && res.data.creator.id);
-          if (res.data.creator) setCreatorId(res.data.creator.id);
-        })
-        .catch((e) => console.log(e));
-    });
-  }, [userId]);
+    setUserId(userId);
+    setCreatorId(creatorId);
+    setIsCreator(creatorId !== null);
+  }, [userId, creatorId]);
 
   // Navigate to home
   const onLogo = () => {
@@ -72,7 +63,7 @@ function NavBar({ userId }) {
             alert("Successfully signed out.");
             setUserHover(false);
             setUserId("");
-            navigate("/");
+            navigate(0);
           }, 500);
         }
       })
