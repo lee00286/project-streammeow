@@ -9,7 +9,8 @@ import {
 } from "@stripe/react-stripe-js";
 
 // Client URL
-const CLIENT_HOST = process.env.REACT_APP_CLIENT_HOST || "localhost:3000";
+const CLIENT_HOST =
+  process.env.REACT_APP_CLIENT_HOST || "https://streammeow.net";
 
 /**
  * CheckOutForm component.
@@ -75,7 +76,7 @@ function CheckOutForm() {
     const { error } = await stripe.confirmPayment({
       elements,
       confirmParams: {
-        return_url: `http://${CLIENT_HOST}/purchase/confirm`, // redirected after the payment
+        return_url: `${CLIENT_HOST}/purchase/confirm`, // redirected after the payment
         receipt_email: Email, // stripe only sends in live mode
       },
     });

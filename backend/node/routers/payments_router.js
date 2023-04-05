@@ -9,7 +9,7 @@ export const paymentsRouter = Router();
 dotenv.config();
 
 // Client URL
-const CLIENT_HOST = process.env.CLIENT_HOST || "localhost:3000";
+const CLIENT_HOST = process.env.CLIENT_HOST || "https://streammeow.net";
 
 // Stripe API key
 const publicSampleTestKey = "sk_test_Hrs6SAopgFPF0bZXSN3f6ELN";
@@ -105,8 +105,8 @@ paymentsRouter.post("/checkout-session", isAuthenticated, async (req, res) => {
         },
       ],
       metadata: { membership_id: req.body.membershipId },
-      success_url: `http://${CLIENT_HOST}/purchase/confirm?success=true&session_id={CHECKOUT_SESSION_ID}&membership=${req.body.membershipId}`,
-      cancel_url: `http://${CLIENT_HOST}/purchase/confirm?canceled=true`,
+      success_url: `${CLIENT_HOST}/purchase/confirm?success=true&session_id={CHECKOUT_SESSION_ID}&membership=${req.body.membershipId}`,
+      cancel_url: `${CLIENT_HOST}/purchase/confirm?canceled=true`,
     });
     return res.status(200).json({ url: session.url });
   } catch (e) {

@@ -1,6 +1,8 @@
-import "./HomePage.css";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import React from "react";
+import module from "../../ApiService";
+import Alert from "../Alert/Alert";
+import "./HomePage.css";
 
 /**
  * Home page component.
@@ -9,6 +11,21 @@ import React from "react";
 function HomePage() {
   const navigate = useNavigate();
 
+  const [Creators, setCreators] = useState([]);
+  const [ErrorLog, setErrorLog] = useState("");
+
+  useEffect(() => {
+    module
+      .getAllCreators()
+      .then((res) => {
+        if (res.error) return setErrorLog(res.error);
+        setCreators(res.data.creators);
+      })
+      .catch(
+        (e) => e.response?.data?.error && setErrorLog(e.response.data.error)
+      );
+  }, []);
+
   // Navigate to creators
   const moreCreators = () => {
     navigate("/allcreators");
@@ -16,7 +33,7 @@ function HomePage() {
 
   // Navigate to live streams
   const moreStreams = () => {
-    navigate("/allstreams");
+    navigate("/streaming");
   };
 
   // Navigate to videos
@@ -24,8 +41,39 @@ function HomePage() {
     navigate("/allposted");
   };
 
+  const creatorList =
+    Creators && Creators !== [] && Creators.length > 0 ? (
+      Creators.map((creator, index) => {
+        const onCreator = () => {
+          navigate(`/creators/${creator.id}`);
+        };
+
+        return (
+          <div
+            key={`creator-${index}`}
+            className="creator col-1"
+            onClick={onCreator}
+          >
+            <div className="image-container">
+              <img
+                className="creator-img"
+                src="samples/tintin@2x.png"
+                // src={`/api/users/${creator.userId}/picture`}
+              />
+            </div>
+            <div className="creator-name">
+              <p>{`Creator-${creator.id}`}</p>
+            </div>
+          </div>
+        );
+      })
+    ) : (
+      <div>No Creators</div>
+    );
+
   return (
     <div className="home-page page col">
+      <Alert text={ErrorLog} isError={true} hide={ErrorLog === ""} />
       <div className="creators-container col">
         <div className="title-container row">
           <div className="title col-10">
@@ -35,104 +83,7 @@ function HomePage() {
             <p>more</p>
           </div>
         </div>
-        <div className="creator-container row">
-          <div className="creator col-1">
-            <div className="image-container">
-              <img
-                className="creator-img"
-                src="samples/tintin@2x.png"
-                alt="tintin"
-              />
-            </div>
-            <div className="creator-name">
-              <p>Tin tin</p>
-            </div>
-          </div>
-          <div className="creator col-1">
-            <div className="image-container">
-              <img
-                className="creator-img"
-                src="samples/tintin@2x.png"
-                alt="tintin"
-              />
-            </div>
-            <div className="creator-name">
-              <p>Tin tin</p>
-            </div>
-          </div>
-          <div className="creator col-1">
-            <div className="image-container">
-              <img
-                className="creator-img"
-                src="samples/tintin@2x.png"
-                alt="tintin"
-              />
-            </div>
-            <div className="creator-name">
-              <p>Tin tin</p>
-            </div>
-          </div>
-          <div className="creator col-1">
-            <div className="image-container">
-              <img
-                className="creator-img"
-                src="samples/tintin@2x.png"
-                alt="tintin"
-              />
-            </div>
-            <div className="creator-name">
-              <p>Tin tin</p>
-            </div>
-          </div>
-          <div className="creator col-1">
-            <div className="image-container">
-              <img
-                className="creator-img"
-                src="samples/tintin@2x.png"
-                alt="tintin"
-              />
-            </div>
-            <div className="creator-name">
-              <p>Tin tin</p>
-            </div>
-          </div>
-          <div className="creator col-1">
-            <div className="image-container">
-              <img
-                className="creator-img"
-                src="samples/tintin@2x.png"
-                alt="tintin"
-              />
-            </div>
-            <div className="creator-name">
-              <p>Tin tin</p>
-            </div>
-          </div>
-          <div className="creator col-1">
-            <div className="image-container">
-              <img
-                className="creator-img"
-                src="samples/tintin@2x.png"
-                alt="tintin"
-              />
-            </div>
-            <div className="creator-name">
-              <p>Tin tin</p>
-            </div>
-          </div>
-          <div className="creator col-1">
-            <div className="image-container">
-              <img
-                className="creator-img"
-                src="samples/tintin@2x.png"
-                alt="tintin"
-              />
-            </div>
-            <div className="creator-name">
-              <p>Tin tin</p>
-            </div>
-          </div>
-        </div>
+        <div className="creator-container row">{creatorList}</div>
       </div>
       <div className="live-container col">
         <div className="title-container row">
