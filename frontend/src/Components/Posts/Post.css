@@ -1,15 +1,12 @@
+/* TODO: card appearance */
+/* TODO refactor into a preview class */
 .post {
-  margin: 0;
-  /* TODO: card appearance */
-  background-color: var(--yellow1);
-  width: 100%;
-  /* TODO refactor into a preview class */
-  min-height: 400px;
-  padding: 15px;
-  text-align: left;
   position: relative;
-  display: flex;
-  flex-direction: column;
+  margin: 0;
+  padding: 20px;
+  width: 100%;
+  background-color: var(--yellow1);
+  text-align: left;
 }
 
 .post * {
@@ -17,45 +14,37 @@
 }
 
 .post-header {
-  margin-bottom: 2em;
+  margin-bottom: 1em;
   width: 100%;
 }
 
 .post-content {
+  margin-bottom: 1em;
   width: 100%;
 }
 
 /* TODO: deal with very long description overlapping */
 .post-footer {
-  display: block;
-  position: absolute;
-  bottom: 15px;
-  width: 94%;
-  font-size: 1.25em;
-}
-
-.post-footer-left {
-  float: left;
-}
-
-.post-footer-right {
-  float: right;
-  display: flex;
-  column-gap: 10px;
+  justify-content: flex-end;
   align-items: center;
+  width: 100%;
+  font-size: 1.25em;
+  column-gap: 10px;
+  user-select: none;
 }
 
 .post-title {
   font-weight: bold;
-  font-size: 2em;
+  font-size: 1.5em;
 }
 
 .post-button {
   border: none;
   border-radius: 50%;
   background: none;
-  height: 2em;
-  width: 2em;
+  height: 1.8em;
+  width: 1.8em;
+  cursor: pointer;
 }
 
 .post-button:hover {
@@ -74,4 +63,5 @@
 .lock {
   height: 6em;
   width: 6em;
+  color: var(--gray1) !important;
 }
