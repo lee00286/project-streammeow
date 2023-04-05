@@ -21,7 +21,6 @@ export default function Post({
   dislikes,
   onLike,
 }) {
-  console.log(locked);
   let content = locked
     ? createLockedPost(lockedReason, title)
     : createPost(title, description, likes, dislikes, onLike);

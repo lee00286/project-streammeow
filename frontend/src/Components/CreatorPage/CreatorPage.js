@@ -87,7 +87,6 @@ export default function CreatorPage() {
         if (!ignore) {
           if (res.error) return setErrorLog(res.error);
           setPosts(res.data.posts);
-          console.log(res.data.posts);
         }
       })
       .catch(
@@ -109,7 +108,6 @@ export default function CreatorPage() {
 
   const postComponents = Posts.map((post) => {
     let permission = [];
-    console.log(post);
     if (post.permission) {
       for (let i = 0; i < post.permission.length; post.permission++) {
         const index = memberships.findIndex((m) => m.id === post.permission[i]);
@@ -126,8 +124,6 @@ export default function CreatorPage() {
         !post.permission.includes(Permission),
       title: post.title,
     };
-
-    console.log(options);
 
     const onLike = (like) => {
       let action = like ? "like" : "dislike";

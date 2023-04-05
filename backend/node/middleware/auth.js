@@ -9,7 +9,7 @@ export const isAuthenticated = function (req, res, next) {
 export const isNotAuthenticated = function (req, res, next) {
   if (req.session.userId)
     return res.status(200).json({ userId: req.session.userId });
-  if (checkJwt) return res.status(200).json({ message: "signed in by auth0" });
+  // if (checkJwt) return res.status(200).json({ message: "signed in by auth0" });
   next();
 };
 

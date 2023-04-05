@@ -5,7 +5,6 @@ import LoginForm from "./LoginForm";
 import module from "../../ApiService";
 import Alert from "../Alert/Alert";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
 
 function RegisterPage() {
   const navigate = useNavigate();
@@ -27,10 +26,12 @@ function RegisterPage() {
     }
 
     module.UserRegister(email, password).then((res) => {
-      if (res.data.user) {
+      if (res.error) return setErrorLog(res.error);
+      // Signed in by auth0
+      if (res.data.user || res.message) {
         navigate("/signin");
       } else {
-        setErrorLog(res.err);
+        setErrorLog("Error occured.");
       }
     });
   };
