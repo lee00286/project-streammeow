@@ -3,6 +3,11 @@ export const creditList = [
     title: "CSS",
     credits: [
       {
+        name: "cols.css file provided from CSCC09 lecture",
+        siteName: "GitHub",
+        link: "https://github.com/choyiny/cscc09.com/blob/main/lectures/01-html-css/cols.css",
+      },
+      {
         name: "CSS variables for color",
         link: "https://ado.xyz/blog/custom-css-color-names/",
       },
@@ -285,6 +290,16 @@ export const creditList = [
         name: "Docker compose Nginx Node.js example",
         siteName: "GitHub",
         link: "https://github.com/docker/awesome-compose/tree/master/nginx-nodejs-redis",
+      },
+    ],
+  },
+  {
+    title: "Nginx",
+    credits: [
+      {
+        name: "Nginx conf file for React app",
+        siteName: "GitHub",
+        link: "https://github.com/react-boilerplate/react-boilerplate/blob/master/app/.nginx.conf",
       },
     ],
   },
