@@ -21,8 +21,7 @@ membershipsRouter.post("/", isAuthenticated, async (req, res) => {
   )
     return res.status(422).json({ error: "Invalid arguments." });
   try {
-    // TODO: get userId from session key (req.session.userId)
-    let creatorId = "1";
+    let creatorId = req.session.userId;
 
     // Create a new membership
     const membership = await Memberships.create({
@@ -75,7 +74,7 @@ membershipsRouter.get("/", async (req, res) => {
 /**
  * Retrieve one membership using membershipId.
  * */
-membershipsRouter.get("/:membershipId/", async (req, res, next) => {
+membershipsRouter.get("/:membershipId/", async (req, res) => {
   const membershipId = req.params.membershipId;
   // Check validity of membershipId
   if (!isValidArgument(membershipId, "string"))
@@ -221,8 +220,7 @@ membershipsRouter.delete("/:membershipId/", async (req, res) => {
         .status(404)
         .json({ error: `Membership(id=${membershipId}) doesn't exist.` });
     // If the membership is not created by the user
-    // TODO: get userId from session key (req.session.userId)
-    let creatorId = "1";
+    let creatorId = req.session.userId;
     if (creatorId !== membership.creatorId)
       return res.status(403).json({ error: "Permission denied." });
 

@@ -5,6 +5,8 @@ import module from "../../ApiService";
 import ReadyPage from "./ReadyPage";
 import StreamVideo from "./Items/StreamVideo";
 import ColorButton from "../Buttons/ColorButton";
+import Alert from "../Alert/Alert";
+// Style
 import "./StreamingPage.css";
 
 // TODO: Streaming permission
@@ -19,12 +21,13 @@ function StreamerInfo() {
   const navigate = useNavigate();
 
   const [CreatorInfo, setCreatorInfo] = useState(null);
+  const [ErrorLog, setErrorLog] = useState("");
 
   useEffect(() => {
     if (!creatorId) return;
     // TODO: GET streamer information
     module.getUserById(creatorId).then((res) => {
-      if (res.error) return console.log(res.error);
+      if (res.error) return setErrorLog(res.error);
       setCreatorInfo(res.data.user);
     });
   }, [creatorId]);
@@ -39,10 +42,9 @@ function StreamerInfo() {
     navigate(`/purchase/${creatorId}`);
   };
 
-  // TODO: Replace streamer info to the information in { streamer }
-  //       It should include: creatorId, profileImg, name, etc.
   return (
     <div className="streamer-container row">
+      <Alert text={ErrorLog} isError={true} hide={ErrorLog === ""} />
       <div className="streamer-info row">
         <img src="/logo1.png" className="streamer-profile" />
         <div className="streamer-name">
@@ -107,6 +109,7 @@ function StreamingPage() {
   const [GSD, setGSD] = useState("");
   const [SendGSD, setSendGSD] = useState("");
   const [StartSession, setStartSession] = useState(false);
+  const [ErrorLog, setErrorLog] = useState("");
 
   // Check if user is the creator
   useEffect(() => {
@@ -119,7 +122,7 @@ function StreamingPage() {
       module
         .getCreatorByUserId(res.data.user.id)
         .then((res) => {
-          if (res.error) return console.log(res.error);
+          if (res.error) return setErrorLog(res.error);
           if (
             !res.data.creator?.id ||
             !creatorId ||
@@ -127,7 +130,9 @@ function StreamingPage() {
           )
             return setCreatorId(undefined);
         })
-        .catch((e) => console.log(e));
+        .catch(
+          (e) => e.response?.data?.error && setErrorLog(e.response.data.error)
+        );
     });
   }, [creatorId]);
 
@@ -137,12 +142,14 @@ function StreamingPage() {
     module
       .getAllStreamings(creatorId)
       .then((res) => {
-        if (res.error) return console.log(res.error);
+        if (res.error) return setErrorLog(res.error);
         if (!res.data || res.data.streamings.length < 1)
-          return console.log("No streaming found");
+          return setErrorLog("No streaming found");
         setStream(res.data.streamings[0]);
       })
-      .catch((e) => console.log(e));
+      .catch(
+        (e) => e.response?.data?.error && setErrorLog(e.response.data.error)
+      );
   }, [creatorId, StartSession]);
 
   // Save session description
@@ -163,6 +170,7 @@ function StreamingPage() {
 
   return (
     <div className="stream grid-body page col">
+      <Alert text={ErrorLog} isError={true} hide={ErrorLog === ""} />
       {!StartSession && (
         <div className="streaming-before col">
           <h2>Creator's Streaming</h2>

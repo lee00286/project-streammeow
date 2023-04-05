@@ -21,6 +21,10 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
+      picture: {
+        type: Sequelize.JSON,
+        allowNull: true,
+      },
       subscription: {
         type: Sequelize.ARRAY(Sequelize.STRING),
         allowNull: true,
@@ -104,6 +108,57 @@ module.exports = {
       },
       subscribers: {
         type: Sequelize.ARRAY(Sequelize.INTEGER),
+        allowNull: true,
+      },
+      creatorId: {
+        type: Sequelize.INTEGER,
+        references: {
+          model: "Creators",
+          key: "id",
+        },
+        allowNull: false,
+      },
+    });
+    await queryInterface.createTable("Posts", {
+      id: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+      },
+      title: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      description: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
+      permission: {
+        type: Sequelize.ARRAY(Sequelize.INTEGER),
+        allowNull: true, // if null, then no restriction
+      },
+      likes: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        defaultValue: 0,
+      },
+      dislikes: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        defaultValue: 0,
+      },
+      comments: {
+        type: Sequelize.ARRAY(Sequelize.STRING),
+        allowNull: true,
+      },
+      createdAt: {
+        type: Sequelize.DATE,
+        allowNull: false,
+        defaultValue: Sequelize.NOW,
+      },
+      updatedAt: {
+        type: Sequelize.DATE,
         allowNull: true,
       },
       creatorId: {

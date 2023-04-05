@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import module from "../../ApiService";
 // Components
 import SubTitle from "../Texts/SubTitle";
+import Alert from "../Alert/Alert";
+// Style
 import "./StreamingPage.css";
 
 /**
@@ -101,13 +103,14 @@ function StreamingSlide() {
 function StreamingListPage() {
   const [LiveList, setLiveList] = useState([]);
   const [LiveReplayList, setLiveReplayList] = useState([]);
+  const [ErrorLog, setErrorLog] = useState("");
 
   useEffect(() => {
     // Retrieve all streamings
     module
       .getAllStreamings()
       .then((res) => {
-        if (res.error) return console.log(res.error);
+        if (res.error) return setErrorLog(res.error);
         const streamingList = res.data.streamings;
         // Set streaming list by live and live replay
         const liveList = [];
@@ -121,11 +124,14 @@ function StreamingListPage() {
         setLiveList(liveList);
         setLiveReplayList(liveReplayList);
       })
-      .catch((e) => console.log(e));
+      .catch(
+        (e) => e.response?.data?.error && setErrorLog(e.response.data.error)
+      );
   }, []);
 
   return (
     <div className="grid-body page all-streaming">
+      <Alert text={ErrorLog} isError={true} hide={ErrorLog === ""} />
       <StreamingSlide />
       <SubTitle text="On Live" />
       <StreamingList streamingList={LiveList} isLive={true} />

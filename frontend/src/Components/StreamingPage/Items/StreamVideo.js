@@ -67,11 +67,9 @@ function StreamVideo({
       if (event.candidate === null) {
         // Browser base64 Session Description
         const sessionDescription = btoa(JSON.stringify(pc.localDescription));
-        // console.log(sessionDescription);
         // Send local session description to get golang session description
         const response = await axios.post(
           `http://${STREAMING_HOST}:${STREAMING_PORT}/sdp`,
-          // `http://localhost:${STREAMING_PORT}/sdp`,
           sessionDescription,
           {
             headers: {
@@ -79,7 +77,6 @@ function StreamVideo({
             },
           }
         );
-        // console.log(response);
         if (
           response.status === 200 &&
           response.data !== null &&
@@ -145,7 +142,6 @@ function StreamVideo({
 
   // Write log
   const onLog = (msg) => {
-    console.log(msg);
     setLog(msg);
   };
 

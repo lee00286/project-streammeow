@@ -2,7 +2,10 @@ import React, { useEffect, useMemo, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import module from "../../ApiService";
 import calculations from "../calculations";
+// Components
 import ColorButton from "../Buttons/ColorButton";
+import Alert from "../Alert/Alert";
+// Style
 import "../Buttons/Buttons.css";
 
 /* Get query */
@@ -92,6 +95,7 @@ function ConfirmPage() {
 
   const [Invoice, setInvoice] = useState(null);
   const [CancelPayment, setCancelPayment] = useState(false);
+  const [ErrorLog, setErrorLog] = useState("");
 
   useEffect(() => {
     const cancel = query.get("canceled");
@@ -102,14 +106,14 @@ function ConfirmPage() {
     module
       .getSession(query.get("session_id"))
       .then((res) => {
-        if (res.data.error) console.log(res.data.error);
+        if (res.data.error) setErrorLog(res.data.error);
         else return res.data;
       })
       .then((data) => {
         module
           .summarizePayment(data.invoice)
           .then((res) => {
-            if (res.error) return console.log(res.error);
+            if (res.error) return setErrorLog(res.error);
             setInvoice(res.data);
             return res.data;
           })
@@ -122,7 +126,9 @@ function ConfirmPage() {
           .then(() => {
             module.membershipSubscribe(query.get("membership"));
           })
-          .catch((e) => console.log(e));
+          .catch(
+            (e) => e.response?.data?.error && setErrorLog(e.response.data.error)
+          );
       });
   }, []);
 
@@ -130,6 +136,7 @@ function ConfirmPage() {
 
   return (
     <div className="invoice page">
+      <Alert text={ErrorLog} isError={true} hide={ErrorLog === ""} />
       {Invoice && (
         <div className="invoice-ticket col">
           <div className="invoice-top">

@@ -23,16 +23,6 @@ const endpointSecret =
   null;
 
 /**
- * Calculate the order total on the server
- * to prevent people from directly manipulating the amount on the client.
- * @param {number} totalCost: total cost of the order
- */
-const calculateOrderAmount = (totalCost) => {
-  // TODO: Replace this constant with a calculation of the order's amount
-  return 1400;
-};
-
-/**
  * Summarize invoice data to send to the client.
  * @param {Object} invoice: invoice of the payment
  */
@@ -82,7 +72,7 @@ paymentsRouter.post("/payment-intent", isAuthenticated, async (req, res) => {
   try {
     // Create a PaymentIntent with the order amount and currency
     const paymentIntent = await stripe.paymentIntents.create({
-      amount: calculateOrderAmount(reqBody.totalCost),
+      amount: 1400,
       currency: reqBody.currency,
       payment_method_types: ["card"],
     });
