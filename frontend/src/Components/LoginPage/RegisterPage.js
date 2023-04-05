@@ -3,6 +3,7 @@ import "./LoginPage.css";
 import SigninWith from "./SigninWith";
 import LoginForm from "./LoginForm";
 import module from "../../ApiService";
+import { playFile } from "../webAudioAPI";
 import Alert from "../Alert/Alert";
 import { useNavigate } from "react-router-dom";
 
@@ -26,13 +27,20 @@ function RegisterPage() {
     }
 
     module.UserRegister(email, password).then((res) => {
-      if (res.error) return setErrorLog(res.error);
       // Signed in by auth0
-      if (res.data.user || res.message) {
+      if (res?.data?.user || res.message) {
+        // Web Audio API
+        playFile("https://s3-us-west-2.amazonaws.com/s.cdpn.io/3/success.mp3");
         navigate("/signin");
-      } else {
-        setErrorLog("Error occured.");
       }
+      let errorLog = "";
+      if (res.error) errorLog = res.error;
+      else {
+        // Web Audio API
+        playFile("https://s3-us-west-2.amazonaws.com/s.cdpn.io/3/error.mp3");
+        errorLog = "Error occured.";
+      }
+      setErrorLog(errorLog);
     });
   };
 

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import LoginForm from "./LoginForm";
 import "./LoginPage.css";
 import module from "../../ApiService";
+import { playFile } from "../webAudioAPI";
 import { useNavigate } from "react-router-dom";
 import Alert from "../Alert/Alert";
 
@@ -22,16 +23,24 @@ function LoginPage() {
     module
       .UserLogin(email, password)
       .then((res) => {
-        if (res.error) return setErrorLog(res.error);
-        if (res.data.user) {
+        if (res?.data?.user) {
+          // Web Audio API
+          playFile(
+            "https://s3-us-west-2.amazonaws.com/s.cdpn.io/3/success.mp3"
+          );
           navigate(0);
-        } else {
-          setErrorLog("User doesn't exist.");
         }
+        let errorLog;
+        if (res.error) errorLog = res.error;
+        else if (res.data.user) errorLog = "User doesn't exist.";
+        // Web Audio API
+        playFile("https://s3-us-west-2.amazonaws.com/s.cdpn.io/3/error.mp3");
+        return setErrorLog(errorLog);
       })
-      .catch(
-        (e) => e.response?.data?.error && setErrorLog(e.response.data.error)
-      );
+      .catch((e) => {
+        playFile("https://s3-us-west-2.amazonaws.com/s.cdpn.io/3/error.mp3");
+        e.response?.data?.error && setErrorLog(e.response.data.error);
+      });
   };
 
   return (

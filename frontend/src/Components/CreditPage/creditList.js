@@ -125,6 +125,16 @@ export const creditList = [
     ],
   },
   {
+    title: "JavaScript API - Web Audio API",
+    credits: [
+      {
+        name: "Form Validation with Web Audio",
+        siteName: "CSS Tricks",
+        link: "https://css-tricks.com/form-validation-web-audio/",
+      },
+    ],
+  },
+  {
     title: "JavaScript API - Stripe",
     credits: [
       {

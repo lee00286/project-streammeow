@@ -27,15 +27,15 @@ What complexity points will this project contain:
 - Sentry (1 point): Monitor performance and track errors in frontend and backend
 - Nivo (1 point): Data visualization to view subscription and purchase history
 - Pion WebRTC (2 points): Video streaming (one-to-many) with Selective Forwarding Unit (SFU)
-- SendGrid (2 points): Users will receive email when they subscribe to a creator or buy a product from the website
 - Stripe (2 points): Use Pricing model and Stripe Checkout to implement membership subscription feature
 - Auth0 (1 point): Users can sign in to the website using Auth0 partners such as Google
 - Web Audio API (1 point): Sound for buttons ([example](https://css-tricks.com/form-validation-web-audio/))
 
-Total: 10
+Total: 8
 
 (optional) What complexity points will be attempted as bonus for the challenge factor
 
+- SendGrid (2 points): Users will receive email when they subscribe to a creator or buy a product from the website
 - Socket.io (2 points): Real-time many-to-many chat between creator and subscriber
 - Push API (3 points): Send notification when a subscribed streamer is live
 
