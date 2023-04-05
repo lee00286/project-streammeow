@@ -29,6 +29,7 @@ import StreamingListPage from "./Components/StreamingPage/StreamingListPage";
 import PurchasePage from "./Components/PurchasePage/PurchasePage";
 import ConfirmPage from "./Components/PurchasePage/ConfirmPage";
 import UserPage from "./Components/UserPage/UserPage";
+import CallbackPage from "./Components/LoginPage/CallbackPage";
 // Style
 import "./App.css";
 import "./Components/cols.css";
@@ -135,6 +136,7 @@ function App() {
         <Route path="/allcreators" element={<AllCreators />} />
         <Route path="/allstreams" element={<AllStreams />} />
         <Route path="/allposted" element={<AllPosted />} />
+        <Route path="/callback" element={<CallbackPage />} />
         <Route
           path="/becomecreator"
           element={

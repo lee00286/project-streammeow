@@ -1,7 +1,11 @@
 import { Router } from "express";
 import { isValidArgument } from "../error_check.js";
 import { User } from "../models/users.js";
-import { isAuthenticated, isNotAuthenticated } from "../middleware/auth.js";
+import {
+  isAuthenticated,
+  isNotAuthenticated,
+  checkJwt,
+} from "../middleware/auth.js";
 import bcrypt from "bcryptjs";
 import Sentry from "@sentry/node";
 import multer from "multer";
@@ -49,6 +53,58 @@ usersRouter.post("/login", isNotAuthenticated, async (req, res) => {
   req.session.userId = user.id;
   return res.status(200).json({ user });
 });
+
+usersRouter.post(
+  "/auth0",
+  checkJwt,
+  upload.single("picture"),
+  async (req, res) => {
+    const saltRounds = 10;
+    const salt = bcrypt.genSaltSync(saltRounds);
+    let password = req.body.email;
+    let email = req.body.email;
+    let name = req.body.name;
+    let picture = req.file;
+    password = bcrypt.hashSync(password, salt);
+    let user = await User.findOne({ where: { email } });
+    if (user && user.auth0 === false) {
+      return res
+        .status(400)
+        .json({ error: "Email address already registered" });
+    }
+    if (user && user.auth0 === true) {
+      //sign in
+      let password = req.body.email;
+      let email = req.body.email;
+      let user = await User.findOne({ where: { email } });
+      if (!user) {
+        return res.status(400).json({ error: "Email address not registered" });
+      }
+      const hash = user.password;
+      const match = bcrypt.compareSync(password, hash);
+      if (!match) {
+        return res.status(401).json({ error: "Incorrect email or password" });
+      }
+      req.session.userId = user.id;
+      return res.status(200).json({ user });
+    }
+    try {
+      const user = await User.create({
+        email: email,
+        password: password,
+        name: name,
+        picture: picture,
+        auth0: true,
+      });
+      req.session.userId = user.id;
+      return res.status(200).json({ user });
+    } catch (e) {
+      const errorMsg = "Failed to create a user.";
+      console.log(errorMsg);
+      Sentry.captureException(e);
+    }
+  }
+);
 
 usersRouter.post("/logout", isAuthenticated, async (req, res) => {
   // Remove data stored in session

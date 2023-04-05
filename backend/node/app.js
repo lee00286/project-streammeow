@@ -22,10 +22,15 @@ dotenv.config();
 
 // CORS for a list of allowed origins (specify for safety)
 const CLIENT_HOST = process.env.CLIENT_HOST || "http://localhost:3000";
-const allowedOrigins = [CLIENT_HOST, "https://checkout.stripe.com"];
+const allowedOrigins = [
+  CLIENT_HOST,
+  "https://checkout.stripe.com",
+  "https://dev-xz5orhy8rzrhzt80.us.auth0.com",
+];
 // const allowedOrigins = ["*"];
 const options = {
   origin: allowedOrigins,
+  credentials: true,
 };
 app.use(cors(options));
 

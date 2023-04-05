@@ -5,6 +5,7 @@ import LoginForm from "./LoginForm";
 import module from "../../ApiService";
 import Alert from "../Alert/Alert";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 function RegisterPage() {
   const navigate = useNavigate();
@@ -20,6 +21,11 @@ function RegisterPage() {
   }, []);
 
   const register = (email, password) => {
+    if (!email || !password) {
+      console.log("Please enter email and password");
+      return;
+    }
+
     module.UserRegister(email, password).then((res) => {
       if (res.data.user) {
         navigate("/signin");

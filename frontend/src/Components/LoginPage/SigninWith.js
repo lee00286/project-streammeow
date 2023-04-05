@@ -1,4 +1,6 @@
 import { useNavigate } from "react-router-dom";
+import { useAuth0 } from "@auth0/auth0-react";
+import module from "../../ApiService";
 
 import "./LoginPage.css";
 
@@ -6,6 +8,22 @@ function SigninWith() {
   const navigate = useNavigate();
   const toSignIn = () => {
     navigate("/signin");
+  };
+
+  const { loginWithRedirect, user } = useAuth0();
+  const handleLogin = () => {
+    loginWithRedirect({
+      appState: { returnTo: "/" },
+    });
+    if (user) {
+      module.Auth0Login(user.email, user.name, user.picture).then((res) => {
+        if (res.data.user) {
+          console.log(res.data.user);
+        } else {
+          console.log(res.err);
+        }
+      });
+    }
   };
 
   return (
@@ -16,7 +34,9 @@ function SigninWith() {
             <h2>Register</h2>
           </div>
           <div className="login-input col">
-            <button className="auth-button">Sign in with Google</button>
+            <button className="auth-button" onClick={handleLogin}>
+              Sign in with Google
+            </button>
             <button className="auth-button">Sign in with Github</button>
           </div>
         </div>
