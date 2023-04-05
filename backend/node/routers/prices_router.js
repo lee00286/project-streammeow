@@ -2,6 +2,7 @@ import { Router } from "express";
 import { Stripe } from "stripe";
 import dotenv from "dotenv";
 import { isValidArgument, stripeCatchError } from "../error_check.js";
+import { isAuthenticated } from "../middleware/auth.js";
 import Sentry from "@sentry/node";
 
 export const pricesRouter = Router();
@@ -27,7 +28,7 @@ const calculateTax = (price, taxRate) => {
 /**
  * Create a price for a membership in Stripe.
  * */
-pricesRouter.post("/", async (req, res) => {
+pricesRouter.post("/", isAuthenticated, async (req, res) => {
   const reqBody = req.body;
   // Check validity of arguments
   if (
@@ -39,7 +40,6 @@ pricesRouter.post("/", async (req, res) => {
   const taxPrice = calculateTax(reqBody.price, 12.5);
   try {
     // Create a price
-    // TODO: For recurring, think about year interval as well
     const price = await stripe.prices.create({
       product_data: {
         name: reqBody.membershipName,
@@ -59,7 +59,7 @@ pricesRouter.post("/", async (req, res) => {
 /**
  * Retrieve all prices from Stripe.
  * */
-pricesRouter.get("/", async (req, res) => {
+pricesRouter.get("/", isAuthenticated, async (req, res) => {
   try {
     const prices = await stripe.prices.list();
     if (prices === null || prices === undefined)
@@ -75,7 +75,7 @@ pricesRouter.get("/", async (req, res) => {
 /**
  * Retrieve a price from Stripe, using priceId.
  * */
-pricesRouter.get("/:priceId/", async (req, res) => {
+pricesRouter.get("/:priceId/", isAuthenticated, async (req, res) => {
   const priceId = req.params.priceId;
   // Check validity of priceId
   if (!isValidArgument(priceId, "string"))
@@ -96,7 +96,7 @@ pricesRouter.get("/:priceId/", async (req, res) => {
 /**
  * Update attributes of a price.
  * */
-pricesRouter.patch("/:priceId/", async (req, res) => {
+pricesRouter.patch("/:priceId/", isAuthenticated, async (req, res) => {
   const priceId = req.params.priceId;
   const variables = req.body.variables;
   // Check validity of arugments
@@ -120,7 +120,7 @@ pricesRouter.patch("/:priceId/", async (req, res) => {
 /**
  * Delete a price from Stripe.
  * */
-pricesRouter.delete("/:priceId/", async (req, res) => {
+pricesRouter.delete("/:priceId/", isAuthenticated, async (req, res) => {
   const priceId = req.params.priceId;
   // Check validity of priceId
   if (!isValidArgument(priceId, "string"))

@@ -4,35 +4,30 @@ import module from "../../ApiService";
 // Components
 import MenuButton from "../Buttons/MenuButton";
 import ColorButton from "../Buttons/ColorButton";
+import Alert from "../Alert/Alert";
 // Style
 import "./NavBar.css";
 
 /**
  * Navigation bar component that directs users to different pages.
+ * @param {number} userId: id of the user
+ * @param {number} creatorId: id of the streamer
  * @returns Navigation bar component
  */
-function NavBar({ userId }) {
+function NavBar({ userId, creatorId }) {
   const navigate = useNavigate();
 
   const [UserId, setUserId] = useState("");
+  const [CreatorId, setCreatorId] = useState("");
   const [IsCreator, setIsCreator] = useState(false);
   const [UserHover, setUserHover] = useState(false);
+  const [ErrorLog, setErrorLog] = useState("");
 
   useEffect(() => {
-    module.getUserId().then((res) => {
-      if (res.data.user === undefined) return;
-      // If the user is authenticated
-      setUserId(res.data.user.id);
-      // If the user is creator
-      module
-        .getCreatorByUserId(res.data.user.id)
-        .then((res) => {
-          if (res.error) return console.log(res.error);
-          setIsCreator(res.data.creator && res.data.creator.id);
-        })
-        .catch((e) => console.log(e));
-    });
-  }, [userId]);
+    setUserId(userId);
+    setCreatorId(creatorId);
+    setIsCreator(creatorId !== null);
+  }, [userId, creatorId]);
 
   // Navigate to home
   const onLogo = () => {
@@ -62,19 +57,16 @@ function NavBar({ userId }) {
   // Sign out
   const onSignOut = () => {
     // Signout
-    module
-      .UserLogout()
-      .then((res) => {
-        if (res.data.success) {
-          setTimeout(function () {
-            alert("Successfully signed out.");
-            setUserHover(false);
-            setUserId("");
-            navigate("/");
-          }, 500);
-        }
-      })
-      .catch((e) => console.log(e));
+    module.UserLogout().then((res) => {
+      if (res.data.success) {
+        setTimeout(function () {
+          setErrorLog("Successfully signed out.");
+          setUserHover(false);
+          setUserId("");
+          navigate(0);
+        }, 500);
+      }
+    });
   };
 
   // Navigate to mypage (user page)
@@ -82,10 +74,12 @@ function NavBar({ userId }) {
     navigate("/mypage");
   };
 
+  const onCreatorPage = () => {
+    navigate(`/creators/${CreatorId}`);
+  };
+
   // Become the creator and navigate to creator's page
   const onCreator = () => {
-    // TODO: Become the creator
-    // TODO: Change it to creatorId-specific
     navigate("/becomecreator");
   };
 
@@ -97,6 +91,7 @@ function NavBar({ userId }) {
 
   return (
     <div className="navigation row align-items-center no-select">
+      <Alert text={ErrorLog} isSuccess={true} hide={ErrorLog === ""} />
       <div className="logo-img col-2">
         <img src="/logo2.png" onClick={onLogo} />
       </div>
@@ -137,7 +132,11 @@ function NavBar({ userId }) {
             onMouseLeave={() => setUserHover(false)}
             className="nav-user-menu row"
           >
-            <img src="/icons/user.png" className="user-icon" />
+            <img
+              src={`/api/users/${UserId}/picture`}
+              // alt="/icons/user.png"
+              className="user-icon"
+            />
           </div>
         </div>
       ) : (
@@ -166,6 +165,11 @@ function NavBar({ userId }) {
           <div className="submenu-button" onClick={onMyPage}>
             My Page
           </div>
+          {IsCreator && CreatorId && (
+            <div className="submenu-button" onClick={onCreatorPage}>
+              Creator's Page
+            </div>
+          )}
           <div className="submenu-button" onClick={onSignOut}>
             Sign Out
           </div>

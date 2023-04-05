@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import module from "../../../ApiService";
 // Components
 import ColorButton from "../../Buttons/ColorButton";
+import Alert from "../../Alert/Alert";
 // Style
 import "../PurchasePage.css";
 
@@ -17,6 +18,7 @@ function SubscribeButton(props) {
 
   let [Success, setSuccess] = useState(false);
   let [SessionId, setSessionId] = useState("");
+  const [ErrorLog, setErrorLog] = useState("");
 
   /* Set priceId of the membership */
   useEffect(() => {
@@ -44,7 +46,7 @@ function SubscribeButton(props) {
 
     if (query.get("canceled")) {
       setSuccess(false);
-      console.log(
+      setErrorLog(
         "Order canceled -- continue to shop around and checkout when you're ready."
       );
     }
@@ -56,16 +58,18 @@ function SubscribeButton(props) {
     module
       .addPortalSession()
       .then((res) => {
-        if (res.error) return console.log(res.error);
+        if (res.error) return setErrorLog(res.error);
       })
-      .catch((e) => console.log(e));
+      .catch(
+        (e) => e.response?.data?.error && setErrorLog(e.response.data.error)
+      );
   };
 
   /* Checkout membership subscription */
   const onCheckOut = (e) => {
     e.preventDefault();
     if (!props.isChecked) {
-      console.log(
+      setErrorLog(
         "To continue, you must agree to the Terms & Conditions and Privacy Policy."
       );
       return;
@@ -73,20 +77,21 @@ function SubscribeButton(props) {
 
     // Create a checkout-session using priceId
     module
-      .addCheckoutSession(PriceId)
+      .addCheckoutSession(PriceId, props.membershipId)
       .then((res) => {
-        if (res.error) return console.log(res.error);
+        if (res.error) return setErrorLog(res.error);
         // Payment (replace with my own payment page)
         window.open(res.data.url, "_self");
       })
-      .catch((e) => {
-        console.log(e);
-      });
+      .catch(
+        (e) => e.response?.data?.error && setErrorLog(e.response.data.error)
+      );
   };
 
   if (Success && SessionId !== "") {
     return (
       <section>
+        <Alert text={ErrorLog} isError={true} hide={ErrorLog === ""} />
         <div className="product Box-root">
           <div className="description Box-root">
             <h3>Subscription to starter plan successful!</h3>
@@ -108,13 +113,16 @@ function SubscribeButton(props) {
   }
 
   return (
-    <ColorButton
-      buttonColor="var(--yellow4)"
-      textColor="#fff"
-      text="Subscribe"
-      buttonFunction={onCheckOut}
-      disabled={PriceId === null}
-    />
+    <div>
+      <Alert text={ErrorLog} isError={true} hide={ErrorLog === ""} />
+      <ColorButton
+        buttonColor="var(--yellow4)"
+        textColor="#fff"
+        text="Subscribe"
+        buttonFunction={onCheckOut}
+        disabled={PriceId === null}
+      />
+    </div>
   );
 }
 

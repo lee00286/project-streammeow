@@ -1,13 +1,14 @@
 "use strict";
 
 import React, { useState, useEffect, StrictMode } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 import module from "../../ApiService";
 import PageTitle from "../Texts/PageTitle";
 import SubTitle from "../Texts/SubTitle";
 import Membership from "../Membership/Membership";
 import Post from "../Posts/Post";
+import Alert from "../Alert/Alert";
 import "./CreatorPage.css";
 
 // placeholder post data till API is decided
@@ -79,11 +80,11 @@ const posts = [
   },
 ];
 
-// TODO: replace with actual id when database is setup
-const creatorId = 1;
-
 export default function CreatorPage() {
+  const { creatorId } = useParams();
+
   const [memberships, setMemberships] = useState([]);
+  const [ErrorLog, setErrorLog] = useState("");
 
   // retrieve data for the creator page
   useEffect(() => {
@@ -95,11 +96,13 @@ export default function CreatorPage() {
       .getAllMemberships(creatorId)
       .then((res) => {
         if (!ignore) {
-          if (res.error) return console.log(res.error);
+          if (res.error) return setErrorLog(res.error);
           setMemberships(res.data.memberships);
         }
       })
-      .catch((e) => console.log(e));
+      .catch(
+        (e) => e.response?.data?.error && setErrorLog(e.response.data.error)
+      );
     return () => {
       ignore = true;
     };
@@ -112,7 +115,6 @@ export default function CreatorPage() {
   const navigate = useNavigate();
 
   const goToPurchase = (id) => {
-    console.log(id);
     navigate(`/purchase/${creatorId}`, { state: { membershipId: id } });
   };
 
@@ -140,6 +142,7 @@ export default function CreatorPage() {
   return (
     <StrictMode>
       <div className="page center">
+        <Alert text={ErrorLog} isError={true} hide={ErrorLog === ""} />
         <PageTitle text="Creator" />
         <SubTitle text="Memberships" />
         <div className="memberships-container">

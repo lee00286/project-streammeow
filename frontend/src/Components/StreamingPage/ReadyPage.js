@@ -5,6 +5,7 @@ import module from "../../ApiService";
 import StreamVideo from "./Items/StreamVideo";
 import ColorButton from "../Buttons/ColorButton";
 import Select from "react-select";
+import Alert from "../Alert/Alert";
 // Style
 import "./StreamingPage.css";
 
@@ -90,12 +91,14 @@ function StreamInfo(props) {
 function ReadyPage() {
   const { creatorId } = useParams();
 
+  const [ErrorLog, setErrorLog] = useState("");
   // Streaming Information
   const [Title, setTitle] = useState("");
   const [Description, setDescription] = useState("");
   const [Permission, setPermission] = useState([]);
   const [MembershipList, setMembershipList] = useState(["Everyone"]);
   // Video Streaming
+  const [ScreenCapture, setScreenCapture] = useState(false);
   const [GSD, setGSD] = useState("");
   const [SendGSD, setSendGSD] = useState("");
   const [StartVideo, setStartVideo] = useState(false);
@@ -118,7 +121,7 @@ function ReadyPage() {
     module
       .getAllStreamings(creatorId)
       .then((res) => {
-        if (res.error) return console.log(res.error);
+        if (res.error) return setErrorLog(res.error);
         const streamings = res.data.streamings;
         return streamings;
       })
@@ -133,12 +136,13 @@ function ReadyPage() {
             const update = module.updateStreaming(streamings[i].id, {
               isEnded: true,
             });
-            if (update.error) return console.log(update.error);
-            console.log(update);
+            if (update.error) return setErrorLog(update.error);
           }
         }
       })
-      .catch((e) => console.log(e));
+      .catch(
+        (e) => e.response?.data?.error && setErrorLog(e.response.data.error)
+      );
   }, [creatorId]);
 
   // Get creator's membership list
@@ -146,11 +150,16 @@ function ReadyPage() {
     if (creatorId === undefined || creatorId === null || creatorId === "")
       return;
     // Get creator's membership list from database
-    module.getAllMemberships(creatorId).then((res) => {
-      if (res.error) return console.log(res.error);
-      setMembershipList(res.data.memberships);
-    });
-  }, []);
+    module
+      .getAllMemberships(creatorId)
+      .then((res) => {
+        if (res.error) return setErrorLog(res.error);
+        setMembershipList(res.data.memberships);
+      })
+      .catch(
+        (e) => e.response?.data?.error && setErrorLog(e.response.data.error)
+      );
+  }, [creatorId]);
 
   // Save streaming title
   const onTitle = (title) => {
@@ -183,14 +192,21 @@ function ReadyPage() {
     setStartVideo(true);
   };
 
+  // Start screen capturing
+  const onStartScreenCapture = () => {
+    setStartVideo(true);
+    setScreenCapture(true);
+  };
+
   // Start streaming
   const onStartStreaming = () => {
     // Save streaming information to database
     const response = module
       .addStreaming(Title, Description, Permission)
-      .catch((e) => console.log(e));
-    console.log(response);
-    if (response.error) return console.log(response.error);
+      .catch(
+        (e) => e.response?.data?.error && setErrorLog(e.response.data.error)
+      );
+    if (response.error) return setErrorLog(response.error);
     // Start streaming session
     setStartSession(true);
     setSendGSD(GSD);
@@ -198,9 +214,11 @@ function ReadyPage() {
 
   return (
     <div className="stream grid-body page col">
+      <Alert text={ErrorLog} isError={true} hide={ErrorLog === ""} />
       <div className="stream-top row">
         <StreamVideo
           isCreator={true}
+          isScreenCapture={ScreenCapture}
           hasStartVideo={StartVideo}
           hasStartSession={StartSession}
           gsd={SendGSD}
@@ -219,6 +237,13 @@ function ReadyPage() {
           textColor="var(--yellow4)"
           buttonColor="#fff"
           buttonFunction={onStartVideo}
+          border="1px solid var(--yellow4)"
+        />
+        <ColorButton
+          text="Start Screen Capture"
+          textColor="var(--yellow4)"
+          buttonColor="#fff"
+          buttonFunction={onStartScreenCapture}
           border="1px solid var(--yellow4)"
         />
         <ColorButton

@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@nivo/bar": "^0.80.0",
+    "@nivo/core": "^0.80.0",
     "@sentry/react": "^7.45.0",
     "@sentry/tracing": "^7.45.0",
     "@stripe/react-stripe-js": "^1.16.5",
@@ -26,7 +28,7 @@
   },
   "scripts": {
     "format": "prettier --write .",
-    "start": "react-scripts start",
+    "start": "PORT=80 react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

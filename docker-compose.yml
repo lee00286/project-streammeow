@@ -1,16 +1,5 @@
 version: "3"
 services:
-  frontend:
-    container_name: frontend
-    build: "./frontend"
-    ports:
-      - "3000:3000"
-    depends_on:
-      - node
-      - webrtc
-    links:
-      - node
-      - webrtc
   db:
     image: postgres:15-alpine
     restart: always
@@ -36,8 +25,8 @@ services:
       - db
     links:
       - db
-    ports:
-      - "5001:5001"
+    expose:
+      - 5001
     environment:
       - POSTGRES_DB=${POSTGRES_DB}
       - POSTGRES_USERNAME=${POSTGRES_USERNAME}
@@ -47,8 +36,8 @@ services:
   webrtc:
     container_name: webrtc
     build: "./backend/webrtc"
-    ports:
-      - "8080:8080"
+    expose:
+      - 8080
   nginx:
     image: nginx:latest
     container_name: nginx
@@ -56,9 +45,10 @@ services:
     ports:
       - "80:80"
     volumes:
-      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+      - ./frontend/build:/usr/share/nginx/html
+      - ./certs:/etc/nginx/certs
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
     depends_on:
-      - frontend
       - node
       - webrtc
 volumes:

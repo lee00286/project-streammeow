@@ -1,7 +1,11 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import module from "../../ApiService";
 import calculations from "../calculations";
+// Components
+import ColorButton from "../Buttons/ColorButton";
+import Alert from "../Alert/Alert";
+// Style
 import "../Buttons/Buttons.css";
 
 /* Get query */
@@ -53,6 +57,36 @@ function PaymentDetails({ invoice }) {
 }
 
 /**
+ * Payment cancellation component.
+ * @returns Payment cancellation component
+ */
+function ConfirmCancel() {
+  const navigate = useNavigate();
+
+  const onHome = () => {
+    navigate("/");
+  };
+
+  return (
+    <div className="invoice page">
+      <div className="invoice-ticket col">
+        <div className="invoice-top">
+          <img src="/icons/caution.png" className="no-select" />
+          <h2>Payment Cancelled</h2>
+          <p>Your payment has been cancelled.</p>
+          <ColorButton
+            text="Go Home"
+            textColor="#fff"
+            buttonColor="var(--yellow4)"
+            buttonFunction={onHome}
+          />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/**
  * Payment confirmation page.
  * @returns ConfirmPage component
  */
@@ -60,27 +94,49 @@ function ConfirmPage() {
   let query = useQuery();
 
   const [Invoice, setInvoice] = useState(null);
+  const [CancelPayment, setCancelPayment] = useState(false);
+  const [ErrorLog, setErrorLog] = useState("");
 
   useEffect(() => {
+    const cancel = query.get("canceled");
+    if (CancelPayment || cancel === "true") {
+      setCancelPayment(true);
+      return;
+    }
     module
       .getSession(query.get("session_id"))
       .then((res) => {
-        if (res.data.error) console.log(res.data.error);
+        if (res.data.error) setErrorLog(res.data.error);
         else return res.data;
       })
       .then((data) => {
         module
           .summarizePayment(data.invoice)
           .then((res) => {
-            if (res.error) return console.log(res.error);
+            if (res.error) return setErrorLog(res.error);
             setInvoice(res.data);
+            return res.data;
           })
-          .catch((e) => console.log(e));
+          .then((invoice) => {
+            module.userSubscribe(
+              query.get("membership"),
+              invoice.payment.datePaid
+            );
+          })
+          .then(() => {
+            module.membershipSubscribe(query.get("membership"));
+          })
+          .catch(
+            (e) => e.response?.data?.error && setErrorLog(e.response.data.error)
+          );
       });
   }, []);
 
+  if (CancelPayment) return <ConfirmCancel />;
+
   return (
     <div className="invoice page">
+      <Alert text={ErrorLog} isError={true} hide={ErrorLog === ""} />
       {Invoice && (
         <div className="invoice-ticket col">
           <div className="invoice-top">
