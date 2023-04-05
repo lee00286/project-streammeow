@@ -12,15 +12,6 @@ const generatePassword = (password) => {
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    /**
-     * Add seed commands here.
-     *
-     * Example:
-     * await queryInterface.bulkInsert('People', [{
-     *   name: 'John Doe',
-     *   isBetaMember: false
-     * }], {});
-     */
     await queryInterface.bulkInsert("Users", [
       {
         name: "User 1",
@@ -68,7 +59,7 @@ module.exports = {
         userId: users[0][1].id,
       },
     ]);
-    return queryInterface.bulkInsert("Memberships", [
+    await queryInterface.bulkInsert("Memberships", [
       {
         name: "Basic",
         description: "Basic membership",
@@ -98,6 +89,46 @@ module.exports = {
         createdAt: new Date(),
         updatedAt: new Date(),
         creatorId: 2,
+      },
+    ]);
+    const memberships = await queryInterface.sequelize.query(
+      `SELECT id from "Memberships";`
+    );
+    return queryInterface.bulkInsert("Posts", [
+      {
+        title: "My first post!",
+        description:
+          "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley.",
+        permission: null,
+        likes: 10,
+        dislikes: 2,
+        comments: null,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        creatorId: 1,
+      },
+      {
+        title: "A members only post",
+        description:
+          "Hello everyone! I just wanted to say thank you for supporting me through these tough times.",
+        permission: [memberships[0][0].id, memberships[0][1].id],
+        likes: 5,
+        dislikes: 10,
+        comments: null,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        creatorId: 1,
+      },
+      {
+        title: "Something special for my Standard+ members",
+        description: "This is a secret post.",
+        permission: [memberships[0][1].id],
+        likes: 3,
+        dislikes: 0,
+        comments: null,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        creatorId: 1,
       },
     ]);
   },

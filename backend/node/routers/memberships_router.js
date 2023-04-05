@@ -74,7 +74,7 @@ membershipsRouter.get("/", async (req, res) => {
 /**
  * Retrieve one membership using membershipId.
  * */
-membershipsRouter.get("/:membershipId/", async (req, res, next) => {
+membershipsRouter.get("/:membershipId/", async (req, res) => {
   const membershipId = req.params.membershipId;
   // Check validity of membershipId
   if (!isValidArgument(membershipId, "string"))
