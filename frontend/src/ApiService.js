@@ -277,21 +277,12 @@ module.getAllCreators = () => {
 };
 
 /**
- * Retrieve a creator from DB using creatorId.
- * @param {string} creatorId: id of the creator
- */
-module.getCreatorById = (creatorId) => {
-  // Get a creator using creatorId
-  return axios.get(`/api/creators/${creatorId}`);
-};
-
-/**
  * Retrieve a creator from DB using userId.
  * @param {string} userId: id of the user
  */
 module.getCreatorByUserId = (userId) => {
   // Get a creator using userId
-  return axios.get(`/api/creators/user/${userId}`);
+  return axios.get(`/api/creators/${userId}`);
 };
 
 /**

@@ -43,30 +43,9 @@ creatorsRouter.get("/", isAuthenticated, async (req, res) => {
 });
 
 /**
- * Retrieve one creator using creatorId.
- * */
-creatorsRouter.get("/:creatorId/", isAuthenticated, async (req, res, next) => {
-  const creatorId = req.params.creatorId;
-  if (creatorId === "user") return next();
-  // Check validity of creatorId
-  if (!isValidArgument(creatorId, "string"))
-    return res.status(422).json({ error: "Invalid creatorId." });
-  try {
-    const creator = await Creators.findByPk(creatorId);
-    if (!creator)
-      return res.status(200).json({ msg: `Creator doesn't exist.` });
-    return res.status(200).json({ creator });
-  } catch (e) {
-    const errorMsg = "Failed to retrieve a creator.";
-    console.log(errorMsg);
-    Sentry.captureException(e);
-  }
-});
-
-/**
  * Retrieve one creator using userId.
  * */
-creatorsRouter.get("/user/:userId/", isAuthenticated, async (req, res) => {
+creatorsRouter.get("/:userId/", isAuthenticated, async (req, res) => {
   const userId = req.params.userId;
   // Check validity of userId
   if (!isValidArgument(userId, "string"))
