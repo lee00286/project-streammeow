@@ -4,6 +4,7 @@ import module from "../../ApiService";
 // Components
 import MenuButton from "../Buttons/MenuButton";
 import ColorButton from "../Buttons/ColorButton";
+import Alert from "../Alert/Alert";
 // Style
 import "./NavBar.css";
 
@@ -20,6 +21,7 @@ function NavBar({ userId, creatorId }) {
   const [CreatorId, setCreatorId] = useState("");
   const [IsCreator, setIsCreator] = useState(false);
   const [UserHover, setUserHover] = useState(false);
+  const [ErrorLog, setErrorLog] = useState("");
 
   useEffect(() => {
     setUserId(userId);
@@ -55,19 +57,16 @@ function NavBar({ userId, creatorId }) {
   // Sign out
   const onSignOut = () => {
     // Signout
-    module
-      .UserLogout()
-      .then((res) => {
-        if (res.data.success) {
-          setTimeout(function () {
-            alert("Successfully signed out.");
-            setUserHover(false);
-            setUserId("");
-            navigate(0);
-          }, 500);
-        }
-      })
-      .catch((e) => console.log(e));
+    module.UserLogout().then((res) => {
+      if (res.data.success) {
+        setTimeout(function () {
+          setErrorLog("Successfully signed out.");
+          setUserHover(false);
+          setUserId("");
+          navigate(0);
+        }, 500);
+      }
+    });
   };
 
   // Navigate to mypage (user page)
@@ -92,6 +91,7 @@ function NavBar({ userId, creatorId }) {
 
   return (
     <div className="navigation row align-items-center no-select">
+      <Alert text={ErrorLog} isSuccess={true} hide={ErrorLog === ""} />
       <div className="logo-img col-2">
         <img src="/logo2.png" onClick={onLogo} />
       </div>

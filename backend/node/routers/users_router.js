@@ -6,7 +6,6 @@ import bcrypt from "bcryptjs";
 import Sentry from "@sentry/node";
 import multer from "multer";
 import path from "path";
-import fs from "fs";
 
 export const usersRouter = Router();
 export const user_bcrypt = bcrypt;

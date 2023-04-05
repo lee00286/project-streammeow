@@ -40,6 +40,16 @@ export const creditList = [
         siteName: "CSS Tricks",
         link: "https://css-tricks.com/almanac/properties/a/aspect-ratio/",
       },
+      {
+        name: "CSS keyframe animation",
+        siteName: "Stackoverflow",
+        link: "https://stackoverflow.com/questions/16812911/css-keyframe-animation-with-translation-transform-snaps-to-whole-pixels-in-ie-10",
+      },
+      {
+        name: "CSS animation make HTML element disappear",
+        siteName: "Stackoverflow",
+        link: "https://stackoverflow.com/questions/39513705/make-html-element-disappear-with-css-animation",
+      },
     ],
   },
   {
@@ -97,6 +107,10 @@ export const creditList = [
         name: "Screen Capture API",
         siteName: "MDN Web Docs",
         link: "https://developer.mozilla.org/en-US/docs/Web/API/Screen_Capture_API/Using_Screen_Capture",
+      },
+      {
+        name: "Loading with React hook",
+        link: "https://codewithnico.com/react-wait-axios-to-render/",
       },
     ],
   },

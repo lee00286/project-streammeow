@@ -83,7 +83,9 @@ function App() {
           else setCreatorId(null);
           setIsLoading(false);
         })
-        .catch((e) => console.log(e));
+        .catch(
+          (e) => e.response?.data?.error && console.log(e.response.data.error)
+        );
     });
   }, []);
 
@@ -104,7 +106,7 @@ function App() {
     // User should be authenticated
     if (isUser && UserId) {
       if (isCreator === null) return childOne;
-      if (!isCreator && !CreatorId) return childOne;
+      if (isCreator === false && !CreatorId) return childOne;
       if (isCreator && CreatorId) return childOne;
     }
 

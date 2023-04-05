@@ -7,6 +7,7 @@ import { ResponsiveBar } from "@nivo/bar";
 import PageTitle from "../Texts/PageTitle";
 import SubTitle from "../Texts/SubTitle";
 import ColorButton from "../Buttons/ColorButton";
+import Alert from "../Alert/Alert";
 // Style
 import "./UserPage.css";
 
@@ -22,6 +23,7 @@ function CreatorsTab({ creator }) {
 
   const [Creator, setCreator] = useState(null);
   const [NivoData, setNivoData] = useState([]);
+  const [ErrorLog, setErrorLog] = useState("");
 
   useEffect(() => {
     if (!creator) return;
@@ -29,7 +31,7 @@ function CreatorsTab({ creator }) {
     module
       .getAllMemberships(creator.id)
       .then((res) => {
-        if (res.error) return console.log(res.error);
+        if (res.error) return setErrorLog(res.error);
         const memberships = res.data.memberships;
         let data = [];
         // Set up membership data
@@ -45,12 +47,15 @@ function CreatorsTab({ creator }) {
         }
         setNivoData(data);
       })
-      .catch((e) => console.log(e));
+      .catch(
+        (e) => e.response?.data?.error && setErrorLog(e.response.data.error)
+      );
   }, [creator]);
 
   if (Creator) {
     return (
       <div className="user-tab creator-history col-auto col">
+        <Alert text={ErrorLog} isError={true} hide={ErrorLog === ""} />
         <SubTitle text="Subscription Count" />
         <div>
           <div className="nivo-graph">
@@ -94,6 +99,7 @@ function CreatorsTab({ creator }) {
 
   return (
     <div className="user-tab col-auto col">
+      <Alert text={ErrorLog} isError={true} hide={ErrorLog === ""} />
       <SubTitle text="Creator's Menu" />
       <div className="flex-center">
         <ColorButton
@@ -114,6 +120,7 @@ function CreatorsTab({ creator }) {
 function UserHistoryTab() {
   const [UserHistory, setUserHistory] = useState(null);
   const [Subscription, setSubscription] = useState([]);
+  const [ErrorLog, setErrorLog] = useState("");
 
   // Get user information
   useEffect(() => {
@@ -122,8 +129,8 @@ function UserHistoryTab() {
     module
       .getUserId()
       .then((res) => {
-        if (res.error) return console.log(res.error);
-        if (!res.data.user) return console.log("Failed to load user data");
+        if (res.error) return setErrorLog(res.error);
+        if (!res.data.user) return setErrorLog("Failed to load user data");
         setUserHistory(res.data.user);
         // Subscription
         if (!res.data?.user?.subscription) return;
@@ -140,7 +147,7 @@ function UserHistoryTab() {
           });
           // // Get membership detail
           // const detail = module.getMembershipById(splittedText[0]).then((res) => {
-          //   if (res.error) return console.log(res.error);
+          //   if (res.error) return setErrorLog(res.error);
           //   return res;
           // }).then((data) => {
           //   if (!data?.name || !data.description || !data.price) return;
@@ -152,7 +159,7 @@ function UserHistoryTab() {
           //     price: data.price,
           //   };
           //   subscriptionList.push(variables);
-          // }).catch((e) => console.log(e));
+          // }).catch((e) => e.response?.data?.error && setErrorLog(e.response.data.error));
         }
         setSubscription(subscriptionList);
       });
@@ -174,6 +181,7 @@ function UserHistoryTab() {
   if (UserHistory) {
     return (
       <div className="user-tab user-history col-auto col">
+        <Alert text={ErrorLog} isError={true} hide={ErrorLog === ""} />
         <SubTitle text="Subscriptions" />
         <div>{subscriptions}</div>
       </div>
@@ -182,6 +190,7 @@ function UserHistoryTab() {
 
   return (
     <div className="user-tab col-auto col">
+      <Alert text={ErrorLog} isError={true} hide={ErrorLog === ""} />
       <SubTitle text="User History" />
       <div className="flex-center">Empty</div>
     </div>
@@ -200,13 +209,14 @@ function UserInfoTab() {
   const [ModifyName, setModifyName] = useState(null);
   const [ModifyEmail, setModifyEmail] = useState(null);
   const [ModifyPicture, setModifyPicture] = useState(null);
+  const [ErrorLog, setErrorLog] = useState("");
 
   // Get user information
   useEffect(() => {
     // Get userId
     module.getUserId().then((res) => {
-      if (res.error) return console.log(res.error);
-      if (!res.data.user) return console.log("Failed to load user data");
+      if (res.error) return setErrorLog(res.error);
+      if (!res.data.user) return setErrorLog("Failed to load user data");
       setUserInfo(res.data.user);
     });
   }, [IsModify]);
@@ -218,8 +228,8 @@ function UserInfoTab() {
     if (UserInfo.name) setModifyName(UserInfo.name);
     if (UserInfo.email) setModifyEmail(UserInfo.email);
     module.getUserPicture(UserInfo.id).then((res) => {
-      if (res.error) return console.log(res.error);
-      if (!res.data) return console.log("Failed to load user picture");
+      if (res.error) return setErrorLog(res.error);
+      if (!res.data) return setErrorLog("Failed to load user picture");
       setModifyPicture(res.data);
     });
   }, [IsModify]);
@@ -240,11 +250,13 @@ function UserInfoTab() {
     module
       .updateUser(UserInfo.id, formData)
       .then((res) => {
-        if (res.error) return console.log(res.error);
+        if (res.error) return setErrorLog(res.error);
         // Remove modifying forms
         setIsModify(false);
       })
-      .catch((e) => console.log(e));
+      .catch(
+        (e) => e.response?.data?.error && setErrorLog(e.response.data.error)
+      );
   };
 
   const onChangePassword = () => {
@@ -254,6 +266,7 @@ function UserInfoTab() {
   if (UserInfo && IsModify) {
     return (
       <div className="user-tab user-info col-auto col">
+        <Alert text={ErrorLog} isError={true} hide={ErrorLog === ""} />
         <div className="info-header row">
           <SubTitle text="User Information" />
         </div>
@@ -310,6 +323,7 @@ function UserInfoTab() {
   if (UserInfo && !IsModify) {
     return (
       <div className="user-tab user-info col-auto col">
+        <Alert text={ErrorLog} isError={true} hide={ErrorLog === ""} />
         <div className="info-header row">
           <SubTitle text="User Information" />
           <button onClick={onInfoEdit}>Edit</button>
@@ -344,7 +358,12 @@ function UserInfoTab() {
     );
   }
 
-  return <div className="user-tab col-auto flex-center">Empty</div>;
+  return (
+    <div className="user-tab col-auto flex-center">
+      <Alert text={ErrorLog} isError={true} hide={ErrorLog === ""} />
+      Empty
+    </div>
+  );
 }
 
 function SideBar({ onClickMenu }) {
@@ -383,6 +402,7 @@ function UserPage() {
   const [ClickedPage, setClickedPage] = useState(0);
   const [CurrentMenu, setCurrentMenu] = useState(null);
   const [Creator, setCreator] = useState(null);
+  const [ErrorLog, setErrorLog] = useState("");
 
   useEffect(() => {
     module.getUserId().then((res) => {
@@ -392,10 +412,12 @@ function UserPage() {
       module
         .getCreatorByUserId(res.data.user.id)
         .then((res) => {
-          if (res.error) return console.log(res.error);
+          if (res.error) return setErrorLog(res.error);
           setCreator(res.data.creator);
         })
-        .catch((e) => console.log(e));
+        .catch(
+          (e) => e.response?.data?.error && setErrorLog(e.response.data.error)
+        );
     });
   }, [ClickedPage]);
 
@@ -424,6 +446,7 @@ function UserPage() {
 
   return (
     <div className="grid-body page user-page">
+      <Alert text={ErrorLog} isError={true} hide={ErrorLog === ""} />
       <PageTitle text="My Page" />
       <div className="user-tabs row">
         <SideBar onClickMenu={onClickMenu} />
