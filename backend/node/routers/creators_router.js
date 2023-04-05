@@ -28,7 +28,7 @@ creatorsRouter.post("/", isAuthenticated, async (req, res) => {
 /**
  * Retrieve all creators from DB.
  * */
-creatorsRouter.get("/", isAuthenticated, async (req, res) => {
+creatorsRouter.get("/", async (req, res) => {
   try {
     // Retrieve creators
     const creators = await Creators.findAll({ order: [["id", "DESC"]] });

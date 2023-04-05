@@ -48,6 +48,12 @@
 
 .creator {
   margin: 0px 20px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.creator:hover {
+  background-color: var(--gray1);
 }
 
 .creator-img {
@@ -210,6 +216,7 @@
   border-bottom: 1px;
   border-bottom-style: solid;
   border-bottom-color: var(--yellow2);
+  cursor: pointer;
 }
 
 .all-streams {
