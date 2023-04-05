@@ -59,7 +59,7 @@ function LoginForm({ login, register, onLogin, onRegister }) {
           <div className="login-input col">
             <label>EMAIL</label>
             <input
-              type="text"
+              type="email"
               placeholder="Email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}

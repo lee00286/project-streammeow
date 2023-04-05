@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import module from "../../../ApiService";
+import Alert from "../../Alert/Alert";
 // Stripe
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
@@ -19,6 +20,7 @@ const stripePromise = loadStripe(
  */
 function Payment({ totalCost, currency }) {
   const [ClientSecret, setClientSecret] = useState(null);
+  const [ErrorLog, setErrorLog] = useState("");
 
   useEffect(() => {
     if (!totalCost || !currency) return;
@@ -28,9 +30,9 @@ function Payment({ totalCost, currency }) {
       .then((res) => {
         setClientSecret(res.data.clientSecret);
       })
-      .catch((err) => {
-        console.log(`Error: ${err.response.data.error}`);
-      });
+      .catch(
+        (e) => e.response?.data?.error && setErrorLog(e.response.data.error)
+      );
   }, [totalCost, currency]);
 
   // Customize the appearance of the payment form
@@ -51,6 +53,7 @@ function Payment({ totalCost, currency }) {
 
   return (
     <div>
+      <Alert text={ErrorLog} isError={true} hide={ErrorLog === ""} />
       {ClientSecret && (
         <Elements options={options} stripe={stripePromise}>
           <CheckoutForm />

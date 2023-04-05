@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import Alert from "../../Alert/Alert";
 // Stripe
 import {
   LinkAuthenticationElement,
@@ -21,6 +22,8 @@ function CheckOutForm() {
   const [Email, setEmail] = useState("");
   const [Message, setMessage] = useState(null);
   const [IsLoading, setIsLoading] = useState(false);
+  const [ErrorLog, setErrorLog] = useState("");
+  const [IsError, setIsError] = useState(true);
 
   useEffect(() => {
     if (!stripe) return;
@@ -33,25 +36,23 @@ function CheckOutForm() {
     // Show a payment status message
     stripe.retrievePaymentIntent(clientSecret).then((res) => {
       // If error occurs
-      if (res.error) return console.log(res.error.message);
+      if (res.error) return setErrorLog(res.error.message);
       // paymentIntent is retrieved
       const paymentIntent = res.paymentIntent;
       switch (paymentIntent.status) {
         case "succeeded":
-          console.log("Payment succeeded!");
-          setMessage("Payment succeeded!");
+          setErrorLog("Payment succeeded!");
+          setIsError(false);
           break;
         case "processing":
-          console.log("Your payment is processing.");
-          setMessage("Your payment is processing.");
+          setErrorLog("Your payment is processing.");
+          setIsError(false);
           break;
         case "requires_payment_method":
-          console.log("Your payment was not successful, please try again.");
-          setMessage("Your payment was not successful, please try again.");
+          setErrorLog("Your payment was not successful, please try again.");
           break;
         default:
-          console.log("Something went wrong.");
-          setMessage("Something went wrong.");
+          setErrorLog("Something went wrong.");
           break;
       }
     });
@@ -81,11 +82,9 @@ function CheckOutForm() {
 
     // If there is an immediate error when confirming the payment
     if (error.type === "card_error" || error.type === "validation_error") {
-      setMessage(error.message);
-      console.log(error.message);
+      setErrorLog(error.message);
     } else {
-      setMessage("An unexpected error occurred.");
-      console.log("An unexpected error occurred.");
+      setErrorLog("An unexpected error occurred.");
     }
 
     // Payment finished
@@ -94,6 +93,12 @@ function CheckOutForm() {
 
   return (
     <form onSubmit={handleSubmit}>
+      <Alert
+        text={ErrorLog}
+        isError={IsError}
+        isSuccess={!IsError}
+        hide={ErrorLog === ""}
+      />
       <LinkAuthenticationElement
         id="link-authentication-element"
         onChange={(e) => setEmail(e?.target?.value ?? "")}

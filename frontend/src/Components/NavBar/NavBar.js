@@ -1,40 +1,35 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth0 } from "@auth0/auth0-react";
 import module from "../../ApiService";
 // Components
 import MenuButton from "../Buttons/MenuButton";
 import ColorButton from "../Buttons/ColorButton";
+import Alert from "../Alert/Alert";
 // Style
 import "./NavBar.css";
 
 /**
  * Navigation bar component that directs users to different pages.
+ * @param {number} userId: id of the user
+ * @param {number} creatorId: id of the streamer
  * @returns Navigation bar component
  */
-function NavBar({ userId }) {
+function NavBar({ userId, creatorId }) {
   const navigate = useNavigate();
+  const { logout, user, isAuthenticated, isLoading } = useAuth0();
 
   const [UserId, setUserId] = useState("");
   const [CreatorId, setCreatorId] = useState("");
   const [IsCreator, setIsCreator] = useState(false);
   const [UserHover, setUserHover] = useState(false);
+  const [ErrorLog, setErrorLog] = useState("");
 
   useEffect(() => {
-    module.getUserId().then((res) => {
-      if (res.data.user === undefined) return;
-      // If the user is authenticated
-      setUserId(res.data.user.id);
-      // If the user is creator
-      module
-        .getCreatorByUserId(res.data.user.id)
-        .then((res) => {
-          if (res.error) return console.log(res.error);
-          setIsCreator(res.data.creator && res.data.creator.id);
-          if (res.data.creator) setCreatorId(res.data.creator.id);
-        })
-        .catch((e) => console.log(e));
-    });
-  }, [userId]);
+    setUserId(userId);
+    setCreatorId(creatorId);
+    setIsCreator(creatorId !== null);
+  }, [userId, creatorId]);
 
   // Navigate to home
   const onLogo = () => {
@@ -64,19 +59,16 @@ function NavBar({ userId }) {
   // Sign out
   const onSignOut = () => {
     // Signout
-    module
-      .UserLogout()
-      .then((res) => {
-        if (res.data.success) {
-          setTimeout(function () {
-            alert("Successfully signed out.");
-            setUserHover(false);
-            setUserId("");
-            navigate("/");
-          }, 500);
-        }
-      })
-      .catch((e) => console.log(e));
+    module.UserLogout().then((res) => {
+      if (res.data.success) {
+        setTimeout(function () {
+          setErrorLog("Successfully signed out.");
+          setUserHover(false);
+          setUserId("");
+          navigate(0);
+        }, 500);
+      }
+    });
   };
 
   // Navigate to mypage (user page)
@@ -101,6 +93,7 @@ function NavBar({ userId }) {
 
   return (
     <div className="navigation row align-items-center no-select">
+      <Alert text={ErrorLog} isSuccess={true} hide={ErrorLog === ""} />
       <div className="logo-img col-2">
         <img src="/logo2.png" onClick={onLogo} />
       </div>
@@ -117,7 +110,7 @@ function NavBar({ userId }) {
           buttonFunction={onCredit}
         />
       </div>
-      {UserId ? (
+      {UserId || isAuthenticated ? (
         <div className="nav-buttons row col-3">
           {IsCreator ? (
             <ColorButton

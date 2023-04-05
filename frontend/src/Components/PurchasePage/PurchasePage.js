@@ -7,6 +7,7 @@ import SubTitle from "../Texts/SubTitle";
 import InvoiceTable from "./Items/InvoiceTable";
 import CheckBox from "../Texts/CheckBox";
 import SubscribeButton from "./Items/SubscribeButton";
+import Alert from "../Alert/Alert";
 // Style
 import "./PurchasePage.css";
 import "../Membership/Membership.css";
@@ -147,6 +148,7 @@ function PurchasePage({ plan }) {
   const [BuyList, setBuyList] = useState(null);
   const [PriceId, setPriceId] = useState(null);
   const [IsChecked, setIsChecked] = useState(false);
+  const [ErrorLog, setErrorLog] = useState("");
 
   /* Navigate to creator's page if current user is creator */
   useEffect(() => {
@@ -157,11 +159,13 @@ function PurchasePage({ plan }) {
       module
         .getCreatorByUserId(res.data.user.id)
         .then((res) => {
-          if (res.error) return console.log(res.error);
+          if (res.error) return setErrorLog(res.error);
           if (res.data.creator && `${res.data.creator.id}` === creatorId)
             navigate("/");
         })
-        .catch((e) => console.log(e));
+        .catch(
+          (e) => e.response?.data?.error && setErrorLog(e.response.data.error)
+        );
     });
   }, [creatorId]);
 
@@ -171,14 +175,16 @@ function PurchasePage({ plan }) {
     module
       .getAllMemberships(creatorId)
       .then((res) => {
-        if (res.error) return console.log(res.error);
+        if (res.error) return setErrorLog(res.error);
         const memberships = res.data.memberships;
         setMemberships(memberships);
         for (let i = 0; i < memberships.length; i++) {
           loadPriceId(memberships[i]);
         }
       })
-      .catch((e) => console.log(e));
+      .catch(
+        (e) => e.response?.data?.error && setErrorLog(e.response.data.error)
+      );
   }, [creatorId, SelectPlan]);
 
   /* Update inherited SelectPlan */
@@ -220,15 +226,15 @@ function PurchasePage({ plan }) {
     module
       .addPrice(membership.name, membership.currency, membership.price)
       .then((res) => {
-        if (res.error) return console.log(res.error);
+        if (res.error) return setErrorLog(res.error);
         // Add a priceId to membership
         return module.updateMembership(membership.id, {
           priceId: res.data.price.id,
         });
       })
-      .catch((e) => {
-        console.log(e);
-      });
+      .catch(
+        (e) => e.response?.data?.error && setErrorLog(e.response.data.error)
+      );
   };
 
   // Check if agreement checkbox is checked
@@ -257,6 +263,7 @@ function PurchasePage({ plan }) {
 
   return (
     <div className="grid-body page">
+      <Alert text={ErrorLog} isError={true} hide={ErrorLog === ""} />
       <PageTitle text="Purchase membership" />
       <div className="purchase">
         <div className="purchase-left col-7">

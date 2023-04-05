@@ -3,6 +3,11 @@ export const creditList = [
     title: "CSS",
     credits: [
       {
+        name: "cols.css file provided from CSCC09 lecture",
+        siteName: "GitHub",
+        link: "https://github.com/choyiny/cscc09.com/blob/main/lectures/01-html-css/cols.css",
+      },
+      {
         name: "CSS variables for color",
         link: "https://ado.xyz/blog/custom-css-color-names/",
       },
@@ -34,6 +39,16 @@ export const creditList = [
         name: "Aspect ratio",
         siteName: "CSS Tricks",
         link: "https://css-tricks.com/almanac/properties/a/aspect-ratio/",
+      },
+      {
+        name: "CSS keyframe animation",
+        siteName: "Stackoverflow",
+        link: "https://stackoverflow.com/questions/16812911/css-keyframe-animation-with-translation-transform-snaps-to-whole-pixels-in-ie-10",
+      },
+      {
+        name: "CSS animation make HTML element disappear",
+        siteName: "Stackoverflow",
+        link: "https://stackoverflow.com/questions/39513705/make-html-element-disappear-with-css-animation",
       },
     ],
   },
@@ -93,6 +108,10 @@ export const creditList = [
         siteName: "MDN Web Docs",
         link: "https://developer.mozilla.org/en-US/docs/Web/API/Screen_Capture_API/Using_Screen_Capture",
       },
+      {
+        name: "Loading with React hook",
+        link: "https://codewithnico.com/react-wait-axios-to-render/",
+      },
     ],
   },
   {
@@ -102,6 +121,16 @@ export const creditList = [
         name: "Nivo Bar example",
         siteName: "Nivo Official Document",
         link: "https://nivo.rocks/bar/",
+      },
+    ],
+  },
+  {
+    title: "JavaScript API - Web Audio API",
+    credits: [
+      {
+        name: "Form Validation with Web Audio",
+        siteName: "CSS Tricks",
+        link: "https://css-tricks.com/form-validation-web-audio/",
       },
     ],
   },
@@ -213,6 +242,16 @@ export const creditList = [
         siteName: "Postgresql.org",
         link: "https://www.postgresql.org/docs/9.1/functions-array.html",
       },
+      {
+        name: "Query if array contains a value",
+        siteName: "Stackoverflow",
+        link: "https://stackoverflow.com/questions/29036363/sequelize-querying-if-array-contains-a-value",
+      },
+      {
+        name: "Query with OR condition",
+        siteName: "Stackoverflow",
+        link: "https://stackoverflow.com/questions/20695062/sequelize-or-condition-object",
+      },
     ],
   },
   {
@@ -285,6 +324,16 @@ export const creditList = [
         name: "Docker compose Nginx Node.js example",
         siteName: "GitHub",
         link: "https://github.com/docker/awesome-compose/tree/master/nginx-nodejs-redis",
+      },
+    ],
+  },
+  {
+    title: "Nginx",
+    credits: [
+      {
+        name: "Nginx conf file for React app",
+        siteName: "GitHub",
+        link: "https://github.com/react-boilerplate/react-boilerplate/blob/master/app/.nginx.conf",
       },
     ],
   },

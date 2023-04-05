@@ -36,4 +36,8 @@ export const User = sequelize.define("Users", {
     type: DataTypes.DATE,
     allowNull: true,
   },
+  auth0: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false,
+  },
 });

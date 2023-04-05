@@ -12,6 +12,7 @@ import { membershipsRouter } from "./routers/memberships_router.js";
 import { pricesRouter } from "./routers/prices_router.js";
 import { usersRouter } from "./routers/users_router.js";
 import { creatorsRouter } from "./routers/creators_router.js";
+import { postsRouter } from "./routers/posts_router.js";
 import { streamingsRouter } from "./routers/streamings_router.js";
 
 export const app = express();
@@ -21,10 +22,15 @@ dotenv.config();
 
 // CORS for a list of allowed origins (specify for safety)
 const CLIENT_HOST = process.env.CLIENT_HOST || "http://localhost:3000";
-const allowedOrigins = [CLIENT_HOST, "https://checkout.stripe.com"];
+const allowedOrigins = [
+  CLIENT_HOST,
+  "https://checkout.stripe.com",
+  "https://dev-xz5orhy8rzrhzt80.us.auth0.com",
+];
 // const allowedOrigins = ["*"];
 const options = {
   origin: allowedOrigins,
+  credentials: true,
 };
 app.use(cors(options));
 
@@ -72,6 +78,7 @@ app.use("/api/memberships", membershipsRouter);
 app.use("/api/prices", pricesRouter);
 app.use("/api/users", usersRouter);
 app.use("/api/creators", creatorsRouter);
+app.use("/api/posts", postsRouter);
 app.use("/api/streamings", streamingsRouter);
 
 const HOST = process.env.HOST || "localhost";
