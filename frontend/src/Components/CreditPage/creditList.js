@@ -232,6 +232,16 @@ export const creditList = [
         siteName: "Postgresql.org",
         link: "https://www.postgresql.org/docs/9.1/functions-array.html",
       },
+      {
+        name: "Query if array contains a value",
+        siteName: "Stackoverflow",
+        link: "https://stackoverflow.com/questions/29036363/sequelize-querying-if-array-contains-a-value",
+      },
+      {
+        name: "Query with OR condition",
+        siteName: "Stackoverflow",
+        link: "https://stackoverflow.com/questions/20695062/sequelize-or-condition-object",
+      },
     ],
   },
   {

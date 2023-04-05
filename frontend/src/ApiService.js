@@ -2,6 +2,10 @@ import axios from "axios";
 
 let module = {};
 
+// ============================
+// ================= Membership
+// ============================
+
 /**
  * Create a new membership to DB.
  * @param {string} name: name of the membership
@@ -76,6 +80,10 @@ module.deleteMembership = (membershipId) => {
   return axios.delete(`/api/memberships/${membershipId}`);
 };
 
+// =======================
+// ================= Price
+// =======================
+
 /**
  * Create a new price for a membership in Stripe.
  * @param {string} membershipName: name of the membership
@@ -117,6 +125,10 @@ module.updatePrice = (priceId, variables) => {
 module.deletePrice = (priceId) => {
   return axios.delete(`/api/prices/${priceId}`);
 };
+
+// =========================
+// ================= Payment
+// =========================
 
 /**
  * Create a checkout session.
@@ -161,6 +173,10 @@ module.addPaymentIntent = (totalCost, currency) => {
 module.addPortalSession = () => {
   return axios.post("/api/payments/create-portal-session", {});
 };
+
+// ======================
+// ================= User
+// ======================
 
 /**
  * User registration.
@@ -234,6 +250,10 @@ module.userUnsubscribe = (membershipId) => {
   return axios.patch(`/api/users/unsubscribe`, { membershipId });
 };
 
+// =========================
+// ================= Creator
+// =========================
+
 /**
  * Create a new creator to DB.
  */
@@ -275,6 +295,10 @@ module.updateCreator = (creatorId, formData) => {
 module.deleteCreator = (creatorId) => {
   return axios.delete(`/api/creators/${creatorId}`);
 };
+
+// ===========================
+// ================= Streaming
+// ===========================
 
 /**
  * Create a new streaming to DB.
@@ -326,6 +350,81 @@ module.updateStreaming = (streamingId, variables) => {
  */
 module.deleteStreaming = (streamingId) => {
   return axios.delete(`/api/streamings/${streamingId}`);
+};
+
+// ======================
+// ================= Post
+// ======================
+
+/**
+ * Create a new post to DB.
+ * @param {number} creatorId: if of the creator of the post
+ * @param {string} name: title of the post
+ * @param {string} description: description of the streaming
+ * @param {Array} permission: allowed membership plans to see the post
+ */
+module.addPost = (creatorId, title, description, permission) => {
+  return axios.post("/api/posts/", {
+    creatorId,
+    title,
+    description,
+    permission,
+  });
+};
+
+/**
+ * Retrieve all existing posts from DB.
+ * If creatorId is provided, retrieve all posts of the creator.
+ * @param {string} creatorId: id of the creator
+ * @param {number} permission: permission of the post
+ */
+module.getAllPosts = (creatorId, permission) => {
+  let query = "";
+  // Get all posts of the creator
+  if (creatorId) {
+    query = `?creatorId=${creatorId}`;
+    // Permission check
+    if (permission !== null) {
+      query += `&permission=${permission}`;
+    }
+  }
+  // Get all existing posts
+  return axios.get(`/api/posts${query}`);
+};
+
+/**
+ * Retrieve a post from DB.
+ * @param {string} postId: id of the post
+ */
+module.getPostById = (postId) => {
+  // Get a post using postId
+  return axios.get(`/api/posts/${postId}`);
+};
+
+/**
+ * Update attributes in post.
+ * @param {string} postId: id of the post
+ * @param {Object} variables: attributes to update
+ */
+module.updatePost = (postId, variables) => {
+  return axios.patch(`/api/posts/${postId}`, variables);
+};
+
+/**
+ * Like/Dislike a post.
+ * @param {string} postId: id of the post
+ * @param {string} action: action to do (like or dislike)
+ */
+module.likePost = (postId, action) => {
+  return axios.patch(`/api/posts/${postId}`, { action });
+};
+
+/**
+ * Delete a post from DB.
+ * @param {string} postId: id of the post
+ */
+module.deletePost = (postId) => {
+  return axios.delete(`/api/posts/${postId}`);
 };
 
 export default module;
